@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PassPilot — מנווט המעבר</title>
+<style>
+  :root{--bg:#0f1418;--panel:#171e24;--panel2:#1e272e;--border:#2a343d;--ink:#e6edf3;--muted:#8b98a5;
+    --accent:#3fb6a8;--top:#f0616d;--cheap:#e0a52c;--maint:#4bb85a;--basics:#8a7cff;
+    --sans:system-ui,-apple-system,"Segoe UI","Noto Sans Hebrew",sans-serif;--mono:ui-monospace,Consolas,monospace;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 18px 60px;}
+  header h1{margin:0;font-size:1.5rem;letter-spacing:-.01em;}
+  header .tag{color:var(--muted);font-size:.9rem;margin-top:2px;}
+  header .rule{margin-top:10px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-size:.86rem;color:var(--ink);}
+  header .rule b{color:var(--accent);}
+  .add{display:grid;grid-template-columns:1.4fr 1fr .8fr auto;gap:8px;margin:18px 0;}
+  input,button{font:inherit;border-radius:9px;border:1px solid var(--border);background:var(--panel2);color:var(--ink);padding:9px 11px;}
+  input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  button.add-btn{background:var(--accent);color:#04201c;font-weight:650;border:0;cursor:pointer;}
+  .split{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:16px;font-size:.9rem;}
+  .split b{font-family:var(--mono);color:var(--accent);}
+  .board{display:flex;flex-direction:column;gap:10px;}
+  .course{background:var(--panel);border:1px solid var(--border);border-inline-start-width:5px;border-radius:12px;padding:13px 15px;display:grid;grid-template-columns:1fr auto auto auto;gap:10px 14px;align-items:center;}
+  .course .nm{font-weight:650;font-size:1.02rem;}
+  .course .meta{color:var(--muted);font-size:.78rem;font-family:var(--mono);}
+  .score{width:66px;text-align:center;font-family:var(--mono);}
+  .act{font-size:.82rem;font-weight:650;padding:5px 11px;border-radius:999px;white-space:nowrap;}
+  .days{font-family:var(--mono);font-size:.82rem;color:var(--muted);min-width:52px;text-align:center;}
+  .rm{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:2px 6px;}
+  .rm:hover{color:var(--top);}
+  .empty{color:var(--muted);text-align:center;padding:30px;}
+  .lvl-top{border-inline-start-color:var(--top);} .a-top{background:rgba(240,97,109,.16);color:var(--top);}
+  .lvl-cheap{border-inline-start-color:var(--cheap);} .a-cheap{background:rgba(224,165,44,.16);color:var(--cheap);}
+  .lvl-maint{border-inline-start-color:var(--maint);} .a-maint{background:rgba(75,184,90,.16);color:var(--maint);}
+  .lvl-basics{border-inline-start-color:var(--basics);} .a-basics{background:rgba(138,124,255,.16);color:var(--basics);}
+  footer{margin-top:26px;color:var(--muted);font-size:.76rem;text-align:center;}
+  @media(max-width:640px){.add{grid-template-columns:1fr 1fr;}.course{grid-template-columns:1fr auto;row-gap:8px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎯 PassPilot <span style="color:var(--muted);font-size:1rem">· מנווט המעבר</span></h1>
+    <div class="tag">מקסם ציון-מעבר לסטודנט שצריך <b>רק לעבור</b>. לא לדעת 60% מהחומר — לבנות יכולת להוציא 55 אמין.</div>
+    <div class="rule">הכנס לכל קורס את <b>הציון שאתה מוציא עכשיו במבחן-עבר מתוזמן</b>. הלוח יגיד לך על מה לעבוד — לא לפי "נושאים ושעות", לפי מרחק-מהמעבר.</div>
+  </header>
+
+  <div class="add">
+    <input id="nm" placeholder="שם הקורס (למשל: הסתברות)">
+    <input id="date" type="date">
+    <input id="sc" type="number" min="0" max="100" placeholder="ציון סימולציה">
+    <button class="add-btn" onclick="addCourse()">הוסף</button>
+  </div>
+
+  <div class="split" id="split"></div>
+  <div class="board" id="board"></div>
+
+  <footer>PassPilot · שיטת active-recall + מבחני-עבר-קודם + לוח-בקרת-מעבר · נבנה מרעיון של אבירן · נתונים נשמרים מקומית בדפדפן</footer>
+</div>
+
+<script>
+const KEY='passpilot.courses.v1';
+let courses=load();
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[];}catch{return [];}}
+function save(){localStorage.setItem(KEY,JSON.stringify(courses));}
+function daysTo(d){if(!d)return null;const ms=new Date(d+'T00:00:00')-new Date();return Math.ceil(ms/86400000);}
+
+// The pass-control-board rule (from the methodology): action by current simulated score.
+function level(score){
+  if(score<25)return{k:'basics',t:'רק יסודות ונושאים בטוחים',w:1};
+  if(score<45)return{k:'cheap',t:'נושאים זולים בנקודות',w:3};
+  if(score<60)return{k:'top',t:'⚡ עדיפות עליונה — הכי קרוב למעבר',w:4};
+  return{k:'maint',t:'תחזוקה בלבד ✓',w:0};
+}
+
+function render(){
+  const board=document.getElementById('board');
+  if(!courses.length){board.innerHTML='<div class="empty">הוסף את הקורסים והציון שאתה מוציא בהם עכשיו במבחן-עבר.</div>';document.getElementById('split').textContent='';return;}
+  // sort: nearest exam first, then furthest from passing
+  const arr=courses.map((c,i)=>({...c,i,d:daysTo(c.date),lv:level(+c.score||0)}))
+    .sort((a,b)=>(a.d??999)-(b.d??999)||b.lv.w-a.lv.w);
+  board.innerHTML=arr.map(c=>`
+    <div class="course lvl-${c.lv.k}">
+      <div><div class="nm">${esc(c.nm)}</div><div class="meta">${c.date?c.date:'ללא תאריך'} · סימולציה ${+c.score||0}</div></div>
+      <input class="score" type="number" min="0" max="100" value="${+c.score||0}" onchange="setScore(${c.i},this.value)">
+      <span class="days">${c.d==null?'—':(c.d<0?'עבר':c.d+' ימים')}</span>
+      <span class="act a-${c.lv.k}">${c.lv.t}</span>
+      <button class="rm" onclick="rm(${c.i})" title="הסר">✕</button>
+    </div>`).join('');
+  // nearest exam -> 65/25/10 (or 80/15/5 if <=4 days), the methodology's time split
+  const near=arr[0];
+  const aggressive=near.d!=null&&near.d<=4;
+  document.getElementById('split').innerHTML=near
+    ? `⏱️ חלוקת זמן היום: <b>${aggressive?80:65}%</b> ל-${esc(near.nm)} (הקרוב) · <b>${aggressive?15:25}%</b> לבא אחריו · <b>${aggressive?5:10}%</b> לשחזור טעויות ישנות`
+    : '';
+}
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function addCourse(){const nm=document.getElementById('nm').value.trim();if(!nm)return;
+  courses.push({nm,date:document.getElementById('date').value,score:document.getElementById('sc').value||0});
+  document.getElementById('nm').value='';document.getElementById('sc').value='';save();render();}
+function setScore(i,v){courses[i].score=v;save();render();}
+function rm(i){courses.splice(i,1);save();render();}
+render();
+</script>
+</body>
+</html>
