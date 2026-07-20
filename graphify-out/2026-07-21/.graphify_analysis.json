@@ -1,0 +1,348 @@
+{
+  "communities": {
+    "0": [
+      "github_workflows_factory_ci",
+      "index_html_algebra",
+      "index_html_computePassProbabilityWithConfidence",
+      "index_html_generateCramSchedule",
+      "index_html_generateInitialStudyPlan",
+      "index_html_geometry",
+      "index_html_pilot_object",
+      "index_html_probability",
+      "index_html_run",
+      "index_html_weakTopicRanker"
+    ],
+    "1": [
+      "README_active_recall",
+      "README_aviran",
+      "README_mock_exams",
+      "README_pass_control_board",
+      "README_passpilot",
+      "README_spaced_learning",
+      "index_html"
+    ],
+    "2": [
+      "lib_analyzemockexamintegrity",
+      "lib_analyzemockexamintegrity_analyzemockexamintegrity",
+      "lib_analyzemockexamintegrity_checkcollusion",
+      "lib_analyzemockexamintegrity_getexamdata"
+    ],
+    "3": [
+      "lib_generaterecoverysprint",
+      "lib_generaterecoverysprint_generaterecoverysprint",
+      "lib_generaterecoverysprint_randomuuid",
+      "lib_generaterecoverysprint_records"
+    ],
+    "4": [
+      "lib_trackstudystreak",
+      "lib_trackstudystreak_parsedate",
+      "lib_trackstudystreak_streaks",
+      "lib_trackstudystreak_trackstudystreak"
+    ],
+    "5": [
+      "lib_getaccountabilitypartnerprogress",
+      "lib_getaccountabilitypartnerprogress_createhash",
+      "lib_getaccountabilitypartnerprogress_getaccountabilitypartnerprogress"
+    ],
+    "6": [
+      "lib_analyzeweaktopicsfromquiz",
+      "lib_analyzeweaktopicsfromquiz_analyzeweaktopicsfromquiz"
+    ],
+    "7": [
+      "lib_calculatecombomultiplier",
+      "lib_calculatecombomultiplier_calculatecombomultiplier"
+    ],
+    "8": [
+      "lib_calculateinitialpassprobability",
+      "lib_calculateinitialpassprobability_calculateinitialpassprobability"
+    ],
+    "9": [
+      "lib_calculateresiliencescore",
+      "lib_calculateresiliencescore_calculateresiliencescore"
+    ],
+    "10": [
+      "lib_calculatestreakbonus",
+      "lib_calculatestreakbonus_calculatestreakbonus"
+    ],
+    "11": [
+      "lib_calculatestreakwithgrace",
+      "lib_calculatestreakwithgrace_calculatestreakwithgrace"
+    ],
+    "12": [
+      "lib_checkaccountsharing",
+      "lib_checkaccountsharing_checkaccountsharing"
+    ],
+    "13": [
+      "lib_computeimprovementtrend",
+      "lib_computeimprovementtrend_computeimprovementtrend"
+    ],
+    "14": [
+      "lib_computemocktrend",
+      "lib_computemocktrend_computemocktrend"
+    ],
+    "15": [
+      "lib_computepassprobabilitywithconfidence",
+      "lib_computepassprobabilitywithconfidence_computepassprobabilitywithconfidence"
+    ],
+    "16": [
+      "lib_createdailystudyplan",
+      "lib_createdailystudyplan_createdailystudyplan"
+    ],
+    "17": [
+      "lib_detectsuspiciousbehavior",
+      "lib_detectsuspiciousbehavior_detectsuspiciousbehavior"
+    ],
+    "18": [
+      "lib_generateadaptiveplan",
+      "lib_generateadaptiveplan_generateadaptiveplan"
+    ],
+    "19": [
+      "lib_generatecramschedule",
+      "lib_generatecramschedule_generatecramschedule"
+    ],
+    "20": [
+      "lib_generatedailystudyplan",
+      "lib_generatedailystudyplan_generatedailystudyplan"
+    ],
+    "21": [
+      "lib_generateinitialstudyplan",
+      "lib_generateinitialstudyplan_generateinitialstudyplan"
+    ],
+    "22": [
+      "lib_generatemilestonemessage",
+      "lib_generatemilestonemessage_generatemilestonemessage"
+    ],
+    "23": [
+      "lib_generatequickwinchallenge",
+      "lib_generatequickwinchallenge_generatequickwinchallenge"
+    ],
+    "24": [
+      "lib_generatereferralcode",
+      "lib_generatereferralcode_generatereferralcode"
+    ],
+    "25": [
+      "lib_generatesharecard",
+      "lib_generatesharecard_generatesharecard"
+    ],
+    "26": [
+      "lib_getnextnudgetime",
+      "lib_getnextnudgetime_getnextnudgetime"
+    ],
+    "27": [
+      "lib_getupsellrecommendations",
+      "lib_getupsellrecommendations_getupsellrecommendations"
+    ],
+    "28": [
+      "lib_inferweaktopicsfromminimalquiz",
+      "lib_inferweaktopicsfromminimalquiz_inferweaktopicsfromminimalquiz"
+    ],
+    "29": [
+      "lib_matchstudybuddy",
+      "lib_matchstudybuddy_matchstudybuddy"
+    ],
+    "30": [
+      "lib_optimalreferralreward",
+      "lib_optimalreferralreward_optimalreferralreward"
+    ],
+    "31": [
+      "lib_predictreturnprobability",
+      "lib_predictreturnprobability_predictreturnprobability"
+    ],
+    "32": [
+      "lib_rebalancedailyplan",
+      "lib_rebalancedailyplan_rebalancedailyplan"
+    ],
+    "33": [
+      "lib_trackreferralredemption",
+      "lib_trackreferralredemption_trackreferralredemption"
+    ],
+    "34": [
+      "lib_verifystudylogintegrity",
+      "lib_verifystudylogintegrity_verifystudylogintegrity"
+    ],
+    "35": [
+      "lib_verifystudysession",
+      "lib_verifystudysession_verifystudysession"
+    ],
+    "36": [
+      "lib_weaktopicranker",
+      "lib_weaktopicranker_weaktopicranker"
+    ],
+    "37": [
+      "README_ai_usage"
+    ],
+    "38": [
+      "README_error_recovery"
+    ],
+    "39": [
+      "README_passing_zone"
+    ],
+    "40": [
+      "README_pomodoro"
+    ],
+    "41": [
+      "README_question_list"
+    ],
+    "42": [
+      "README_time_allocation"
+    ]
+  },
+  "cohesion": {
+    "0": 0.3111111111111111,
+    "1": 0.38095238095238093,
+    "2": 0.8333333333333334,
+    "3": 0.5,
+    "4": 0.6666666666666666,
+    "5": 0.6666666666666666,
+    "6": 1.0,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0
+  },
+  "gods": [
+    {
+      "id": "index_html_run",
+      "label": "run",
+      "degree": 6
+    },
+    {
+      "id": "README_passpilot",
+      "label": "PassPilot",
+      "degree": 4
+    },
+    {
+      "id": "index_html",
+      "label": "PassPilot Main Interface",
+      "degree": 4
+    },
+    {
+      "id": "index_html_pilot_object",
+      "label": "Pilot API Object",
+      "degree": 4
+    },
+    {
+      "id": "github_workflows_factory_ci",
+      "label": "factory-ci workflow",
+      "degree": 4
+    },
+    {
+      "id": "lib_analyzemockexamintegrity_analyzemockexamintegrity",
+      "label": "analyzeMockExamIntegrity()",
+      "degree": 3
+    },
+    {
+      "id": "index_html_weakTopicRanker",
+      "label": "weakTopicRanker",
+      "degree": 3
+    },
+    {
+      "id": "index_html_computePassProbabilityWithConfidence",
+      "label": "computePassProbabilityWithConfidence",
+      "degree": 3
+    },
+    {
+      "id": "index_html_generateInitialStudyPlan",
+      "label": "generateInitialStudyPlan",
+      "degree": 3
+    },
+    {
+      "id": "lib_analyzemockexamintegrity_getexamdata",
+      "label": "getExamData()",
+      "degree": 2
+    }
+  ],
+  "surprises": [
+    {
+      "source": "PassPilot Main Interface",
+      "target": "PassPilot",
+      "source_files": [
+        "index.html",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "implements",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "PassPilot Main Interface",
+      "target": "Pass Control Board",
+      "source_files": [
+        "index.html",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "PassPilot Main Interface",
+      "target": "Active Recall",
+      "source_files": [
+        "index.html",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "PassPilot Main Interface",
+      "target": "Mock Exams",
+      "source_files": [
+        "index.html",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "factory-ci workflow",
+      "target": "weakTopicRanker",
+      "source_files": [
+        ".github/workflows/factory-ci.yml",
+        "index.html"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 6953,
+    "output": 10318
+  }
+}

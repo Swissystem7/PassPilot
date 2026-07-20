@@ -1,0 +1,192 @@
+{
+  "lib/analyzeMockExamIntegrity.js": {
+    "mtime": 1784457974.8779159,
+    "ast_hash": "d5e6ab4279a58e8a27498b037012fe3d",
+    "semantic_hash": "d5e6ab4279a58e8a27498b037012fe3d"
+  },
+  "lib/analyzeWeakTopicsFromQuiz.js": {
+    "mtime": 1784573178.4866784,
+    "ast_hash": "332909e3e8925d84ac692fe31be8c781",
+    "semantic_hash": "332909e3e8925d84ac692fe31be8c781"
+  },
+  "lib/calculateComboMultiplier.js": {
+    "mtime": 1784573198.9503293,
+    "ast_hash": "6b5e87ee3cee2150bd67e856d4b7d6d6",
+    "semantic_hash": "6b5e87ee3cee2150bd67e856d4b7d6d6"
+  },
+  "lib/calculateInitialPassProbability.js": {
+    "mtime": 1784573179.665318,
+    "ast_hash": "1f5e027295c9706304960a6763b54195",
+    "semantic_hash": "1f5e027295c9706304960a6763b54195"
+  },
+  "lib/calculateResilienceScore.js": {
+    "mtime": 1784573200.329769,
+    "ast_hash": "ee1503e5e206478c4b6d4f290fb15405",
+    "semantic_hash": "ee1503e5e206478c4b6d4f290fb15405"
+  },
+  "lib/calculateStreakBonus.js": {
+    "mtime": 1784573207.3970015,
+    "ast_hash": "47571c0593460b07f280ba00725710e9",
+    "semantic_hash": "47571c0593460b07f280ba00725710e9"
+  },
+  "lib/calculateStreakWithGrace.js": {
+    "mtime": 1784419641.2371738,
+    "ast_hash": "cb06a74ba681f256863c4af629696c76",
+    "semantic_hash": "cb06a74ba681f256863c4af629696c76"
+  },
+  "lib/checkAccountSharing.js": {
+    "mtime": 1784573190.3594723,
+    "ast_hash": "68c532e90cd93a136e044ad4991a8792",
+    "semantic_hash": "68c532e90cd93a136e044ad4991a8792"
+  },
+  "lib/computeImprovementTrend.js": {
+    "mtime": 1784573207.97069,
+    "ast_hash": "538eebfc8d1fd7ad477ef82c2bfce83f",
+    "semantic_hash": "538eebfc8d1fd7ad477ef82c2bfce83f"
+  },
+  "lib/computeMockTrend.js": {
+    "mtime": 1784419642.2496686,
+    "ast_hash": "c558172257af5ec35cd2f3c2a4c9dcbb",
+    "semantic_hash": "c558172257af5ec35cd2f3c2a4c9dcbb"
+  },
+  "lib/computePassProbabilityWithConfidence.js": {
+    "mtime": 1784457976.3680098,
+    "ast_hash": "d5a2ffe9fd1729e443c35d2fc48ef272",
+    "semantic_hash": "d5a2ffe9fd1729e443c35d2fc48ef272"
+  },
+  "lib/createDailyStudyPlan.js": {
+    "mtime": 1784573206.7681634,
+    "ast_hash": "3b2f1d6bdb9f811cc0a7a136b1b27881",
+    "semantic_hash": "3b2f1d6bdb9f811cc0a7a136b1b27881"
+  },
+  "lib/detectSuspiciousBehavior.js": {
+    "mtime": 1784573189.0575943,
+    "ast_hash": "016fed8304123b86bc47ae22f014cde9",
+    "semantic_hash": "016fed8304123b86bc47ae22f014cde9"
+  },
+  "lib/generateAdaptivePlan.js": {
+    "mtime": 1784573199.5714576,
+    "ast_hash": "8985e93ca51d507aaddbd0869b48d154",
+    "semantic_hash": "8985e93ca51d507aaddbd0869b48d154"
+  },
+  "lib/generateCramSchedule.js": {
+    "mtime": 1784419641.6919754,
+    "ast_hash": "09992e7a0cbd1775b294442d53296833",
+    "semantic_hash": "09992e7a0cbd1775b294442d53296833"
+  },
+  "lib/generateDailyStudyPlan.js": {
+    "mtime": 1784573179.0599458,
+    "ast_hash": "4ea7ac0db9ea9156a3c5deceb90a0bbc",
+    "semantic_hash": "4ea7ac0db9ea9156a3c5deceb90a0bbc"
+  },
+  "lib/generateInitialStudyPlan.js": {
+    "mtime": 1784443574.4297762,
+    "ast_hash": "c2e68ba3a998f70884434dafea17c5b8",
+    "semantic_hash": "c2e68ba3a998f70884434dafea17c5b8"
+  },
+  "lib/generateMilestoneMessage.js": {
+    "mtime": 1784573230.033956,
+    "ast_hash": "dc7a6b2ae9927fd94d77f5849df53745",
+    "semantic_hash": "dc7a6b2ae9927fd94d77f5849df53745"
+  },
+  "lib/generateQuickWinChallenge.js": {
+    "mtime": 1784443575.0573232,
+    "ast_hash": "4899be0cec05c4d53d20f906d9024fd7",
+    "semantic_hash": "4899be0cec05c4d53d20f906d9024fd7"
+  },
+  "lib/generateRecoverySprint.js": {
+    "mtime": 1784429163.9951887,
+    "ast_hash": "a1cb7f6ef4d183815661e94a68ff49e6",
+    "semantic_hash": "a1cb7f6ef4d183815661e94a68ff49e6"
+  },
+  "lib/generateReferralCode.js": {
+    "mtime": 1784573213.3930178,
+    "ast_hash": "2f0832920a396e51a6d00c8f7a556518",
+    "semantic_hash": "2f0832920a396e51a6d00c8f7a556518"
+  },
+  "lib/generateShareCard.js": {
+    "mtime": 1784573214.6585326,
+    "ast_hash": "12d1a67f882ae5743485788801b1d83b",
+    "semantic_hash": "12d1a67f882ae5743485788801b1d83b"
+  },
+  "lib/getAccountabilityPartnerProgress.js": {
+    "mtime": 1784429164.8470075,
+    "ast_hash": "ec7606d040510bb92bbf740dfb0401af",
+    "semantic_hash": "ec7606d040510bb92bbf740dfb0401af"
+  },
+  "lib/getNextNudgeTime.js": {
+    "mtime": 1784573230.910602,
+    "ast_hash": "9f32a529cc609ad0a103d8090720d3c5",
+    "semantic_hash": "9f32a529cc609ad0a103d8090720d3c5"
+  },
+  "lib/getUpsellRecommendations.js": {
+    "mtime": 1784573222.5115683,
+    "ast_hash": "f6b57aa4469a3acfccff729cc3905f83",
+    "semantic_hash": "f6b57aa4469a3acfccff729cc3905f83"
+  },
+  "lib/inferWeakTopicsFromMinimalQuiz.js": {
+    "mtime": 1784443573.87722,
+    "ast_hash": "1b8b80ea4222ac5e66557fb3f3abdd75",
+    "semantic_hash": "1b8b80ea4222ac5e66557fb3f3abdd75"
+  },
+  "lib/matchStudyBuddy.js": {
+    "mtime": 1784573170.859049,
+    "ast_hash": "2c2a2ff5b21e5999d5f6395dd98b7f06",
+    "semantic_hash": "2c2a2ff5b21e5999d5f6395dd98b7f06"
+  },
+  "lib/optimalReferralReward.js": {
+    "mtime": 1784573223.777251,
+    "ast_hash": "1ff8f10818b220db5a609555c3c11d05",
+    "semantic_hash": "1ff8f10818b220db5a609555c3c11d05"
+  },
+  "lib/predictReturnProbability.js": {
+    "mtime": 1784573229.1720107,
+    "ast_hash": "5c790c840a60197daa52e2ebd84ad3b5",
+    "semantic_hash": "5c790c840a60197daa52e2ebd84ad3b5"
+  },
+  "lib/rebalanceDailyPlan.js": {
+    "mtime": 1784573171.465907,
+    "ast_hash": "058f6ba57d9ec0057d570b602ce2103d",
+    "semantic_hash": "058f6ba57d9ec0057d570b602ce2103d"
+  },
+  "lib/trackReferralRedemption.js": {
+    "mtime": 1784573214.0273733,
+    "ast_hash": "868e08f3f88b110c745e5f6d5522b3fe",
+    "semantic_hash": "868e08f3f88b110c745e5f6d5522b3fe"
+  },
+  "lib/trackStudyStreak.js": {
+    "mtime": 1784573170.3434136,
+    "ast_hash": "62de9867a389999cb7fb9a31b6410725",
+    "semantic_hash": "62de9867a389999cb7fb9a31b6410725"
+  },
+  "lib/verifyStudyLogIntegrity.js": {
+    "mtime": 1784573189.7486012,
+    "ast_hash": "910c1cd9436a228b7cd73c7282ace08c",
+    "semantic_hash": "910c1cd9436a228b7cd73c7282ace08c"
+  },
+  "lib/verifyStudySession.js": {
+    "mtime": 1784457975.6796415,
+    "ast_hash": "9580ff5d265512a288fbbcf400a94154",
+    "semantic_hash": "9580ff5d265512a288fbbcf400a94154"
+  },
+  "lib/weakTopicRanker.js": {
+    "mtime": 1784407840.1577027,
+    "ast_hash": "ebec4f3f5fceb5ab61462186645816ab",
+    "semantic_hash": "ebec4f3f5fceb5ab61462186645816ab"
+  },
+  ".github/workflows/factory-ci.yml": {
+    "mtime": 1784400885.922359,
+    "ast_hash": "647973c28026a520b63b016894b8d97c",
+    "semantic_hash": "647973c28026a520b63b016894b8d97c"
+  },
+  "README.md": {
+    "mtime": 1784326040.0088851,
+    "ast_hash": "1b639ba8ef22b0ca6603987071db49c8",
+    "semantic_hash": "1b639ba8ef22b0ca6603987071db49c8"
+  },
+  "index.html": {
+    "mtime": 1784569748.2857494,
+    "ast_hash": "4f56edfff05b787a9ae553039e848341",
+    "semantic_hash": "4f56edfff05b787a9ae553039e848341"
+  }
+}
