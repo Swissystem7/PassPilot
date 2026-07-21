@@ -188,5 +188,20 @@
     "mtime": 1784569748.2857494,
     "ast_hash": "4f56edfff05b787a9ae553039e848341",
     "semantic_hash": "4f56edfff05b787a9ae553039e848341"
+  },
+  "lib/generateOnboardingPlan.js": {
+    "mtime": 1784587565.678708,
+    "ast_hash": "61eedfed1cae5e313fba8097f9261077",
+    "semantic_hash": ""
+  },
+  "lib/resolveCalendarConflicts.js": {
+    "mtime": 1784587566.6179545,
+    "ast_hash": "c471b283098f76d85d792a224d20e67e",
+    "semantic_hash": ""
+  },
+  "VALIDATION.md": {
+    "mtime": 1784581463.9489427,
+    "ast_hash": "da0d17fd4dad61b0b9fe1792488b22a0",
+    "semantic_hash": ""
   }
 }

@@ -59,9 +59,10 @@
       "source_file": "lib/analyzeMockExamIntegrity.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_analyzemockexamintegrity",
       "community": 2,
-      "norm_label": "analyzemockexamintegrity.js"
+      "norm_label": "analyzemockexamintegrity.js",
+      "id": "lib_analyzemockexamintegrity",
+      "community_name": "analyzeMockExamIntegrity.js"
     },
     {
       "label": "analyzeMockExamIntegrity()",
@@ -69,9 +70,10 @@
       "source_file": "lib/analyzeMockExamIntegrity.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_analyzemockexamintegrity_analyzemockexamintegrity",
       "community": 2,
-      "norm_label": "analyzemockexamintegrity()"
+      "norm_label": "analyzemockexamintegrity()",
+      "id": "lib_analyzemockexamintegrity_analyzemockexamintegrity",
+      "community_name": "analyzeMockExamIntegrity.js"
     },
     {
       "label": "getExamData()",
@@ -79,9 +81,10 @@
       "source_file": "lib/analyzeMockExamIntegrity.js",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "lib_analyzemockexamintegrity_getexamdata",
       "community": 2,
-      "norm_label": "getexamdata()"
+      "norm_label": "getexamdata()",
+      "id": "lib_analyzemockexamintegrity_getexamdata",
+      "community_name": "analyzeMockExamIntegrity.js"
     },
     {
       "label": "checkCollusion()",
@@ -89,9 +92,10 @@
       "source_file": "lib/analyzeMockExamIntegrity.js",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "lib_analyzemockexamintegrity_checkcollusion",
       "community": 2,
-      "norm_label": "checkcollusion()"
+      "norm_label": "checkcollusion()",
+      "id": "lib_analyzemockexamintegrity_checkcollusion",
+      "community_name": "analyzeMockExamIntegrity.js"
     },
     {
       "label": "analyzeWeakTopicsFromQuiz.js",
@@ -99,9 +103,10 @@
       "source_file": "lib/analyzeWeakTopicsFromQuiz.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_analyzeweaktopicsfromquiz",
       "community": 6,
-      "norm_label": "analyzeweaktopicsfromquiz.js"
+      "norm_label": "analyzeweaktopicsfromquiz.js",
+      "id": "lib_analyzeweaktopicsfromquiz",
+      "community_name": "analyzeWeakTopicsFromQuiz.js"
     },
     {
       "label": "analyzeWeakTopicsFromQuiz()",
@@ -109,9 +114,10 @@
       "source_file": "lib/analyzeWeakTopicsFromQuiz.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_analyzeweaktopicsfromquiz_analyzeweaktopicsfromquiz",
       "community": 6,
-      "norm_label": "analyzeweaktopicsfromquiz()"
+      "norm_label": "analyzeweaktopicsfromquiz()",
+      "id": "lib_analyzeweaktopicsfromquiz_analyzeweaktopicsfromquiz",
+      "community_name": "analyzeWeakTopicsFromQuiz.js"
     },
     {
       "label": "calculateComboMultiplier.js",
@@ -119,9 +125,10 @@
       "source_file": "lib/calculateComboMultiplier.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculatecombomultiplier",
       "community": 7,
-      "norm_label": "calculatecombomultiplier.js"
+      "norm_label": "calculatecombomultiplier.js",
+      "id": "lib_calculatecombomultiplier",
+      "community_name": "calculateComboMultiplier.js"
     },
     {
       "label": "calculateComboMultiplier()",
@@ -129,9 +136,10 @@
       "source_file": "lib/calculateComboMultiplier.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculatecombomultiplier_calculatecombomultiplier",
       "community": 7,
-      "norm_label": "calculatecombomultiplier()"
+      "norm_label": "calculatecombomultiplier()",
+      "id": "lib_calculatecombomultiplier_calculatecombomultiplier",
+      "community_name": "calculateComboMultiplier.js"
     },
     {
       "label": "calculateInitialPassProbability.js",
@@ -139,9 +147,10 @@
       "source_file": "lib/calculateInitialPassProbability.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculateinitialpassprobability",
       "community": 8,
-      "norm_label": "calculateinitialpassprobability.js"
+      "norm_label": "calculateinitialpassprobability.js",
+      "id": "lib_calculateinitialpassprobability",
+      "community_name": "calculateInitialPassProbability.js"
     },
     {
       "label": "calculateInitialPassProbability()",
@@ -149,9 +158,10 @@
       "source_file": "lib/calculateInitialPassProbability.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculateinitialpassprobability_calculateinitialpassprobability",
       "community": 8,
-      "norm_label": "calculateinitialpassprobability()"
+      "norm_label": "calculateinitialpassprobability()",
+      "id": "lib_calculateinitialpassprobability_calculateinitialpassprobability",
+      "community_name": "calculateInitialPassProbability.js"
     },
     {
       "label": "calculateResilienceScore.js",
@@ -159,9 +169,10 @@
       "source_file": "lib/calculateResilienceScore.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculateresiliencescore",
       "community": 9,
-      "norm_label": "calculateresiliencescore.js"
+      "norm_label": "calculateresiliencescore.js",
+      "id": "lib_calculateresiliencescore",
+      "community_name": "calculateResilienceScore.js"
     },
     {
       "label": "calculateResilienceScore()",
@@ -169,9 +180,10 @@
       "source_file": "lib/calculateResilienceScore.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculateresiliencescore_calculateresiliencescore",
       "community": 9,
-      "norm_label": "calculateresiliencescore()"
+      "norm_label": "calculateresiliencescore()",
+      "id": "lib_calculateresiliencescore_calculateresiliencescore",
+      "community_name": "calculateResilienceScore.js"
     },
     {
       "label": "calculateStreakBonus.js",
@@ -179,9 +191,10 @@
       "source_file": "lib/calculateStreakBonus.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculatestreakbonus",
       "community": 10,
-      "norm_label": "calculatestreakbonus.js"
+      "norm_label": "calculatestreakbonus.js",
+      "id": "lib_calculatestreakbonus",
+      "community_name": "calculateStreakBonus.js"
     },
     {
       "label": "calculateStreakBonus()",
@@ -189,9 +202,10 @@
       "source_file": "lib/calculateStreakBonus.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculatestreakbonus_calculatestreakbonus",
       "community": 10,
-      "norm_label": "calculatestreakbonus()"
+      "norm_label": "calculatestreakbonus()",
+      "id": "lib_calculatestreakbonus_calculatestreakbonus",
+      "community_name": "calculateStreakBonus.js"
     },
     {
       "label": "calculateStreakWithGrace.js",
@@ -199,9 +213,10 @@
       "source_file": "lib/calculateStreakWithGrace.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculatestreakwithgrace",
       "community": 11,
-      "norm_label": "calculatestreakwithgrace.js"
+      "norm_label": "calculatestreakwithgrace.js",
+      "id": "lib_calculatestreakwithgrace",
+      "community_name": "calculateStreakWithGrace.js"
     },
     {
       "label": "calculateStreakWithGrace()",
@@ -209,9 +224,10 @@
       "source_file": "lib/calculateStreakWithGrace.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_calculatestreakwithgrace_calculatestreakwithgrace",
       "community": 11,
-      "norm_label": "calculatestreakwithgrace()"
+      "norm_label": "calculatestreakwithgrace()",
+      "id": "lib_calculatestreakwithgrace_calculatestreakwithgrace",
+      "community_name": "calculateStreakWithGrace.js"
     },
     {
       "label": "checkAccountSharing.js",
@@ -219,9 +235,10 @@
       "source_file": "lib/checkAccountSharing.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_checkaccountsharing",
       "community": 12,
-      "norm_label": "checkaccountsharing.js"
+      "norm_label": "checkaccountsharing.js",
+      "id": "lib_checkaccountsharing",
+      "community_name": "checkAccountSharing.js"
     },
     {
       "label": "checkAccountSharing()",
@@ -229,9 +246,10 @@
       "source_file": "lib/checkAccountSharing.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_checkaccountsharing_checkaccountsharing",
       "community": 12,
-      "norm_label": "checkaccountsharing()"
+      "norm_label": "checkaccountsharing()",
+      "id": "lib_checkaccountsharing_checkaccountsharing",
+      "community_name": "checkAccountSharing.js"
     },
     {
       "label": "computeImprovementTrend.js",
@@ -239,9 +257,10 @@
       "source_file": "lib/computeImprovementTrend.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_computeimprovementtrend",
       "community": 13,
-      "norm_label": "computeimprovementtrend.js"
+      "norm_label": "computeimprovementtrend.js",
+      "id": "lib_computeimprovementtrend",
+      "community_name": "computeImprovementTrend.js"
     },
     {
       "label": "computeImprovementTrend()",
@@ -249,9 +268,10 @@
       "source_file": "lib/computeImprovementTrend.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_computeimprovementtrend_computeimprovementtrend",
       "community": 13,
-      "norm_label": "computeimprovementtrend()"
+      "norm_label": "computeimprovementtrend()",
+      "id": "lib_computeimprovementtrend_computeimprovementtrend",
+      "community_name": "computeImprovementTrend.js"
     },
     {
       "label": "computeMockTrend.js",
@@ -259,9 +279,10 @@
       "source_file": "lib/computeMockTrend.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_computemocktrend",
       "community": 14,
-      "norm_label": "computemocktrend.js"
+      "norm_label": "computemocktrend.js",
+      "id": "lib_computemocktrend",
+      "community_name": "computeMockTrend.js"
     },
     {
       "label": "computeMockTrend()",
@@ -269,9 +290,10 @@
       "source_file": "lib/computeMockTrend.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_computemocktrend_computemocktrend",
       "community": 14,
-      "norm_label": "computemocktrend()"
+      "norm_label": "computemocktrend()",
+      "id": "lib_computemocktrend_computemocktrend",
+      "community_name": "computeMockTrend.js"
     },
     {
       "label": "computePassProbabilityWithConfidence.js",
@@ -279,9 +301,10 @@
       "source_file": "lib/computePassProbabilityWithConfidence.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_computepassprobabilitywithconfidence",
       "community": 15,
-      "norm_label": "computepassprobabilitywithconfidence.js"
+      "norm_label": "computepassprobabilitywithconfidence.js",
+      "id": "lib_computepassprobabilitywithconfidence",
+      "community_name": "computePassProbabilityWithConfidence.js"
     },
     {
       "label": "computePassProbabilityWithConfidence()",
@@ -289,9 +312,10 @@
       "source_file": "lib/computePassProbabilityWithConfidence.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_computepassprobabilitywithconfidence_computepassprobabilitywithconfidence",
       "community": 15,
-      "norm_label": "computepassprobabilitywithconfidence()"
+      "norm_label": "computepassprobabilitywithconfidence()",
+      "id": "lib_computepassprobabilitywithconfidence_computepassprobabilitywithconfidence",
+      "community_name": "computePassProbabilityWithConfidence.js"
     },
     {
       "label": "createDailyStudyPlan.js",
@@ -299,9 +323,10 @@
       "source_file": "lib/createDailyStudyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_createdailystudyplan",
       "community": 16,
-      "norm_label": "createdailystudyplan.js"
+      "norm_label": "createdailystudyplan.js",
+      "id": "lib_createdailystudyplan",
+      "community_name": "createDailyStudyPlan.js"
     },
     {
       "label": "createDailyStudyPlan()",
@@ -309,9 +334,10 @@
       "source_file": "lib/createDailyStudyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_createdailystudyplan_createdailystudyplan",
       "community": 16,
-      "norm_label": "createdailystudyplan()"
+      "norm_label": "createdailystudyplan()",
+      "id": "lib_createdailystudyplan_createdailystudyplan",
+      "community_name": "createDailyStudyPlan.js"
     },
     {
       "label": "detectSuspiciousBehavior.js",
@@ -319,9 +345,10 @@
       "source_file": "lib/detectSuspiciousBehavior.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_detectsuspiciousbehavior",
       "community": 17,
-      "norm_label": "detectsuspiciousbehavior.js"
+      "norm_label": "detectsuspiciousbehavior.js",
+      "id": "lib_detectsuspiciousbehavior",
+      "community_name": "detectSuspiciousBehavior.js"
     },
     {
       "label": "detectSuspiciousBehavior()",
@@ -329,9 +356,10 @@
       "source_file": "lib/detectSuspiciousBehavior.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_detectsuspiciousbehavior_detectsuspiciousbehavior",
       "community": 17,
-      "norm_label": "detectsuspiciousbehavior()"
+      "norm_label": "detectsuspiciousbehavior()",
+      "id": "lib_detectsuspiciousbehavior_detectsuspiciousbehavior",
+      "community_name": "detectSuspiciousBehavior.js"
     },
     {
       "label": "generateAdaptivePlan.js",
@@ -339,9 +367,10 @@
       "source_file": "lib/generateAdaptivePlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generateadaptiveplan",
       "community": 18,
-      "norm_label": "generateadaptiveplan.js"
+      "norm_label": "generateadaptiveplan.js",
+      "id": "lib_generateadaptiveplan",
+      "community_name": "generateAdaptivePlan.js"
     },
     {
       "label": "generateAdaptivePlan()",
@@ -349,9 +378,10 @@
       "source_file": "lib/generateAdaptivePlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generateadaptiveplan_generateadaptiveplan",
       "community": 18,
-      "norm_label": "generateadaptiveplan()"
+      "norm_label": "generateadaptiveplan()",
+      "id": "lib_generateadaptiveplan_generateadaptiveplan",
+      "community_name": "generateAdaptivePlan.js"
     },
     {
       "label": "generateCramSchedule.js",
@@ -359,9 +389,10 @@
       "source_file": "lib/generateCramSchedule.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatecramschedule",
       "community": 19,
-      "norm_label": "generatecramschedule.js"
+      "norm_label": "generatecramschedule.js",
+      "id": "lib_generatecramschedule",
+      "community_name": "generateCramSchedule.js"
     },
     {
       "label": "generateCramSchedule()",
@@ -369,9 +400,10 @@
       "source_file": "lib/generateCramSchedule.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatecramschedule_generatecramschedule",
       "community": 19,
-      "norm_label": "generatecramschedule()"
+      "norm_label": "generatecramschedule()",
+      "id": "lib_generatecramschedule_generatecramschedule",
+      "community_name": "generateCramSchedule.js"
     },
     {
       "label": "generateDailyStudyPlan.js",
@@ -379,9 +411,10 @@
       "source_file": "lib/generateDailyStudyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatedailystudyplan",
       "community": 20,
-      "norm_label": "generatedailystudyplan.js"
+      "norm_label": "generatedailystudyplan.js",
+      "id": "lib_generatedailystudyplan",
+      "community_name": "generateDailyStudyPlan.js"
     },
     {
       "label": "generateDailyStudyPlan()",
@@ -389,9 +422,10 @@
       "source_file": "lib/generateDailyStudyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatedailystudyplan_generatedailystudyplan",
       "community": 20,
-      "norm_label": "generatedailystudyplan()"
+      "norm_label": "generatedailystudyplan()",
+      "id": "lib_generatedailystudyplan_generatedailystudyplan",
+      "community_name": "generateDailyStudyPlan.js"
     },
     {
       "label": "generateInitialStudyPlan.js",
@@ -399,9 +433,10 @@
       "source_file": "lib/generateInitialStudyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generateinitialstudyplan",
       "community": 21,
-      "norm_label": "generateinitialstudyplan.js"
+      "norm_label": "generateinitialstudyplan.js",
+      "id": "lib_generateinitialstudyplan",
+      "community_name": "generateInitialStudyPlan.js"
     },
     {
       "label": "generateInitialStudyPlan()",
@@ -409,9 +444,10 @@
       "source_file": "lib/generateInitialStudyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generateinitialstudyplan_generateinitialstudyplan",
       "community": 21,
-      "norm_label": "generateinitialstudyplan()"
+      "norm_label": "generateinitialstudyplan()",
+      "id": "lib_generateinitialstudyplan_generateinitialstudyplan",
+      "community_name": "generateInitialStudyPlan.js"
     },
     {
       "label": "generateMilestoneMessage.js",
@@ -419,9 +455,10 @@
       "source_file": "lib/generateMilestoneMessage.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatemilestonemessage",
       "community": 22,
-      "norm_label": "generatemilestonemessage.js"
+      "norm_label": "generatemilestonemessage.js",
+      "id": "lib_generatemilestonemessage",
+      "community_name": "generateMilestoneMessage.js"
     },
     {
       "label": "generateMilestoneMessage()",
@@ -429,9 +466,10 @@
       "source_file": "lib/generateMilestoneMessage.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatemilestonemessage_generatemilestonemessage",
       "community": 22,
-      "norm_label": "generatemilestonemessage()"
+      "norm_label": "generatemilestonemessage()",
+      "id": "lib_generatemilestonemessage_generatemilestonemessage",
+      "community_name": "generateMilestoneMessage.js"
     },
     {
       "label": "generateQuickWinChallenge.js",
@@ -439,9 +477,10 @@
       "source_file": "lib/generateQuickWinChallenge.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatequickwinchallenge",
       "community": 23,
-      "norm_label": "generatequickwinchallenge.js"
+      "norm_label": "generatequickwinchallenge.js",
+      "id": "lib_generatequickwinchallenge",
+      "community_name": "generateQuickWinChallenge.js"
     },
     {
       "label": "generateQuickWinChallenge()",
@@ -449,9 +488,10 @@
       "source_file": "lib/generateQuickWinChallenge.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatequickwinchallenge_generatequickwinchallenge",
       "community": 23,
-      "norm_label": "generatequickwinchallenge()"
+      "norm_label": "generatequickwinchallenge()",
+      "id": "lib_generatequickwinchallenge_generatequickwinchallenge",
+      "community_name": "generateQuickWinChallenge.js"
     },
     {
       "label": "generateRecoverySprint.js",
@@ -459,9 +499,10 @@
       "source_file": "lib/generateRecoverySprint.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generaterecoverysprint",
       "community": 3,
-      "norm_label": "generaterecoverysprint.js"
+      "norm_label": "generaterecoverysprint.js",
+      "id": "lib_generaterecoverysprint",
+      "community_name": "generateRecoverySprint.js"
     },
     {
       "label": "{ randomUUID }",
@@ -469,9 +510,10 @@
       "source_file": "lib/generateRecoverySprint.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generaterecoverysprint_randomuuid",
       "community": 3,
-      "norm_label": "{ randomuuid }"
+      "norm_label": "{ randomuuid }",
+      "id": "lib_generaterecoverysprint_randomuuid",
+      "community_name": "generateRecoverySprint.js"
     },
     {
       "label": "records",
@@ -479,9 +521,10 @@
       "source_file": "lib/generateRecoverySprint.js",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "lib_generaterecoverysprint_records",
       "community": 3,
-      "norm_label": "records"
+      "norm_label": "records",
+      "id": "lib_generaterecoverysprint_records",
+      "community_name": "generateRecoverySprint.js"
     },
     {
       "label": "generateRecoverySprint()",
@@ -489,9 +532,10 @@
       "source_file": "lib/generateRecoverySprint.js",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "lib_generaterecoverysprint_generaterecoverysprint",
       "community": 3,
-      "norm_label": "generaterecoverysprint()"
+      "norm_label": "generaterecoverysprint()",
+      "id": "lib_generaterecoverysprint_generaterecoverysprint",
+      "community_name": "generateRecoverySprint.js"
     },
     {
       "label": "generateReferralCode.js",
@@ -499,9 +543,10 @@
       "source_file": "lib/generateReferralCode.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatereferralcode",
       "community": 24,
-      "norm_label": "generatereferralcode.js"
+      "norm_label": "generatereferralcode.js",
+      "id": "lib_generatereferralcode",
+      "community_name": "generateReferralCode.js"
     },
     {
       "label": "generateReferralCode()",
@@ -509,9 +554,10 @@
       "source_file": "lib/generateReferralCode.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatereferralcode_generatereferralcode",
       "community": 24,
-      "norm_label": "generatereferralcode()"
+      "norm_label": "generatereferralcode()",
+      "id": "lib_generatereferralcode_generatereferralcode",
+      "community_name": "generateReferralCode.js"
     },
     {
       "label": "generateShareCard.js",
@@ -519,9 +565,10 @@
       "source_file": "lib/generateShareCard.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatesharecard",
       "community": 25,
-      "norm_label": "generatesharecard.js"
+      "norm_label": "generatesharecard.js",
+      "id": "lib_generatesharecard",
+      "community_name": "generateShareCard.js"
     },
     {
       "label": "generateShareCard()",
@@ -529,9 +576,10 @@
       "source_file": "lib/generateShareCard.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_generatesharecard_generatesharecard",
       "community": 25,
-      "norm_label": "generatesharecard()"
+      "norm_label": "generatesharecard()",
+      "id": "lib_generatesharecard_generatesharecard",
+      "community_name": "generateShareCard.js"
     },
     {
       "label": "getAccountabilityPartnerProgress.js",
@@ -539,9 +587,10 @@
       "source_file": "lib/getAccountabilityPartnerProgress.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_getaccountabilitypartnerprogress",
       "community": 5,
-      "norm_label": "getaccountabilitypartnerprogress.js"
+      "norm_label": "getaccountabilitypartnerprogress.js",
+      "id": "lib_getaccountabilitypartnerprogress",
+      "community_name": "getAccountabilityPartnerProgress.js"
     },
     {
       "label": "{ createHash }",
@@ -549,9 +598,10 @@
       "source_file": "lib/getAccountabilityPartnerProgress.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_getaccountabilitypartnerprogress_createhash",
       "community": 5,
-      "norm_label": "{ createhash }"
+      "norm_label": "{ createhash }",
+      "id": "lib_getaccountabilitypartnerprogress_createhash",
+      "community_name": "getAccountabilityPartnerProgress.js"
     },
     {
       "label": "getAccountabilityPartnerProgress()",
@@ -559,9 +609,10 @@
       "source_file": "lib/getAccountabilityPartnerProgress.js",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "lib_getaccountabilitypartnerprogress_getaccountabilitypartnerprogress",
       "community": 5,
-      "norm_label": "getaccountabilitypartnerprogress()"
+      "norm_label": "getaccountabilitypartnerprogress()",
+      "id": "lib_getaccountabilitypartnerprogress_getaccountabilitypartnerprogress",
+      "community_name": "getAccountabilityPartnerProgress.js"
     },
     {
       "label": "getNextNudgeTime.js",
@@ -569,9 +620,10 @@
       "source_file": "lib/getNextNudgeTime.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_getnextnudgetime",
       "community": 26,
-      "norm_label": "getnextnudgetime.js"
+      "norm_label": "getnextnudgetime.js",
+      "id": "lib_getnextnudgetime",
+      "community_name": "getNextNudgeTime.js"
     },
     {
       "label": "getNextNudgeTime()",
@@ -579,9 +631,10 @@
       "source_file": "lib/getNextNudgeTime.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_getnextnudgetime_getnextnudgetime",
       "community": 26,
-      "norm_label": "getnextnudgetime()"
+      "norm_label": "getnextnudgetime()",
+      "id": "lib_getnextnudgetime_getnextnudgetime",
+      "community_name": "getNextNudgeTime.js"
     },
     {
       "label": "getUpsellRecommendations.js",
@@ -589,9 +642,10 @@
       "source_file": "lib/getUpsellRecommendations.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_getupsellrecommendations",
       "community": 27,
-      "norm_label": "getupsellrecommendations.js"
+      "norm_label": "getupsellrecommendations.js",
+      "id": "lib_getupsellrecommendations",
+      "community_name": "getUpsellRecommendations.js"
     },
     {
       "label": "getUpsellRecommendations()",
@@ -599,9 +653,10 @@
       "source_file": "lib/getUpsellRecommendations.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_getupsellrecommendations_getupsellrecommendations",
       "community": 27,
-      "norm_label": "getupsellrecommendations()"
+      "norm_label": "getupsellrecommendations()",
+      "id": "lib_getupsellrecommendations_getupsellrecommendations",
+      "community_name": "getUpsellRecommendations.js"
     },
     {
       "label": "inferWeakTopicsFromMinimalQuiz.js",
@@ -609,9 +664,10 @@
       "source_file": "lib/inferWeakTopicsFromMinimalQuiz.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_inferweaktopicsfromminimalquiz",
       "community": 28,
-      "norm_label": "inferweaktopicsfromminimalquiz.js"
+      "norm_label": "inferweaktopicsfromminimalquiz.js",
+      "id": "lib_inferweaktopicsfromminimalquiz",
+      "community_name": "inferWeakTopicsFromMinimalQuiz.js"
     },
     {
       "label": "inferWeakTopicsFromMinimalQuiz()",
@@ -619,9 +675,10 @@
       "source_file": "lib/inferWeakTopicsFromMinimalQuiz.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_inferweaktopicsfromminimalquiz_inferweaktopicsfromminimalquiz",
       "community": 28,
-      "norm_label": "inferweaktopicsfromminimalquiz()"
+      "norm_label": "inferweaktopicsfromminimalquiz()",
+      "id": "lib_inferweaktopicsfromminimalquiz_inferweaktopicsfromminimalquiz",
+      "community_name": "inferWeakTopicsFromMinimalQuiz.js"
     },
     {
       "label": "matchStudyBuddy.js",
@@ -629,9 +686,10 @@
       "source_file": "lib/matchStudyBuddy.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_matchstudybuddy",
       "community": 29,
-      "norm_label": "matchstudybuddy.js"
+      "norm_label": "matchstudybuddy.js",
+      "id": "lib_matchstudybuddy",
+      "community_name": "matchStudyBuddy.js"
     },
     {
       "label": "matchStudyBuddy()",
@@ -639,9 +697,10 @@
       "source_file": "lib/matchStudyBuddy.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_matchstudybuddy_matchstudybuddy",
       "community": 29,
-      "norm_label": "matchstudybuddy()"
+      "norm_label": "matchstudybuddy()",
+      "id": "lib_matchstudybuddy_matchstudybuddy",
+      "community_name": "matchStudyBuddy.js"
     },
     {
       "label": "optimalReferralReward.js",
@@ -649,9 +708,10 @@
       "source_file": "lib/optimalReferralReward.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_optimalreferralreward",
       "community": 30,
-      "norm_label": "optimalreferralreward.js"
+      "norm_label": "optimalreferralreward.js",
+      "id": "lib_optimalreferralreward",
+      "community_name": "optimalReferralReward.js"
     },
     {
       "label": "optimalReferralReward()",
@@ -659,9 +719,10 @@
       "source_file": "lib/optimalReferralReward.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_optimalreferralreward_optimalreferralreward",
       "community": 30,
-      "norm_label": "optimalreferralreward()"
+      "norm_label": "optimalreferralreward()",
+      "id": "lib_optimalreferralreward_optimalreferralreward",
+      "community_name": "optimalReferralReward.js"
     },
     {
       "label": "predictReturnProbability.js",
@@ -669,9 +730,10 @@
       "source_file": "lib/predictReturnProbability.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_predictreturnprobability",
       "community": 31,
-      "norm_label": "predictreturnprobability.js"
+      "norm_label": "predictreturnprobability.js",
+      "id": "lib_predictreturnprobability",
+      "community_name": "predictReturnProbability.js"
     },
     {
       "label": "predictReturnProbability()",
@@ -679,9 +741,10 @@
       "source_file": "lib/predictReturnProbability.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_predictreturnprobability_predictreturnprobability",
       "community": 31,
-      "norm_label": "predictreturnprobability()"
+      "norm_label": "predictreturnprobability()",
+      "id": "lib_predictreturnprobability_predictreturnprobability",
+      "community_name": "predictReturnProbability.js"
     },
     {
       "label": "rebalanceDailyPlan.js",
@@ -689,9 +752,10 @@
       "source_file": "lib/rebalanceDailyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_rebalancedailyplan",
       "community": 32,
-      "norm_label": "rebalancedailyplan.js"
+      "norm_label": "rebalancedailyplan.js",
+      "id": "lib_rebalancedailyplan",
+      "community_name": "rebalanceDailyPlan.js"
     },
     {
       "label": "rebalanceDailyPlan()",
@@ -699,9 +763,10 @@
       "source_file": "lib/rebalanceDailyPlan.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_rebalancedailyplan_rebalancedailyplan",
       "community": 32,
-      "norm_label": "rebalancedailyplan()"
+      "norm_label": "rebalancedailyplan()",
+      "id": "lib_rebalancedailyplan_rebalancedailyplan",
+      "community_name": "rebalanceDailyPlan.js"
     },
     {
       "label": "trackReferralRedemption.js",
@@ -709,9 +774,10 @@
       "source_file": "lib/trackReferralRedemption.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_trackreferralredemption",
       "community": 33,
-      "norm_label": "trackreferralredemption.js"
+      "norm_label": "trackreferralredemption.js",
+      "id": "lib_trackreferralredemption",
+      "community_name": "trackReferralRedemption.js"
     },
     {
       "label": "trackReferralRedemption()",
@@ -719,9 +785,10 @@
       "source_file": "lib/trackReferralRedemption.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_trackreferralredemption_trackreferralredemption",
       "community": 33,
-      "norm_label": "trackreferralredemption()"
+      "norm_label": "trackreferralredemption()",
+      "id": "lib_trackreferralredemption_trackreferralredemption",
+      "community_name": "trackReferralRedemption.js"
     },
     {
       "label": "trackStudyStreak.js",
@@ -729,9 +796,10 @@
       "source_file": "lib/trackStudyStreak.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_trackstudystreak",
       "community": 4,
-      "norm_label": "trackstudystreak.js"
+      "norm_label": "trackstudystreak.js",
+      "id": "lib_trackstudystreak",
+      "community_name": "trackStudyStreak.js"
     },
     {
       "label": "streaks",
@@ -739,9 +807,10 @@
       "source_file": "lib/trackStudyStreak.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_trackstudystreak_streaks",
       "community": 4,
-      "norm_label": "streaks"
+      "norm_label": "streaks",
+      "id": "lib_trackstudystreak_streaks",
+      "community_name": "trackStudyStreak.js"
     },
     {
       "label": "parseDate()",
@@ -749,9 +818,10 @@
       "source_file": "lib/trackStudyStreak.js",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "lib_trackstudystreak_parsedate",
       "community": 4,
-      "norm_label": "parsedate()"
+      "norm_label": "parsedate()",
+      "id": "lib_trackstudystreak_parsedate",
+      "community_name": "trackStudyStreak.js"
     },
     {
       "label": "trackStudyStreak()",
@@ -759,9 +829,10 @@
       "source_file": "lib/trackStudyStreak.js",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "lib_trackstudystreak_trackstudystreak",
       "community": 4,
-      "norm_label": "trackstudystreak()"
+      "norm_label": "trackstudystreak()",
+      "id": "lib_trackstudystreak_trackstudystreak",
+      "community_name": "trackStudyStreak.js"
     },
     {
       "label": "verifyStudyLogIntegrity.js",
@@ -769,9 +840,10 @@
       "source_file": "lib/verifyStudyLogIntegrity.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_verifystudylogintegrity",
       "community": 34,
-      "norm_label": "verifystudylogintegrity.js"
+      "norm_label": "verifystudylogintegrity.js",
+      "id": "lib_verifystudylogintegrity",
+      "community_name": "verifyStudyLogIntegrity.js"
     },
     {
       "label": "verifyStudyLogIntegrity()",
@@ -779,9 +851,10 @@
       "source_file": "lib/verifyStudyLogIntegrity.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_verifystudylogintegrity_verifystudylogintegrity",
       "community": 34,
-      "norm_label": "verifystudylogintegrity()"
+      "norm_label": "verifystudylogintegrity()",
+      "id": "lib_verifystudylogintegrity_verifystudylogintegrity",
+      "community_name": "verifyStudyLogIntegrity.js"
     },
     {
       "label": "verifyStudySession.js",
@@ -789,9 +862,10 @@
       "source_file": "lib/verifyStudySession.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_verifystudysession",
       "community": 35,
-      "norm_label": "verifystudysession.js"
+      "norm_label": "verifystudysession.js",
+      "id": "lib_verifystudysession",
+      "community_name": "verifyStudySession.js"
     },
     {
       "label": "verifyStudySession()",
@@ -799,9 +873,10 @@
       "source_file": "lib/verifyStudySession.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_verifystudysession_verifystudysession",
       "community": 35,
-      "norm_label": "verifystudysession()"
+      "norm_label": "verifystudysession()",
+      "id": "lib_verifystudysession_verifystudysession",
+      "community_name": "verifyStudySession.js"
     },
     {
       "label": "weakTopicRanker.js",
@@ -809,9 +884,10 @@
       "source_file": "lib/weakTopicRanker.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_weaktopicranker",
       "community": 36,
-      "norm_label": "weaktopicranker.js"
+      "norm_label": "weaktopicranker.js",
+      "id": "lib_weaktopicranker",
+      "community_name": "weakTopicRanker.js"
     },
     {
       "label": "weakTopicRanker()",
@@ -819,9 +895,10 @@
       "source_file": "lib/weakTopicRanker.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_weaktopicranker_weaktopicranker",
       "community": 36,
-      "norm_label": "weaktopicranker()"
+      "norm_label": "weaktopicranker()",
+      "id": "lib_weaktopicranker_weaktopicranker",
+      "community_name": "weakTopicRanker.js"
     },
     {
       "label": "PassPilot",
@@ -832,9 +909,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_passpilot",
       "community": 1,
-      "norm_label": "passpilot"
+      "norm_label": "passpilot",
+      "id": "README_passpilot",
+      "community_name": "PassPilot"
     },
     {
       "label": "Pass Control Board",
@@ -845,9 +923,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_pass_control_board",
       "community": 1,
-      "norm_label": "pass control board"
+      "norm_label": "pass control board",
+      "id": "README_pass_control_board",
+      "community_name": "PassPilot"
     },
     {
       "label": "Aviran",
@@ -858,9 +937,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_aviran",
       "community": 1,
-      "norm_label": "aviran"
+      "norm_label": "aviran",
+      "id": "README_aviran",
+      "community_name": "PassPilot"
     },
     {
       "label": "Active Recall",
@@ -871,9 +951,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_active_recall",
       "community": 1,
-      "norm_label": "active recall"
+      "norm_label": "active recall",
+      "id": "README_active_recall",
+      "community_name": "PassPilot"
     },
     {
       "label": "Spaced Learning",
@@ -884,9 +965,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_spaced_learning",
       "community": 1,
-      "norm_label": "spaced learning"
+      "norm_label": "spaced learning",
+      "id": "README_spaced_learning",
+      "community_name": "PassPilot"
     },
     {
       "label": "Mock Exams",
@@ -897,9 +979,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_mock_exams",
       "community": 1,
-      "norm_label": "mock exams"
+      "norm_label": "mock exams",
+      "id": "README_mock_exams",
+      "community_name": "PassPilot"
     },
     {
       "label": "Error Recovery",
@@ -910,9 +993,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_error_recovery",
       "community": 38,
-      "norm_label": "error recovery"
+      "norm_label": "error recovery",
+      "id": "README_error_recovery",
+      "community_name": "Error Recovery"
     },
     {
       "label": "Question List (Take/Backup/Waive)",
@@ -923,9 +1007,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_question_list",
       "community": 41,
-      "norm_label": "question list (take/backup/waive)"
+      "norm_label": "question list (take/backup/waive)",
+      "id": "README_question_list",
+      "community_name": "Question List (Take/Backup/Waive)"
     },
     {
       "label": "Pomodoro",
@@ -936,9 +1021,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_pomodoro",
       "community": 40,
-      "norm_label": "pomodoro"
+      "norm_label": "pomodoro",
+      "id": "README_pomodoro",
+      "community_name": "Pomodoro"
     },
     {
       "label": "AI/NotebookLM Usage",
@@ -949,9 +1035,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_ai_usage",
       "community": 37,
-      "norm_label": "ai/notebooklm usage"
+      "norm_label": "ai/notebooklm usage",
+      "id": "README_ai_usage",
+      "community_name": "AI/NotebookLM Usage"
     },
     {
       "label": "Passing Score Zone (50-61)",
@@ -962,9 +1049,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_passing_zone",
       "community": 39,
-      "norm_label": "passing score zone (50-61)"
+      "norm_label": "passing score zone (50-61)",
+      "id": "README_passing_zone",
+      "community_name": "Passing Score Zone (50-61)"
     },
     {
       "label": "Time Allocation Rule (65/25/10)",
@@ -975,9 +1063,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "README_time_allocation",
       "community": 42,
-      "norm_label": "time allocation rule (65/25/10)"
+      "norm_label": "time allocation rule (65/25/10)",
+      "id": "README_time_allocation",
+      "community_name": "Time Allocation Rule (65/25/10)"
     },
     {
       "label": "PassPilot Main Interface",
@@ -988,9 +1077,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html",
       "community": 1,
-      "norm_label": "passpilot main interface"
+      "norm_label": "passpilot main interface",
+      "id": "index_html",
+      "community_name": "PassPilot"
     },
     {
       "label": "weakTopicRanker",
@@ -1001,9 +1091,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_weakTopicRanker",
       "community": 0,
-      "norm_label": "weaktopicranker"
+      "norm_label": "weaktopicranker",
+      "id": "index_html_weakTopicRanker",
+      "community_name": "run"
     },
     {
       "label": "computePassProbabilityWithConfidence",
@@ -1014,9 +1105,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_computePassProbabilityWithConfidence",
       "community": 0,
-      "norm_label": "computepassprobabilitywithconfidence"
+      "norm_label": "computepassprobabilitywithconfidence",
+      "id": "index_html_computePassProbabilityWithConfidence",
+      "community_name": "run"
     },
     {
       "label": "generateInitialStudyPlan",
@@ -1027,9 +1119,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_generateInitialStudyPlan",
       "community": 0,
-      "norm_label": "generateinitialstudyplan"
+      "norm_label": "generateinitialstudyplan",
+      "id": "index_html_generateInitialStudyPlan",
+      "community_name": "run"
     },
     {
       "label": "generateCramSchedule",
@@ -1040,9 +1133,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_generateCramSchedule",
       "community": 0,
-      "norm_label": "generatecramschedule"
+      "norm_label": "generatecramschedule",
+      "id": "index_html_generateCramSchedule",
+      "community_name": "run"
     },
     {
       "label": "Pilot API Object",
@@ -1053,9 +1147,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_pilot_object",
       "community": 0,
-      "norm_label": "pilot api object"
+      "norm_label": "pilot api object",
+      "id": "index_html_pilot_object",
+      "community_name": "run"
     },
     {
       "label": "run",
@@ -1066,9 +1161,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_run",
       "community": 0,
-      "norm_label": "run"
+      "norm_label": "run",
+      "id": "index_html_run",
+      "community_name": "run"
     },
     {
       "label": "Algebra",
@@ -1079,9 +1175,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_algebra",
       "community": 0,
-      "norm_label": "algebra"
+      "norm_label": "algebra",
+      "id": "index_html_algebra",
+      "community_name": "run"
     },
     {
       "label": "Geometry",
@@ -1092,9 +1189,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_geometry",
       "community": 0,
-      "norm_label": "geometry"
+      "norm_label": "geometry",
+      "id": "index_html_geometry",
+      "community_name": "run"
     },
     {
       "label": "Probability",
@@ -1105,9 +1203,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_probability",
       "community": 0,
-      "norm_label": "probability"
+      "norm_label": "probability",
+      "id": "index_html_probability",
+      "community_name": "run"
     },
     {
       "label": "factory-ci workflow",
@@ -1118,9 +1217,10 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "github_workflows_factory_ci",
       "community": 0,
-      "norm_label": "factory-ci workflow"
+      "norm_label": "factory-ci workflow",
+      "id": "github_workflows_factory_ci",
+      "community_name": "run"
     }
   ],
   "links": [
@@ -1132,9 +1232,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_analyzemockexamintegrity",
-      "target": "lib_analyzemockexamintegrity_analyzemockexamintegrity",
-      "confidence_score": 0.5
+      "target": "lib_analyzemockexamintegrity_analyzemockexamintegrity"
     },
     {
       "relation": "contains",
@@ -1143,9 +1243,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_analyzemockexamintegrity",
-      "target": "lib_analyzemockexamintegrity_checkcollusion",
-      "confidence_score": 1.0
+      "target": "lib_analyzemockexamintegrity_checkcollusion"
     },
     {
       "relation": "contains",
@@ -1154,9 +1254,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_analyzemockexamintegrity",
-      "target": "lib_analyzemockexamintegrity_getexamdata",
-      "confidence_score": 1.0
+      "target": "lib_analyzemockexamintegrity_getexamdata"
     },
     {
       "relation": "calls",
@@ -1166,9 +1266,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_analyzemockexamintegrity_analyzemockexamintegrity",
-      "target": "lib_analyzemockexamintegrity_checkcollusion",
-      "confidence_score": 1.0
+      "target": "lib_analyzemockexamintegrity_checkcollusion"
     },
     {
       "relation": "calls",
@@ -1178,9 +1278,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_analyzemockexamintegrity_analyzemockexamintegrity",
-      "target": "lib_analyzemockexamintegrity_getexamdata",
-      "confidence_score": 1.0
+      "target": "lib_analyzemockexamintegrity_getexamdata"
     },
     {
       "relation": "indirect_call",
@@ -1190,9 +1290,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_analyzeweaktopicsfromquiz",
-      "target": "lib_analyzeweaktopicsfromquiz_analyzeweaktopicsfromquiz",
-      "confidence_score": 0.5
+      "target": "lib_analyzeweaktopicsfromquiz_analyzeweaktopicsfromquiz"
     },
     {
       "relation": "indirect_call",
@@ -1202,9 +1302,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_calculatecombomultiplier",
-      "target": "lib_calculatecombomultiplier_calculatecombomultiplier",
-      "confidence_score": 0.5
+      "target": "lib_calculatecombomultiplier_calculatecombomultiplier"
     },
     {
       "relation": "indirect_call",
@@ -1214,9 +1314,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_calculateinitialpassprobability",
-      "target": "lib_calculateinitialpassprobability_calculateinitialpassprobability",
-      "confidence_score": 0.5
+      "target": "lib_calculateinitialpassprobability_calculateinitialpassprobability"
     },
     {
       "relation": "indirect_call",
@@ -1226,9 +1326,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_calculateresiliencescore",
-      "target": "lib_calculateresiliencescore_calculateresiliencescore",
-      "confidence_score": 0.5
+      "target": "lib_calculateresiliencescore_calculateresiliencescore"
     },
     {
       "relation": "indirect_call",
@@ -1238,9 +1338,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_calculatestreakbonus",
-      "target": "lib_calculatestreakbonus_calculatestreakbonus",
-      "confidence_score": 0.5
+      "target": "lib_calculatestreakbonus_calculatestreakbonus"
     },
     {
       "relation": "indirect_call",
@@ -1250,9 +1350,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_calculatestreakwithgrace",
-      "target": "lib_calculatestreakwithgrace_calculatestreakwithgrace",
-      "confidence_score": 0.5
+      "target": "lib_calculatestreakwithgrace_calculatestreakwithgrace"
     },
     {
       "relation": "indirect_call",
@@ -1262,9 +1362,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_checkaccountsharing",
-      "target": "lib_checkaccountsharing_checkaccountsharing",
-      "confidence_score": 0.5
+      "target": "lib_checkaccountsharing_checkaccountsharing"
     },
     {
       "relation": "indirect_call",
@@ -1274,9 +1374,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_computeimprovementtrend",
-      "target": "lib_computeimprovementtrend_computeimprovementtrend",
-      "confidence_score": 0.5
+      "target": "lib_computeimprovementtrend_computeimprovementtrend"
     },
     {
       "relation": "indirect_call",
@@ -1286,9 +1386,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_computemocktrend",
-      "target": "lib_computemocktrend_computemocktrend",
-      "confidence_score": 0.5
+      "target": "lib_computemocktrend_computemocktrend"
     },
     {
       "relation": "indirect_call",
@@ -1298,9 +1398,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_computepassprobabilitywithconfidence",
-      "target": "lib_computepassprobabilitywithconfidence_computepassprobabilitywithconfidence",
-      "confidence_score": 0.5
+      "target": "lib_computepassprobabilitywithconfidence_computepassprobabilitywithconfidence"
     },
     {
       "relation": "indirect_call",
@@ -1310,9 +1410,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_createdailystudyplan",
-      "target": "lib_createdailystudyplan_createdailystudyplan",
-      "confidence_score": 0.5
+      "target": "lib_createdailystudyplan_createdailystudyplan"
     },
     {
       "relation": "indirect_call",
@@ -1322,9 +1422,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_detectsuspiciousbehavior",
-      "target": "lib_detectsuspiciousbehavior_detectsuspiciousbehavior",
-      "confidence_score": 0.5
+      "target": "lib_detectsuspiciousbehavior_detectsuspiciousbehavior"
     },
     {
       "relation": "indirect_call",
@@ -1334,9 +1434,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generateadaptiveplan",
-      "target": "lib_generateadaptiveplan_generateadaptiveplan",
-      "confidence_score": 0.5
+      "target": "lib_generateadaptiveplan_generateadaptiveplan"
     },
     {
       "relation": "indirect_call",
@@ -1346,9 +1446,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generatecramschedule",
-      "target": "lib_generatecramschedule_generatecramschedule",
-      "confidence_score": 0.5
+      "target": "lib_generatecramschedule_generatecramschedule"
     },
     {
       "relation": "indirect_call",
@@ -1358,9 +1458,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generatedailystudyplan",
-      "target": "lib_generatedailystudyplan_generatedailystudyplan",
-      "confidence_score": 0.5
+      "target": "lib_generatedailystudyplan_generatedailystudyplan"
     },
     {
       "relation": "indirect_call",
@@ -1370,9 +1470,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generateinitialstudyplan",
-      "target": "lib_generateinitialstudyplan_generateinitialstudyplan",
-      "confidence_score": 0.5
+      "target": "lib_generateinitialstudyplan_generateinitialstudyplan"
     },
     {
       "relation": "indirect_call",
@@ -1382,9 +1482,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generatemilestonemessage",
-      "target": "lib_generatemilestonemessage_generatemilestonemessage",
-      "confidence_score": 0.5
+      "target": "lib_generatemilestonemessage_generatemilestonemessage"
     },
     {
       "relation": "indirect_call",
@@ -1394,9 +1494,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generatequickwinchallenge",
-      "target": "lib_generatequickwinchallenge_generatequickwinchallenge",
-      "confidence_score": 0.5
+      "target": "lib_generatequickwinchallenge_generatequickwinchallenge"
     },
     {
       "relation": "indirect_call",
@@ -1406,9 +1506,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generaterecoverysprint",
-      "target": "lib_generaterecoverysprint_generaterecoverysprint",
-      "confidence_score": 0.5
+      "target": "lib_generaterecoverysprint_generaterecoverysprint"
     },
     {
       "relation": "contains",
@@ -1417,9 +1517,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_generaterecoverysprint",
-      "target": "lib_generaterecoverysprint_randomuuid",
-      "confidence_score": 1.0
+      "target": "lib_generaterecoverysprint_randomuuid"
     },
     {
       "relation": "contains",
@@ -1428,9 +1528,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_generaterecoverysprint",
-      "target": "lib_generaterecoverysprint_records",
-      "confidence_score": 1.0
+      "target": "lib_generaterecoverysprint_records"
     },
     {
       "relation": "indirect_call",
@@ -1440,9 +1540,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generatereferralcode",
-      "target": "lib_generatereferralcode_generatereferralcode",
-      "confidence_score": 0.5
+      "target": "lib_generatereferralcode_generatereferralcode"
     },
     {
       "relation": "indirect_call",
@@ -1452,9 +1552,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_generatesharecard",
-      "target": "lib_generatesharecard_generatesharecard",
-      "confidence_score": 0.5
+      "target": "lib_generatesharecard_generatesharecard"
     },
     {
       "relation": "contains",
@@ -1463,9 +1563,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_getaccountabilitypartnerprogress",
-      "target": "lib_getaccountabilitypartnerprogress_createhash",
-      "confidence_score": 1.0
+      "target": "lib_getaccountabilitypartnerprogress_createhash"
     },
     {
       "relation": "indirect_call",
@@ -1475,9 +1575,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_getaccountabilitypartnerprogress",
-      "target": "lib_getaccountabilitypartnerprogress_getaccountabilitypartnerprogress",
-      "confidence_score": 0.5
+      "target": "lib_getaccountabilitypartnerprogress_getaccountabilitypartnerprogress"
     },
     {
       "relation": "indirect_call",
@@ -1487,9 +1587,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_getnextnudgetime",
-      "target": "lib_getnextnudgetime_getnextnudgetime",
-      "confidence_score": 0.5
+      "target": "lib_getnextnudgetime_getnextnudgetime"
     },
     {
       "relation": "indirect_call",
@@ -1499,9 +1599,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_getupsellrecommendations",
-      "target": "lib_getupsellrecommendations_getupsellrecommendations",
-      "confidence_score": 0.5
+      "target": "lib_getupsellrecommendations_getupsellrecommendations"
     },
     {
       "relation": "indirect_call",
@@ -1511,9 +1611,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_inferweaktopicsfromminimalquiz",
-      "target": "lib_inferweaktopicsfromminimalquiz_inferweaktopicsfromminimalquiz",
-      "confidence_score": 0.5
+      "target": "lib_inferweaktopicsfromminimalquiz_inferweaktopicsfromminimalquiz"
     },
     {
       "relation": "indirect_call",
@@ -1523,9 +1623,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_matchstudybuddy",
-      "target": "lib_matchstudybuddy_matchstudybuddy",
-      "confidence_score": 0.5
+      "target": "lib_matchstudybuddy_matchstudybuddy"
     },
     {
       "relation": "indirect_call",
@@ -1535,9 +1635,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_optimalreferralreward",
-      "target": "lib_optimalreferralreward_optimalreferralreward",
-      "confidence_score": 0.5
+      "target": "lib_optimalreferralreward_optimalreferralreward"
     },
     {
       "relation": "indirect_call",
@@ -1547,9 +1647,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_predictreturnprobability",
-      "target": "lib_predictreturnprobability_predictreturnprobability",
-      "confidence_score": 0.5
+      "target": "lib_predictreturnprobability_predictreturnprobability"
     },
     {
       "relation": "indirect_call",
@@ -1559,9 +1659,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_rebalancedailyplan",
-      "target": "lib_rebalancedailyplan_rebalancedailyplan",
-      "confidence_score": 0.5
+      "target": "lib_rebalancedailyplan_rebalancedailyplan"
     },
     {
       "relation": "indirect_call",
@@ -1571,9 +1671,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_trackreferralredemption",
-      "target": "lib_trackreferralredemption_trackreferralredemption",
-      "confidence_score": 0.5
+      "target": "lib_trackreferralredemption_trackreferralredemption"
     },
     {
       "relation": "contains",
@@ -1582,9 +1682,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_trackstudystreak",
-      "target": "lib_trackstudystreak_parsedate",
-      "confidence_score": 1.0
+      "target": "lib_trackstudystreak_parsedate"
     },
     {
       "relation": "contains",
@@ -1593,9 +1693,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_trackstudystreak",
-      "target": "lib_trackstudystreak_streaks",
-      "confidence_score": 1.0
+      "target": "lib_trackstudystreak_streaks"
     },
     {
       "relation": "indirect_call",
@@ -1605,9 +1705,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_trackstudystreak",
-      "target": "lib_trackstudystreak_trackstudystreak",
-      "confidence_score": 0.5
+      "target": "lib_trackstudystreak_trackstudystreak"
     },
     {
       "relation": "calls",
@@ -1617,9 +1717,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_trackstudystreak_trackstudystreak",
-      "target": "lib_trackstudystreak_parsedate",
-      "confidence_score": 1.0
+      "target": "lib_trackstudystreak_parsedate"
     },
     {
       "relation": "indirect_call",
@@ -1629,9 +1729,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_verifystudylogintegrity",
-      "target": "lib_verifystudylogintegrity_verifystudylogintegrity",
-      "confidence_score": 0.5
+      "target": "lib_verifystudylogintegrity_verifystudylogintegrity"
     },
     {
       "relation": "indirect_call",
@@ -1641,9 +1741,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_verifystudysession",
-      "target": "lib_verifystudysession_verifystudysession",
-      "confidence_score": 0.5
+      "target": "lib_verifystudysession_verifystudysession"
     },
     {
       "relation": "indirect_call",
@@ -1653,9 +1753,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
+      "confidence_score": 0.5,
       "source": "lib_weaktopicranker",
-      "target": "lib_weaktopicranker_weaktopicranker",
-      "confidence_score": 0.5
+      "target": "lib_weaktopicranker_weaktopicranker"
     },
     {
       "relation": "conceptually_related_to",

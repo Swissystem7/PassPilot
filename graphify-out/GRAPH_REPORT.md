@@ -1,15 +1,16 @@
-# Graph Report - .  (2026-07-21)
+# Graph Report - PassPilot  (2026-07-21)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 39 files · ~10,796 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 100 nodes · 67 edges · 43 communities (35 shown, 8 thin omitted)
-- Extraction: 34% EXTRACTED · 66% INFERRED · 0% AMBIGUOUS · INFERRED: 44 edges (avg confidence: 0.56)
+- 112 nodes · 76 edges · 46 communities (38 shown, 8 thin omitted)
+- Extraction: 39% EXTRACTED · 61% INFERRED · 0% AMBIGUOUS · INFERRED: 46 edges (avg confidence: 0.56)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6593d695`
+- Built from commit: `884ae7c1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,18 +27,19 @@
 - Pomodoro
 - Question List (Take/Backup/Waive)
 - Time Allocation Rule (65/25/10)
+- PassPilot — תמצית אימות שוק
 
 ## God Nodes (most connected - your core abstractions)
-1. `run` - 6 edges
-2. `PassPilot` - 4 edges
-3. `PassPilot Main Interface` - 4 edges
-4. `Pilot API Object` - 4 edges
-5. `factory-ci workflow` - 4 edges
-6. `analyzeMockExamIntegrity()` - 3 edges
-7. `weakTopicRanker` - 3 edges
-8. `computePassProbabilityWithConfidence` - 3 edges
-9. `generateInitialStudyPlan` - 3 edges
-10. `getExamData()` - 2 edges
+1. `PassPilot — תמצית אימות שוק` - 6 edges
+2. `run` - 6 edges
+3. `PassPilot` - 4 edges
+4. `PassPilot Main Interface` - 4 edges
+5. `Pilot API Object` - 4 edges
+6. `factory-ci workflow` - 4 edges
+7. `analyzeMockExamIntegrity()` - 3 edges
+8. `weakTopicRanker` - 3 edges
+9. `computePassProbabilityWithConfidence` - 3 edges
+10. `generateInitialStudyPlan` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `PassPilot Main Interface` --implements--> `PassPilot`  [INFERRED]
@@ -59,7 +61,7 @@
 - **PassPilot Methodology Principles** — README_active_recall, README_spaced_learning, README_mock_exams, README_error_recovery, README_question_list, README_pomodoro, README_ai_usage, README_passing_zone, README_time_allocation [EXTRACTED 1.00]
 - **Exam Topics** — index_html_algebra, index_html_geometry, index_html_probability [EXTRACTED 1.00]
 
-## Communities (43 total, 8 thin omitted)
+## Communities (46 total, 8 thin omitted)
 
 ### Community 0 - "run"
 Cohesion: 0.31
@@ -77,8 +79,12 @@ Nodes (3): analyzeMockExamIntegrity(), checkCollusion(), getExamData()
 Cohesion: 0.67
 Nodes (3): parseDate(), streaks, trackStudyStreak()
 
+### Community 43 - "PassPilot — תמצית אימות שוק"
+Cohesion: 0.25
+Nodes (7): 1. ICP מדויק (ישראל), 2. מחיר + מודל, 3. זווית מול המתחרה המרכזי, 4. תוכנית 100 המשתמשים הראשונים (תקציב 0, ישראל), 5. קריטריון המשך/פיבוט/הריגה (30 יום), PassPilot — Market Validation (auto, DeepSeek 2026-07-20), PassPilot — תמצית אימות שוק
+
 ## Knowledge Gaps
-- **15 isolated node(s):** `{ randomUUID }`, `records`, `{ createHash }`, `streaks`, `Aviran` (+10 more)
+- **21 isolated node(s):** `{ randomUUID }`, `records`, `{ createHash }`, `streaks`, `PassPilot — Market Validation (auto, DeepSeek 2026-07-20)` (+16 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -89,7 +95,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`PassPilot` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 4 inferred relationships involving `PassPilot Main Interface` (e.g. with `Active Recall` and `Mock Exams`) actually correct?**
   _`PassPilot Main Interface` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 4 inferred relationships involving `factory-ci workflow` (e.g. with `computePassProbabilityWithConfidence` and `generateCramSchedule`) actually correct?**
-  _`factory-ci workflow` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `{ randomUUID }`, `records`, `{ createHash }` to the rest of the system?**
-  _15 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _21 weakly-connected nodes found - possible documentation gaps or missing edges._

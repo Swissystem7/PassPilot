@@ -341,8 +341,26 @@
       "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
     }
   ],
-  "tokens": {
-    "input": 6953,
-    "output": 10318
-  }
+  "questions": [
+    {
+      "type": "verify_inferred",
+      "question": "Are the 2 inferred relationships involving `PassPilot` (e.g. with `Aviran` and `PassPilot Main Interface`) actually correct?",
+      "why": "`PassPilot` has 2 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 4 inferred relationships involving `PassPilot Main Interface` (e.g. with `Active Recall` and `Mock Exams`) actually correct?",
+      "why": "`PassPilot Main Interface` has 4 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 4 inferred relationships involving `factory-ci workflow` (e.g. with `computePassProbabilityWithConfidence` and `generateCramSchedule`) actually correct?",
+      "why": "`factory-ci workflow` has 4 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `{ randomUUID }`, `records`, `{ createHash }` to the rest of the system?",
+      "why": "15 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
 }
