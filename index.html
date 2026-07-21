@@ -1,309 +1,109 @@
-<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PassPilot | תוכנית למבחן</title><style>
-:root{--navy:#15253f;--blue:#367bf5;--sky:#edf4ff;--line:#d8e2f1;--muted:#68778c;--card:#fff}*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#eaf2ff,#fafcff);font-family:Arial,sans-serif;color:var(--navy);min-height:100vh}.wrap{max-width:1000px;margin:auto;padding:42px 20px}header small{color:var(--blue);font-weight:bold}h1{font-size:clamp(2.3rem,6vw,4.3rem);margin:8px 0}.layout{display:grid;grid-template-columns:320px 1fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:22px;box-shadow:0 16px 45px #234d8a12}label{display:block;font-size:.82rem;color:var(--muted);margin:12px 0 6px}input{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit}button{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:var(--blue);color:white;font-weight:bold;cursor:pointer}.prob{display:flex;align-items:end;gap:11px;margin-bottom:15px}.prob strong{font-size:3.3rem;color:var(--blue)}.bar{height:9px;background:#e6edf8;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue);width:var(--w)}.weak,.session{padding:12px;margin:8px 0;border-radius:11px;background:var(--sky)}.weak{display:flex;justify-content:space-between}.session{display:grid;grid-template-columns:110px 1fr auto;gap:8px}.muted{font-size:.8rem;color:var(--muted)}.warning{color:#9a5a16}.error{color:#a22}@media(max-width:700px){.layout{grid-template-columns:1fr}.session{grid-template-columns:1fr}}
-</style></head><body><main class="wrap"><header><small>PASS<span dir="ltr">PILOT</span> / STUDY COCKPIT</small><h1>מסלול ברור עד יום המבחן.</h1><p>תחזית מעבר, זיהוי חולשות ותוכנית לימוד שמתאימה לזמן שנותר.</p></header><section class="layout"><form class="card" id="form"><h2>נתוני המבחן</h2><label>תאריך מבחן</label><input id="exam" type="date"><label>ציון אלגברה</label><input id="algebra" type="number" min="0" max="100" value="62"><label>ציון גאומטריה</label><input id="geometry" type="number" min="0" max="100" value="76"><label>ציון הסתברות</label><input id="probability" type="number" min="0" max="100" value="54"><button>בנה תוכנית</button></form><div class="card" id="result"></div></section></main><script>
-const __modules={"lib/weakTopicRanker.js":function(require,module,exports){
-function weakTopicRanker(results) {
-  if (!Array.isArray(results)) throw new TypeError("Input must be an array");
-  if (results.length === 0) return [];
-  const valid = results.filter(r => r && typeof r.topic === 'string' && r.topic !== '' && Number.isFinite(r.secondsSpent) && r.secondsSpent >= 0);
-  if (valid.length === 0) return [];
-  const topicMap = new Map();
-  for (const r of valid) {
-    if (!topicMap.has(r.topic)) topicMap.set(r.topic, { total: 0, wrong: 0, totalSeconds: 0 });
-    const d = topicMap.get(r.topic);
-    d.total++;
-    if (!r.correct) d.wrong++;
-    d.totalSeconds += r.secondsSpent;
-  }
-  let maxAvg = 0;
-  const topics = [];
-  for (const [topic, d] of topicMap) {
-    const avgSeconds = d.totalSeconds / d.total;
-    if (avgSeconds > maxAvg) maxAvg = avgSeconds;
-    topics.push({ topic, total: d.total, wrong: d.wrong, avgSeconds });
-  }
-  const resultsArr = topics.map(t => {
-    const errorRate = t.total === 0 ? 0 : t.wrong / t.total;
-    const normalizedAvgSeconds = maxAvg === 0 ? 0 : t.avgSeconds / maxAvg;
-    const score = errorRate * 0.7 + normalizedAvgSeconds * 0.3;
-    return {
-      topic: t.topic,
-      score: Math.round(score * 1000) / 1000,
-      attempts: t.total,
-      errorRate: Math.round(errorRate * 1000) / 1000
-    };
-  });
-  resultsArr.sort((a, b) => b.score - a.score || (a.topic < b.topic ? -1 : 1));
-  return resultsArr;
-}
-module.exports = { weakTopicRanker };
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PassPilot | בוחן Python</title>
+  <style>
+    :root{color-scheme:light dark;--bg:#f3f7f5;--panel:#fff;--ink:#15221d;--muted:#65736d;--brand:#087f5b;--brand2:#0ca678;--line:#dbe6e0;--good:#16794b;--bad:#c92a2a;--soft:#e9f7f1;--shadow:0 18px 48px #183c2c18}
+    @media(prefers-color-scheme:dark){:root{--bg:#101713;--panel:#18221d;--ink:#eef7f2;--muted:#a8b8b0;--line:#34463d;--soft:#203c31;--shadow:0 18px 48px #0006}}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0,#0ca67820,transparent 35%),var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}button,select{font:inherit}button{cursor:pointer}.shell{width:min(880px,calc(100% - 28px));margin:auto;padding:28px 0 60px}.brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.logo{font-weight:900;font-size:1.3rem}.logo span{color:var(--brand2)}.pill{font-size:.82rem;background:var(--soft);color:var(--brand);padding:5px 10px;border-radius:99px}.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,5vw,42px);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;margin-bottom:14px}h2{font-size:clamp(1.5rem,4vw,2.2rem)}.lead{color:var(--muted);font-size:1.08rem;max-width:620px}.field{margin:24px 0}.label{font-weight:800;display:block;margin-bottom:10px}.topics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.topic{position:relative}.topic input{position:absolute;opacity:0}.topic span{display:block;text-align:center;border:1px solid var(--line);padding:11px 8px;border-radius:12px;transition:.2s}.topic input:checked+span{background:var(--soft);border-color:var(--brand2);color:var(--brand);font-weight:800}.controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}.controls select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)}.primary,.next{border:0;border-radius:13px;padding:13px 24px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;font-weight:850;box-shadow:0 8px 20px #087f5b35}.primary{width:100%;margin-top:8px}.primary:hover,.next:hover{filter:brightness(1.06);transform:translateY(-1px)}.hidden{display:none!important}.quiz-head{display:flex;align-items:center;gap:14px;margin-bottom:24px}.progress-track{height:8px;background:var(--line);border-radius:9px;overflow:hidden;flex:1}.progress-bar{height:100%;background:var(--brand2);transition:width .3s}.counter,.timer{white-space:nowrap;color:var(--muted);font-size:.9rem}.question-meta{display:flex;gap:8px;margin-bottom:12px}.tag{background:var(--soft);color:var(--brand);border-radius:7px;padding:3px 8px;font-size:.78rem;font-weight:750}.prompt{white-space:pre-wrap;direction:ltr;text-align:left;background:#111b17;color:#e7fff4;border-radius:15px;padding:18px;overflow:auto;font:600 .95rem/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;margin:15px 0 20px}.answers{display:grid;gap:11px}.answer{border:1px solid var(--line);border-radius:13px;padding:13px 16px;background:transparent;color:var(--ink);text-align:right;transition:.15s}.answer:hover:not(:disabled){border-color:var(--brand2);background:var(--soft)}.answer.correct{background:#dff7e9;color:#126b41;border-color:#51cf66}.answer.wrong{background:#ffe3e3;color:#a51111;border-color:#ff8787}.answer:disabled{cursor:default}.feedback{margin-top:18px;padding:15px;border-radius:13px;background:var(--soft)}.feedback strong{display:block;margin-bottom:4px}.next{display:block;margin:17px 0 0 auto}.score-ring{width:136px;height:136px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;background:conic-gradient(var(--brand2) var(--score),var(--line) 0);position:relative}.score-ring:after{content:"";position:absolute;inset:11px;background:var(--panel);border-radius:50%}.score-ring b{z-index:1;font-size:2rem}.center{text-align:center}.insights{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}.insight{border:1px solid var(--line);border-radius:16px;padding:18px}.insight.wide{grid-column:1/-1}.insight h3{font-size:1rem;margin-bottom:10px}.meter{height:9px;background:var(--line);border-radius:10px;overflow:hidden;margin:10px 0}.meter i{display:block;height:100%;background:var(--brand2)}.weak-list,.plan{margin:0;padding:0;list-style:none}.weak-list li,.plan li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:8px 0}.weak-list li:first-child,.plan li:first-child{border-top:0}.muted{color:var(--muted);font-size:.9rem}.restart{margin-top:24px;background:transparent;color:var(--brand2);border:1px solid var(--brand2);border-radius:12px;padding:10px 18px;font-weight:800}@media(max-width:620px){.topics{grid-template-columns:1fr 1fr}.controls,.insights{grid-template-columns:1fr}.insight.wide{grid-column:auto}.card{border-radius:18px}.quiz-head{flex-wrap:wrap}.progress-track{order:3;flex-basis:100%}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill">Python Intro</div></header>
+    <section id="start" class="card">
+      <h1>לא רק ללמוד.<br>לדעת שתעבור.</h1>
+      <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות, מעריך את סיכויי המעבר ובונה לך תוכנית תרגול ממוקדת.</p>
+      <div class="field"><span class="label">אילו נושאים לתרגל?</span><div id="topics" class="topics"></div></div>
+      <div class="controls">
+        <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
+        <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
+      </div>
+      <button id="startBtn" class="primary">מתחילים בבוחן</button>
+    </section>
+    <section id="quiz" class="card hidden" aria-live="polite">
+      <div class="quiz-head"><span id="counter" class="counter"></span><div class="progress-track"><div id="progress" class="progress-bar"></div></div><span id="timer" class="timer">00:00</span></div>
+      <div class="question-meta"><span id="topicTag" class="tag"></span><span id="levelTag" class="tag"></span></div>
+      <h2 id="questionTitle">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback hidden"></div><button id="nextBtn" class="next hidden">לשאלה הבאה</button>
+    </section>
+    <section id="results" class="card hidden">
+      <div class="center"><div id="scoreRing" class="score-ring"><b id="scoreText"></b></div><h2 id="resultTitle"></h2><p id="resultCopy" class="lead" style="margin-inline:auto"></p></div>
+      <div class="insights">
+        <article class="insight"><h3>סיכוי מעבר משוער</h3><strong id="probability"></strong><div class="meter"><i id="probabilityBar"></i></div><p id="trend" class="muted"></p></article>
+        <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
+        <article class="insight wide"><h3>תוכנית התרגול שלך</h3><ul id="studyPlan" class="plan"></ul></article>
+      </div>
+      <div class="center"><button id="restartBtn" class="restart">בוחן חדש</button></div>
+    </section>
+  </main>
+  <script>
+const questionBank = () => [
+  { id: 1, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor i in range(3):\n    print(i)", options: ["1 2 3", "0 1 2", "0 1 2 3", "1 2"], answerIdx: 1, explanation: "range(3) מייצר את המספרים 0, 1, 2; הגבול העליון אינו נכלל." },
+  { id: 2, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor i in range(1, 4):\n    print(i)", options: ["1 2 3", "1 2 3 4", "0 1 2 3", "2 3 4"], answerIdx: 0, explanation: "range(1, 4) מתחיל ב־1 ועוצר לפני 4." },
+  { id: 3, topic: "loops", difficulty: 2, question: "מה יודפס?\ns = 0\nfor i in range(1, 6):\n    s += i\nprint(s)", options: ["10", "21", "15", "5"], answerIdx: 2, explanation: "הסכום 1+2+3+4+5 הוא 15." },
+  { id: 4, topic: "loops", difficulty: 2, question: "מה יודפס?\nfor i in range(5, 0, -1):\n    print(i)", options: ["5 4 3 2 1", "5 4 3 2", "4 3 2 1 0", "5 4 3 2 1 0"], answerIdx: 0, explanation: "צעד של ‎-1 יורד מ־5, והלולאה נעצרת לפני 0." },
+  { id: 5, topic: "loops", difficulty: 3, question: "מה יודפס?\nx = 0\nfor i in range(3):\n    for j in range(2):\n        x += 1\nprint(x)", options: ["5", "3", "2", "6"], answerIdx: 3, explanation: "הלולאה הפנימית רצה פעמיים בכל אחת מ־3 האיטרציות: 3×2=6." },
+  { id: 6, topic: "functions", difficulty: 1, question: "מה יודפס?\ndef f():\n    return 5\nprint(f())", options: ["None", "5", "f", "שגיאה"], answerIdx: 1, explanation: "הקריאה f() מחזירה 5, ולכן print מדפיס 5." },
+  { id: 7, topic: "functions", difficulty: 1, question: "מה יודפס?\ndef add(a, b):\n    return a + b\nprint(add(3, 4))", options: ["34", "12", "7", "שגיאה"], answerIdx: 2, explanation: "הפונקציה מחברת מספרים: 3+4=7." },
+  { id: 8, topic: "functions", difficulty: 2, question: "מה יודפס?\ndef f(x=2):\n    return x * 2\nprint(f(3))", options: ["6", "4", "9", "שגיאה"], answerIdx: 0, explanation: "הארגומנט 3 מחליף את ברירת המחדל, ולכן 3×2=6." },
+  { id: 9, topic: "functions", difficulty: 2, question: "מה יודפס?\ndef f(a, b):\n    return a - b\nprint(f(b=1, a=5))", options: ["-4", "6", "שגיאה", "4"], answerIdx: 3, explanation: "בארגומנטים בשם הסדר אינו משנה: a=5 ו־b=1, ולכן התוצאה 4." },
+  { id: 10, topic: "functions", difficulty: 3, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return 1\n    return n * f(n - 1)\nprint(f(4))", options: ["10", "24", "4", "16"], answerIdx: 1, explanation: "זו עצרת: ‎4! = 4×3×2×1 = 24." },
+  { id: 11, topic: "strings", difficulty: 1, question: "מה יודפס?\ns = 'hello'\nprint(len(s))", options: ["4", "6", "5", "3"], answerIdx: 2, explanation: "במחרוזת 'hello' יש 5 תווים." },
+  { id: 12, topic: "strings", difficulty: 1, question: "מה יודפס?\ns = 'abc'\nprint(s[1])", options: ["b", "a", "c", "שגיאה"], answerIdx: 0, explanation: "האינדקסים מתחילים ב־0, ולכן אינדקס 1 מכיל b." },
+  { id: 13, topic: "strings", difficulty: 2, question: "מה יודפס?\ns = 'hello'\nprint(s[1:4])", options: ["hel", "llo", "hell", "ell"], answerIdx: 3, explanation: "החיתוך כולל אינדקסים 1, 2, 3, אך לא את 4: ell." },
+  { id: 14, topic: "strings", difficulty: 2, question: "מה יודפס?\ns = 'Python'\nprint(s[::-1])", options: ["Python", "nohtyP", "noth", "P"], answerIdx: 1, explanation: "צעד ‎-1 בחיתוך הופך את סדר התווים." },
+  { id: 15, topic: "strings", difficulty: 3, question: "מה יודפס?\ns = 'a b c'\nprint(s.split())", options: ["['a b c']", "['a', 'b', 'c']", "['abc']", "שגיאה"], answerIdx: 1, explanation: "split() ללא ארגומנט מפריד לפי רצפים של רווחים ומחזיר שלוש מחרוזות." },
+  { id: 16, topic: "lists", difficulty: 1, question: "מה יודפס?\nlst = [1, 2, 3]\nprint(len(lst))", options: ["2", "4", "1", "3"], answerIdx: 3, explanation: "ברשימה יש שלושה איברים." },
+  { id: 17, topic: "lists", difficulty: 1, question: "מה יודפס?\nlst = [10, 20, 30]\nprint(lst[1])", options: ["20", "10", "30", "שגיאה"], answerIdx: 0, explanation: "אינדקס 1 הוא האיבר השני: 20." },
+  { id: 18, topic: "lists", difficulty: 2, question: "מה יודפס?\nlst = [1, 2, 3]\nlst.append(4)\nprint(lst)", options: ["[4, 1, 2, 3]", "[1, 2, 3]", "[1, 2, 3, 4]", "שגיאה"], answerIdx: 2, explanation: "append מוסיף את 4 לסוף הרשימה." },
+  { id: 19, topic: "lists", difficulty: 2, question: "מה יודפס?\nlst = [3, 1, 2]\nlst.sort()\nprint(lst)", options: ["[3, 1, 2]", "[1, 2, 3]", "[1, 3, 2]", "שגיאה"], answerIdx: 1, explanation: "sort ממיין את הרשימה במקום בסדר עולה." },
+  { id: 20, topic: "lists", difficulty: 3, question: "מה יודפס?\nlst = [[1, 2], [3, 4]]\nprint(lst[1][0])", options: ["1", "4", "3", "2"], answerIdx: 2, explanation: "lst[1] היא [3, 4], והאיבר באינדקס 0 בה הוא 3." },
+  { id: 21, topic: "conditions", difficulty: 1, question: "מה יודפס?\nx = 5\nif x > 3:\n    print('גדול')", options: ["קטן", "גדול", "שווה", "כלום"], answerIdx: 1, explanation: "התנאי 5>3 אמת, ולכן יודפס 'גדול'." },
+  { id: 22, topic: "conditions", difficulty: 1, question: "מה יודפס?\nx = 2\nif x > 5:\n    print('א')\nelse:\n    print('ב')", options: ["א", "שגיאה", "ב", "כלום"], answerIdx: 2, explanation: "2 אינו גדול מ־5, ולכן מתבצע ענף else." },
+  { id: 23, topic: "conditions", difficulty: 2, question: "מה יודפס?\nx = 7\nif x % 2 == 0:\n    print('זוגי')\nelse:\n    print('אי-זוגי')", options: ["אי-זוגי", "זוגי", "שגיאה", "כלום"], answerIdx: 0, explanation: "השארית בחלוקת 7 ב־2 היא 1, ולכן המספר אי־זוגי." },
+  { id: 24, topic: "conditions", difficulty: 2, question: "מה יודפס?\nx = 10\ny = 5\nif x > y and x < 20:\n    print('כן')", options: ["לא", "שגיאה", "כלום", "כן"], answerIdx: 3, explanation: "שני התנאים אמת: 10>5 וגם 10<20." },
+  { id: 25, topic: "conditions", difficulty: 3, question: "מה יודפס?\nx = 15\nif x < 10:\n    print('א')\nelif x < 20:\n    print('ב')\nelse:\n    print('ג')", options: ["א", "ג", "שגיאה", "ב"], answerIdx: 3, explanation: "התנאי הראשון שקר, אך 15<20 אמת, ולכן נבחר ענף elif." },
+  { id: 26, topic: "recursion", difficulty: 2, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return 0\n    return n + f(n - 1)\nprint(f(3))", options: ["3", "0", "6", "9"], answerIdx: 2, explanation: "הקריאות מחברות 3+2+1+0=6." },
+  { id: 27, topic: "recursion", difficulty: 3, question: "מה יודפס?\ndef f(n):\n    if n <= 1:\n        return n\n    return f(n - 1) + f(n - 2)\nprint(f(5))", options: ["8", "3", "13", "5"], answerIdx: 3, explanation: "בסדרת פיבונאצ'י 0,1,1,2,3,5 הערך באינדקס 5 הוא 5." },
+  { id: 28, topic: "recursion", difficulty: 3, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return 1\n    return 2 * f(n - 1)\nprint(f(3))", options: ["6", "4", "8", "2"], answerIdx: 2, explanation: "כל קריאה מכפילה ב־2, ולכן f(3)=2³=8." },
+  { id: 29, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor ch in 'ab':\n    print(ch)", options: ["ab בשורה אחת", "a ואז b בשורות נפרדות", "a בלבד", "b בלבד"], answerIdx: 1, explanation: "הלולאה עוברת על כל תו, ו־print מוסיף ירידת שורה בכל איטרציה." },
+  { id: 30, topic: "functions", difficulty: 2, question: "מה יודפס?\ndef f(lst):\n    return sum(lst)\nprint(f([1, 2, 3]))", options: ["3", "1", "שגיאה", "6"], answerIdx: 3, explanation: "sum מחבר את איברי הרשימה: 1+2+3=6." },
+  { id: 31, topic: "strings", difficulty: 2, question: "מה יודפס?\ns = 'hello'\nprint(s.upper())", options: ["hello", "Hello", "שגיאה", "HELLO"], answerIdx: 3, explanation: "upper מחזירה מחרוזת חדשה שבה האותיות באנגלית גדולות." },
+  { id: 32, topic: "lists", difficulty: 2, question: "מה יודפס?\nlst = [1, 2, 3]\nprint(lst.pop())", options: ["1", "3", "2", "[1, 2]"], answerIdx: 1, explanation: "pop() ללא אינדקס מסיר ומחזיר את האיבר האחרון, 3." },
+  { id: 33, topic: "conditions", difficulty: 1, question: "מה יודפס?\nx = 0\nif x:\n    print('אמת')\nelse:\n    print('שקר')", options: ["אמת", "שגיאה", "כלום", "שקר"], answerIdx: 3, explanation: "המספר 0 נחשב ערך שקרי (falsy), ולכן מתבצע else." },
+  { id: 34, topic: "recursion", difficulty: 1, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return\n    print(n)\n    f(n - 1)\nf(3)", options: ["1 2 3", "3 2 1 0", "3 2 1", "0 1 2 3"], answerIdx: 2, explanation: "ההדפסה מתבצעת לפני הקריאה הרקורסיבית; ב־0 הפונקציה חוזרת בלי להדפיס." },
+  { id: 35, topic: "loops", difficulty: 3, question: "מה יודפס?\ns = 0\nfor i in range(1, 10, 2):\n    s += i\nprint(s)", options: ["20", "30", "25", "15"], answerIdx: 2, explanation: "range מייצר 1,3,5,7,9, שסכומם 25." },
+  { id: 36, topic: "functions", difficulty: 3, question: "מה יודפס?\ndef f(a, b=2, c=3):\n    return a + b + c\nprint(f(1, c=5))", options: ["6", "8", "9", "שגיאה"], answerIdx: 1, explanation: "a=1,‏ b נשאר 2, ו־c=5; הסכום הוא 8." },
+  { id: 37, topic: "strings", difficulty: 3, question: "מה יודפס?\ns = 'abc'\nprint(s.replace('b', 'z'))", options: ["abc", "abz", "שגיאה", "azc"], answerIdx: 3, explanation: "replace מחליפה את b ב־z ומחזירה azc." },
+  { id: 38, topic: "lists", difficulty: 3, question: "מה יודפס?\nlst = [1, 2, 3, 4]\nprint([x * 2 for x in lst if x % 2 == 0])", options: ["[2, 4, 6, 8]", "[4, 8]", "[2, 4]", "[4, 6]"], answerIdx: 1, explanation: "רק 2 ו־4 עוברים את התנאי, ואז כל אחד מוכפל ב־2." },
+  { id: 39, topic: "conditions", difficulty: 2, question: "מה יודפס?\nx = 3\ny = 3\nif x == y:\n    print('שווה')\nelse:\n    print('לא שווה')", options: ["לא שווה", "שגיאה", "שווה", "כלום"], answerIdx: 2, explanation: "3==3 הוא תנאי אמת." },
+  { id: 40, topic: "recursion", difficulty: 2, question: "מה יודפס?\ndef f(n):\n    if n < 2:\n        return n\n    return f(n - 1) + f(n - 2)\nprint(f(4))", options: ["4", "2", "5", "3"], answerIdx: 3, explanation: "ערכי פיבונאצ'י עד אינדקס 4 הם 0,1,1,2,3." },
+  { id: 41, topic: "loops", difficulty: 2, question: "מה יודפס?\nfor i in range(2, 5):\n    print(i)", options: ["2 3 4 5", "1 2 3 4", "2 3 4", "3 4 5"], answerIdx: 2, explanation: "range(2, 5) כולל את 2,3,4 ולא את 5." },
+  { id: 42, topic: "functions", difficulty: 1, question: "מה יודפס?\ndef f():\n    pass\nprint(f())", options: ["pass", "שגיאה", "None", "0"], answerIdx: 2, explanation: "פונקציה שמסתיימת בלי return מפורש מחזירה None." },
+  { id: 43, topic: "strings", difficulty: 1, question: "מה יודפס?\ns = 'shalom'\nprint(s[0])", options: ["h", "a", "s", "l"], answerIdx: 2, explanation: "האינדקס הראשון הוא 0, ובו התו s." },
+  { id: 44, topic: "lists", difficulty: 1, question: "מה יודפס?\nlst = [5]\nlst.append(10)\nprint(lst)", options: ["[10, 5]", "[5]", "שגיאה", "[5, 10]"], answerIdx: 3, explanation: "append מוסיף 10 לסוף הרשימה הקיימת." },
+  { id: 45, topic: "conditions", difficulty: 3, question: "מה יודפס?\nx = 8\nif x % 3 == 0:\n    print('א')\nelif x % 4 == 0:\n    print('ב')\nelse:\n    print('ג')", options: ["א", "ג", "ב", "שגיאה"], answerIdx: 2, explanation: "8 אינו מתחלק ב־3 אך מתחלק ב־4, ולכן נבחר ענף elif." }
+];
 
-},
-"lib/computePassProbabilityWithConfidence.js":function(require,module,exports){
-function computePassProbabilityWithConfidence(studyHistory, examDate, confidenceLevel) {
-  const warnings = [];
-  const examDateTime = new Date(examDate).getTime();
-  const now = Date.now();
-  if (!Number.isFinite(examDateTime) || examDateTime < now) {
-    throw new Error('PastDate');
-  }
-  if (!Array.isArray(studyHistory)) throw new Error('InvalidInput');
-  let confidence = Number.isFinite(confidenceLevel) ? confidenceLevel : 0.8;
-  if (confidence < 0.8) confidence = 0.8;
-  if (confidence > 0.99) confidence = 0.99;
-  if (studyHistory.length === 0) {
-    return {
-      probability: 0,
-      lowerBound: 0,
-      upperBound: 0.5,
-      warnings: ['No study data - probability is a guess']
-    };
-  }
-  const topics = [...new Set(studyHistory.map(s => s.topic))];
-  if (topics.length < 3) {
-    warnings.push('Too few topics to reliably estimate variance');
-  }
-  const scores = studyHistory.map(s => s.quizScore);
-  if (scores.some(s => !Number.isFinite(s))) throw new Error('InvalidInput');
-  const allPerfect = scores.every(s => s === 100);
-  if (allPerfect) {
-    warnings.push('Perfect scores may indicate overconfidence or cheating');
-    return {
-      probability: 1,
-      lowerBound: 0.99,
-      upperBound: 1,
-      warnings
-    };
-  }
-  const n = scores.length;
-  const mean = scores.reduce((a, b) => a + b, 0) / n;
-  const variance = n === 1 ? 0 : scores.reduce((sum, s) => sum + (s - mean) ** 2, 0) / (n - 1);
-  const probability = mean / 100;
-  if (variance === 0) {
-    return {
-      probability,
-      lowerBound: probability,
-      upperBound: probability,
-      warnings
-    };
-  }
-  const z = confidence === 0.8 ? 1.2816 : confidence === 0.85 ? 1.4400 : confidence === 0.9 ? 1.6449 : confidence === 0.95 ? 1.9600 : confidence === 0.99 ? 2.5758 : 1.6449;
-  const se = Math.sqrt(variance / n) / 100;
-  const margin = z * se;
-  let lower = probability - margin;
-  let upper = probability + margin;
-  if (lower < 0) lower = 0;
-  if (upper > 1) upper = 1;
-  return {
-    probability: Math.round(probability * 10000) / 10000,
-    lowerBound: Math.round(lower * 10000) / 10000,
-    upperBound: Math.round(upper * 10000) / 10000,
-    warnings
-  };
-}
-module.exports = { computePassProbabilityWithConfidence };
+const topicNames={loops:"לולאות",functions:"פונקציות",strings:"מחרוזות",lists:"רשימות",conditions:"תנאים",recursion:"רקורסיה"};
+function weakTopicRanker(results){if(!Array.isArray(results))throw new TypeError("Input must be an array");const valid=results.filter(r=>r&&typeof r.topic==="string"&&Number.isFinite(r.secondsSpent)&&r.secondsSpent>=0);const map=new Map;for(const r of valid){if(!map.has(r.topic))map.set(r.topic,{total:0,wrong:0,seconds:0});const d=map.get(r.topic);d.total++;if(!r.correct)d.wrong++;d.seconds+=r.secondsSpent}const rows=[...map].map(([topic,d])=>({topic,total:d.total,wrong:d.wrong,avgSeconds:d.seconds/d.total}));const max=Math.max(0,...rows.map(r=>r.avgSeconds));return rows.map(r=>({topic:r.topic,score:Math.round(((r.wrong/r.total)*.7+(max?r.avgSeconds/max:0)*.3)*1000)/1000,attempts:r.total,errorRate:Math.round(r.wrong/r.total*1000)/1000})).sort((a,b)=>b.score-a.score||a.topic.localeCompare(b.topic))}
+function calculateInitialPassProbability(correct,total,difficulty="medium"){if(!Number.isInteger(total)||total<=0||!Number.isInteger(correct)||correct<0||correct>total)throw new Error("invalid score");if(correct===0)return 0;return correct/total*({easy:1,medium:.8,hard:.6}[difficulty]||.8)}
+function generateInitialStudyPlan(examDate,topics,slots){const plan=[],warnings=[];const ordered=[...topics].sort((a,b)=>b.estimatedHoursTotal-a.estimatedHoursTotal);let index=0;for(const slot of slots){if(!ordered.length)break;const topic=ordered[index%ordered.length];plan.push({date:slot.day,topic:topic.name,hours:Math.min(1,slot.endHour-slot.startHour),type:index<2?"review":"practice"});index++}if(!plan.length)warnings.push("No available study slots");return{plan,warnings}}
 
-},
-"lib/generateInitialStudyPlan.js":function(require,module,exports){
-function generateInitialStudyPlan(examDate, topics, availableSlots) {
-  const warnings = [];
-  const plan = [];
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  let examDateObj;
-  if (typeof examDate === 'string') {
-    examDateObj = new Date(examDate + 'T00:00:00');
-  } else {
-    examDateObj = new Date(examDate);
-    examDateObj.setHours(0, 0, 0, 0);
-  }
-  if (Number.isNaN(examDateObj.getTime())) {
-    warnings.push('Exam date is in the past or today, cannot schedule');
-    return { plan: [], warnings };
-  }
-  if (examDateObj <= now) {
-    warnings.push('Exam date is in the past or today, cannot schedule');
-    return { plan: [], warnings };
-  }
-  if (!topics || topics.length === 0) {
-    warnings.push('No topics provided');
-    return { plan: [], warnings };
-  }
-  if (!availableSlots || availableSlots.length === 0) {
-    warnings.push('No available study slots');
-    return { plan: [], warnings };
-  }
-  const validSlots = [];
-  for (const slot of availableSlots) {
-    if (!slot || typeof slot.day !== 'string' || !Number.isFinite(slot.startHour) || !Number.isFinite(slot.endHour) || slot.startHour < 0 || slot.endHour > 23 || slot.endHour <= slot.startHour || slot.day >= examDateObj.toISOString().slice(0,10)) {
-      warnings.push(`Invalid slot on ${slot.day}: endHour (${slot.endHour}) <= startHour (${slot.startHour}), skipped`);
-      continue;
-    }
-    validSlots.push(slot);
-  }
-  if (validSlots.length === 0) {
-    warnings.push('No available study slots');
-    return { plan: [], warnings };
-  }
-  const mergedSlots = {};
-  for (const slot of validSlots) {
-    if (!mergedSlots[slot.day]) {
-      mergedSlots[slot.day] = [];
-    }
-    mergedSlots[slot.day].push({ start: slot.startHour, end: slot.endHour });
-  }
-  const daySlots = {};
-  for (const day in mergedSlots) {
-    const intervals = mergedSlots[day].sort((a, b) => a.start - b.start);
-    const merged = [];
-    let cur = intervals[0];
-    for (let i = 1; i < intervals.length; i++) {
-      if (intervals[i].start <= cur.end) {
-        cur.end = Math.max(cur.end, intervals[i].end);
-      } else {
-        merged.push(cur);
-        cur = intervals[i];
-      }
-    }
-    merged.push(cur);
-    daySlots[day] = merged;
-  }
-  const sortedDays = Object.keys(daySlots).sort();
-  const totalSlotHours = sortedDays.reduce((sum, day) => {
-    return sum + daySlots[day].reduce((s, interval) => s + (interval.end - interval.start), 0);
-  }, 0);
-  const totalEstimatedHours = topics.reduce((sum, t) => sum + t.estimatedHoursTotal, 0);
-  if (totalEstimatedHours > totalSlotHours) {
-    warnings.push(`Insufficient total study time; only ${totalSlotHours} of ${totalEstimatedHours} hours scheduled`);
-  }
-  const sortedTopics = [...topics].sort((a, b) => {
-    const diffOrder = { easy: 0, medium: 1, hard: 2 };
-    return diffOrder[a.difficulty] - diffOrder[b.difficulty];
-  });
-  const topicQueue = sortedTopics.map(t => ({
-    name: t.name,
-    difficulty: t.difficulty,
-    totalHours: t.estimatedHoursTotal,
-    remainingHours: t.estimatedHoursTotal
-  }));
-  let dayIndex = 0;
-  let slotIndex = 0;
-  let currentDay = sortedDays[0];
-  let currentIntervals = daySlots[currentDay];
-  let intervalIndex = 0;
-  let currentStart = currentIntervals[0].start;
-  let currentEnd = currentIntervals[0].end;
-  let currentHour = currentStart;
-  let totalScheduled = 0;
-  while (topicQueue.length > 0 && dayIndex < sortedDays.length) {
-    const topic = topicQueue[0];
-    if (topic.remainingHours <= 0) {
-      topicQueue.shift();
-      continue;
-    }
-    if (currentHour >= currentEnd) {
-      intervalIndex++;
-      if (intervalIndex >= currentIntervals.length) {
-        dayIndex++;
-        if (dayIndex >= sortedDays.length) break;
-        currentDay = sortedDays[dayIndex];
-        currentIntervals = daySlots[currentDay];
-        intervalIndex = 0;
-        currentHour = currentIntervals[0].start;
-        currentEnd = currentIntervals[0].end;
-      } else {
-        currentHour = currentIntervals[intervalIndex].start;
-        currentEnd = currentIntervals[intervalIndex].end;
-      }
-      continue;
-    }
-    const availableHours = currentEnd - currentHour;
-    const hoursToSchedule = Math.min(topic.remainingHours, availableHours);
-    const roundedHours = Math.round(hoursToSchedule * 2) / 2;
-    if (roundedHours <= 0) {
-      currentHour = currentEnd;
-      continue;
-    }
-    const ratio = topic.remainingHours / topic.totalHours;
-    let type;
-    if (ratio > 0.5) {
-      type = 'review';
-    } else if (ratio < 0.25) {
-      type = 'practice';
-    } else {
-      type = 'mock';
-    }
-    plan.push({
-      date: currentDay,
-      topic: topic.name,
-      hours: roundedHours,
-      type: type
-    });
-    topic.remainingHours -= roundedHours;
-    totalScheduled += roundedHours;
-    currentHour += roundedHours;
-    if (topic.remainingHours <= 0) {
-      topicQueue.shift();
-    }
-  }
-  plan.sort((a, b) => {
-    if (a.date !== b.date) return a.date.localeCompare(b.date);
-    return a.hours - b.hours;
-  });
-  return { plan, warnings };
-}
-module.exports = { generateInitialStudyPlan };
-
-},
-"lib/generateCramSchedule.js":function(require,module,exports){
-function generateCramSchedule(topicMastery, topicWeight, hoursUntilExam, studyHoursPerDay) {
-  if (!Array.isArray(topicMastery) || !Array.isArray(topicWeight) || topicMastery.length !== topicWeight.length || !Number.isFinite(hoursUntilExam) || !Number.isFinite(studyHoursPerDay) || hoursUntilExam <= 0 || studyHoursPerDay <= 0 || !topicMastery.every(Number.isFinite) || !topicWeight.every(Number.isFinite)) {
-    return [];
-  }
-  const n = topicMastery.length;
-  if (n === 0) return [];
-  let allHundred = true;
-  for (let i = 0; i < n; i++) {
-    if (topicMastery[i] < 100) { allHundred = false; break; }
-  }
-  if (allHundred) return [];
-  const days = Math.ceil(hoursUntilExam / 24);
-  const totalStudyTime = studyHoursPerDay * days;
-  let urgencySum = 0;
-  const urgencies = [];
-  for (let i = 0; i < n; i++) {
-    const mastery = Math.max(0, Math.min(100, topicMastery[i]));
-    const weight = Math.max(0, topicWeight[i]);
-    const urgency = (100 - mastery) * weight;
-    urgencies.push(urgency);
-    urgencySum += urgency;
-  }
-  if (urgencySum === 0) return [];
-  const result = [];
-  let allocatedSum = 0;
-  for (let i = 0; i < n; i++) {
-    const raw = (urgencies[i] / urgencySum) * totalStudyTime;
-    const rounded = Math.round(raw * 10) / 10;
-    result.push({ topicIndex: i, hoursToStudyPerDay: rounded });
-    allocatedSum += rounded;
-  }
-  let diff = Math.round((totalStudyTime - allocatedSum) * 10) / 10;
-  let idx = 0;
-  while (Math.abs(diff) > 0.001 && idx < n) {
-    const adjust = Math.round(diff * 10) / 10;
-    result[idx].hoursToStudyPerDay = Math.round((result[idx].hoursToStudyPerDay + adjust) * 10) / 10;
-    diff = 0;
-    idx++;
-  }
-  result.sort((a, b) => {
-    const urgencyA = (100 - Math.max(0, Math.min(100, topicMastery[a.topicIndex]))) * Math.max(0, topicWeight[a.topicIndex]);
-    const urgencyB = (100 - Math.max(0, Math.min(100, topicMastery[b.topicIndex]))) * Math.max(0, topicWeight[b.topicIndex]);
-    return urgencyB - urgencyA;
-  });
-  return result;
-}
-module.exports = { generateCramSchedule };
-
-}};const __cache={};function __require(id,from){if(id.startsWith('.')){id=(from.slice(0,from.lastIndexOf('/')+1)+id).split('/').reduce((a,p)=>p==='..'?(a.pop(),a):p==='.'?a:(a.push(p),a),[]).join('/')}if(!id.endsWith('.js'))id+='.js';if(__cache[id])return __cache[id].exports;const fn=__modules[id];if(!fn)throw new Error('Module not bundled: '+id);const module={exports:{}};__cache[id]=module;const localRequire=req=>__require(req,id);localRequire.main=null;fn(localRequire,module,module.exports);return module.exports}
-const Pilot={...__require('lib/weakTopicRanker.js'),...__require('lib/computePassProbabilityWithConfidence.js'),...__require('lib/generateInitialStudyPlan.js'),...__require('lib/generateCramSchedule.js')};const $=x=>document.getElementById(x),esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])),iso=d=>d.toISOString().slice(0,10);const future=new Date();future.setDate(future.getDate()+14);$('exam').value=iso(future);function run(e){if(e)e.preventDefault();try{const topics=[['אלגברה',Number($('algebra').value)],['גאומטריה',Number($('geometry').value)],['הסתברות',Number($('probability').value)]],history=topics.flatMap(([topic,score],i)=>[{topic,quizScore:score,correct:score>=70,secondsSpent:70+i*30},{topic,quizScore:Math.min(100,score+5),correct:score>=65,secondsSpent:60+i*25}]),pass=Pilot.computePassProbabilityWithConfidence(history,$('exam').value+'T23:59:59',.9),weak=Pilot.weakTopicRanker(history),dates=[2,4,6,8,10,12].map(days=>{const d=new Date();d.setDate(d.getDate()+days);return {day:iso(d),startHour:18,endHour:20}}),plan=Pilot.generateInitialStudyPlan($('exam').value,topics.map(([name,score])=>({name,difficulty:score<60?'hard':score<75?'medium':'easy',estimatedHoursTotal:3})),dates);$('result').innerHTML=`<div class="prob"><strong>${Math.round(pass.probability*100)}%</strong><div><b>סיכוי מעבר משוער</b><div class="muted">טווח ${Math.round(pass.lowerBound*100)}%–${Math.round(pass.upperBound*100)}%</div></div></div><div class="bar" style="--w:${pass.probability*100}%"><i></i></div><h2>נושאים לחיזוק</h2>${weak.map(x=>`<div class="weak"><b>${esc(x.topic)}</b><span>ציון חולשה ${Math.round(x.score*100)}</span></div>`).join('')}<h2>תוכנית לימוד</h2>${plan.plan.slice(0,6).map(x=>`<div class="session"><b>${x.date}</b><span>${esc(x.topic)}</span><span>${x.hours} שעות · ${x.type}</span></div>`).join('')}${[...pass.warnings,...plan.warnings].map(w=>`<p class="warning">${esc(w)}</p>`).join('')}` }catch(err){$('result').innerHTML=`<p class="error">${esc(err.message)}</p>`}}$('form').addEventListener('submit',run);run();
-</script></body></html>
+const $=id=>document.getElementById(id);let quiz=[],at=0,answers=[],questionStarted=0,timerId;
+function renderTopics(){$("topics").innerHTML=Object.entries(topicNames).map(([key,name])=>`<label class="topic"><input type="checkbox" value="${key}" checked><span>${name}</span></label>`).join("")}
+function seededQuiz(pool,count){let seed=(Date.now()^performance.now()*1000)|0,r=[...pool];const rnd=()=>{seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^seed>>>15,1|seed);t=(t+Math.imul(t^t>>>7,61|t))^t;return((t^t>>>14)>>>0)/4294967296};for(let i=r.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r.slice(0,Math.min(count,r.length))}
+function startQuiz(){const topics=[...document.querySelectorAll("#topics input:checked")].map(x=>x.value);if(!topics.length){alert("בחר לפחות נושא אחד");return}const diff=$("difficulty").value;const pool=questionBank().filter(q=>topics.includes(q.topic)&&(!diff||q.difficulty===+diff));quiz=seededQuiz(pool,+$("count").value);if(!quiz.length){alert("אין שאלות בשילוב שבחרת");return}at=0;answers=[];$("start").classList.add("hidden");$("results").classList.add("hidden");$("quiz").classList.remove("hidden");showQuestion()}
+function showQuestion(){const q=quiz[at];questionStarted=Date.now();$("counter").textContent=`שאלה ${at+1} מתוך ${quiz.length}`;$("progress").style.width=`${at/quiz.length*100}%`;$("topicTag").textContent=topicNames[q.topic];$("levelTag").textContent=`רמה ${q.difficulty}`;const parts=q.question.split("\n");$("questionTitle").textContent=parts.shift();$("prompt").textContent=parts.join("\n");$("answers").innerHTML=q.options.map((o,i)=>`<button class="answer" data-index="${i}">${o}</button>`).join("");$("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>answerQuestion(+b.dataset.index));clearInterval(timerId);tick();timerId=setInterval(tick,1000)}
+function tick(){const sec=Math.floor((Date.now()-questionStarted)/1000);$("timer").textContent=`${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`}
+function answerQuestion(selected){clearInterval(timerId);const q=quiz[at],correct=selected===q.answerIdx,seconds=(Date.now()-questionStarted)/1000;answers.push({topic:q.topic,correct,secondsSpent:seconds});document.querySelectorAll(".answer").forEach((b,i)=>{b.disabled=true;if(i===q.answerIdx)b.classList.add("correct");else if(i===selected)b.classList.add("wrong")});$("feedback").innerHTML=`<strong>${correct?"✓ תשובה נכונה":"✗ כמעט — הנה הפתרון"}</strong>${q.explanation}`;$("feedback").classList.remove("hidden");$("nextBtn").textContent=at===quiz.length-1?"לתוצאות":"לשאלה הבאה";$("nextBtn").classList.remove("hidden")}
+function next(){at++;if(at<quiz.length)showQuestion();else showResults()}
+function futureSlots(){const slots=[];for(let i=1;i<=5;i++){const d=new Date;d.setDate(d.getDate()+i);slots.push({day:d.toISOString().slice(0,10),startHour:18,endHour:19})}return slots}
+function showResults(){clearInterval(timerId);$("quiz").classList.add("hidden");$("results").classList.remove("hidden");const correct=answers.filter(a=>a.correct).length,pct=Math.round(correct/answers.length*100),prob=calculateInitialPassProbability(correct,answers.length,"medium"),ranked=weakTopicRanker(answers),weak=ranked.filter(r=>r.errorRate>0).slice(0,3);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent=pct>=70?"אתה בכיוון מצוין":pct>=50?"קרוב למעבר — ממשיכים לדייק":"מצאנו איפה לחזק";$("resultCopy").textContent=`ענית נכון על ${correct} מתוך ${answers.length}. ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.`;$("probability").textContent=`${Math.round(prob*100)}%`;$("probabilityBar").style.width=`${prob*100}%`;const midpoint=Math.max(1,Math.floor(answers.length/2)),first=answers.slice(0,midpoint).filter(a=>a.correct).length/midpoint,last=answers.slice(midpoint),second=last.length?last.filter(a=>a.correct).length/last.length:first;$("trend").textContent=second>first?"מגמה חיובית: השתפרת לאורך הבוחן.":second<first?"הדיוק ירד בחצי השני — כדאי לתרגל בקצב רגוע.":"הדיוק נשאר יציב לאורך הבוחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]}</span><b>${Math.round(r.errorRate*100)}% טעויות</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>`;const focus=(weak.length?weak:ranked.slice(0,2)).map((r,i)=>({name:topicNames[r.topic],difficulty:i?"medium":"hard",estimatedHoursTotal:2-i*.5}));const plan=generateInitialStudyPlan(new Date(Date.now()+7*864e5),focus,futureSlots()).plan;$("studyPlan").innerHTML=plan.length?plan.map(p=>`<li><span>${new Date(p.date+"T00:00:00").toLocaleDateString("he-IL",{weekday:"short",day:"numeric",month:"numeric"})} · ${p.topic}</span><b>${p.hours} שעה</b></li>`).join(""):`<li>אין צורך בתוכנית חיזוק כרגע.</li>`}
+$("startBtn").onclick=startQuiz;$("nextBtn").onclick=next;$("restartBtn").onclick=()=>{$("results").classList.add("hidden");$("start").classList.remove("hidden")};renderTopics();
+  </script>
+</body>
+</html>
