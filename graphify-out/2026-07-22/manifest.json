@@ -185,9 +185,9 @@
     "semantic_hash": "1b639ba8ef22b0ca6603987071db49c8"
   },
   "index.html": {
-    "mtime": 1784684317.3820193,
-    "ast_hash": "07c6682928b03988473b4606391b16ab",
-    "semantic_hash": ""
+    "mtime": 1784569748.2857494,
+    "ast_hash": "4f56edfff05b787a9ae553039e848341",
+    "semantic_hash": "4f56edfff05b787a9ae553039e848341"
   },
   "lib/generateOnboardingPlan.js": {
     "mtime": 1784587565.678708,
@@ -202,101 +202,6 @@
   "VALIDATION.md": {
     "mtime": 1784581463.9489427,
     "ast_hash": "da0d17fd4dad61b0b9fe1792488b22a0",
-    "semantic_hash": ""
-  },
-  "lib/calculateReferralReward.js": {
-    "mtime": 1784659565.9623475,
-    "ast_hash": "b33075753773e417ba3b863596c5b603",
-    "semantic_hash": ""
-  },
-  "lib/calibratedPassProbability.js": {
-    "mtime": 1784645162.7918828,
-    "ast_hash": "7e4ee5ff378bbab158424eaf3789edc5",
-    "semantic_hash": ""
-  },
-  "lib/computeRetentionDiscount.js": {
-    "mtime": 1784659563.6094358,
-    "ast_hash": "7044916c7b9f95b6d6739a897a269158",
-    "semantic_hash": ""
-  },
-  "lib/createStudyPair.js": {
-    "mtime": 1784659580.2582686,
-    "ast_hash": "64b2e7eaff94af2de480f66f63288057",
-    "semantic_hash": ""
-  },
-  "lib/detectMockExamAnomalies.js": {
-    "mtime": 1784601970.2998443,
-    "ast_hash": "6fc9ab2519a4ca5c48b309b29a738238",
-    "semantic_hash": ""
-  },
-  "lib/detectOverStudyRisk.js": {
-    "mtime": 1784645163.5262465,
-    "ast_hash": "2342ba2609fe20b41b40b2998caffe50",
-    "semantic_hash": ""
-  },
-  "lib/detectStudyAnomaly.js": {
-    "mtime": 1784637972.9165275,
-    "ast_hash": "9e3f24eed45bf17b47a874dcef95b73f",
-    "semantic_hash": ""
-  },
-  "lib/examMode10016.js": {
-    "mtime": 1784684136.5592563,
-    "ast_hash": "b25f2bd36d00515548e7fce1c2dcebf6",
-    "semantic_hash": ""
-  },
-  "lib/generateCatchUpPlan.js": {
-    "mtime": 1784616378.05093,
-    "ast_hash": "556e8e413f26df088c2747ac337f3d36",
-    "semantic_hash": ""
-  },
-  "lib/generateDailyPlan.js": {
-    "mtime": 1784630771.2355807,
-    "ast_hash": "895fd5173f51e207ae300f0d9405c090",
-    "semantic_hash": ""
-  },
-  "lib/generateEmergencyPlan.js": {
-    "mtime": 1784616376.6755567,
-    "ast_hash": "90a3c440ebf4f769f6e8475b060e9341",
-    "semantic_hash": ""
-  },
-  "lib/generateMockExamBundle.js": {
-    "mtime": 1784659565.352975,
-    "ast_hash": "9ef0d3598766b4960e94e9f99109a314",
-    "semantic_hash": ""
-  },
-  "lib/generateMotivationMessage.js": {
-    "mtime": 1784616377.5559642,
-    "ast_hash": "783c060d877558c2e08284d705b78660",
-    "semantic_hash": ""
-  },
-  "lib/generateReferralLink.js": {
-    "mtime": 1784673969.4596553,
-    "ast_hash": "c975f7ff3834618713594cc4dc9fb236",
-    "semantic_hash": ""
-  },
-  "lib/generateStudyProof.js": {
-    "mtime": 1784601969.501317,
-    "ast_hash": "6d23f89c94133c08b7947170c18d67da",
-    "semantic_hash": ""
-  },
-  "lib/loadExamPreset.js": {
-    "mtime": 1784630770.5096056,
-    "ast_hash": "279c671a61d685a98c21a093c404ae2d",
-    "semantic_hash": ""
-  },
-  "lib/questionBank.js": {
-    "mtime": 1784684136.6124907,
-    "ast_hash": "14d62fc7f7d4d4ec2a79928f91ad82d2",
-    "semantic_hash": ""
-  },
-  "lib/quickPassProbability.js": {
-    "mtime": 1784630771.8544111,
-    "ast_hash": "5bd78d62fc4d44452537854c297dd09d",
-    "semantic_hash": ""
-  },
-  "lib/signPassProbability.js": {
-    "mtime": 1784601970.8623278,
-    "ast_hash": "cb14f7c58fbfb73d5e03bc065cdb36cc",
     "semantic_hash": ""
   }
 }

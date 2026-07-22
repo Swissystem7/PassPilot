@@ -164,28 +164,6 @@
       "norm_label": "calculateinitialpassprobability()"
     },
     {
-      "label": "calculateReferralReward.js",
-      "file_type": "code",
-      "source_file": "lib/calculateReferralReward.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_calculatereferralreward",
-      "community": 51,
-      "community_name": "calculateReferralReward.js",
-      "norm_label": "calculatereferralreward.js"
-    },
-    {
-      "label": "calculateReferralReward()",
-      "file_type": "code",
-      "source_file": "lib/calculateReferralReward.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_calculatereferralreward_calculatereferralreward",
-      "community": 51,
-      "community_name": "calculateReferralReward.js",
-      "norm_label": "calculatereferralreward()"
-    },
-    {
       "label": "calculateResilienceScore.js",
       "file_type": "code",
       "source_file": "lib/calculateResilienceScore.js",
@@ -250,28 +228,6 @@
       "community": 11,
       "community_name": "calculateStreakWithGrace.js",
       "norm_label": "calculatestreakwithgrace()"
-    },
-    {
-      "label": "calibratedPassProbability.js",
-      "file_type": "code",
-      "source_file": "lib/calibratedPassProbability.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_calibratedpassprobability",
-      "community": 52,
-      "community_name": "calibratedPassProbability.js",
-      "norm_label": "calibratedpassprobability.js"
-    },
-    {
-      "label": "calibratedPassProbability()",
-      "file_type": "code",
-      "source_file": "lib/calibratedPassProbability.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_calibratedpassprobability_calibratedpassprobability",
-      "community": 52,
-      "community_name": "calibratedPassProbability.js",
-      "norm_label": "calibratedpassprobability()"
     },
     {
       "label": "checkAccountSharing.js",
@@ -362,28 +318,6 @@
       "norm_label": "computepassprobabilitywithconfidence()"
     },
     {
-      "label": "computeRetentionDiscount.js",
-      "file_type": "code",
-      "source_file": "lib/computeRetentionDiscount.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_computeretentiondiscount",
-      "community": 53,
-      "community_name": "computeRetentionDiscount.js",
-      "norm_label": "computeretentiondiscount.js"
-    },
-    {
-      "label": "computeRetentionDiscount()",
-      "file_type": "code",
-      "source_file": "lib/computeRetentionDiscount.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_computeretentiondiscount_computeretentiondiscount",
-      "community": 53,
-      "community_name": "computeRetentionDiscount.js",
-      "norm_label": "computeretentiondiscount()"
-    },
-    {
       "label": "createDailyStudyPlan.js",
       "file_type": "code",
       "source_file": "lib/createDailyStudyPlan.js",
@@ -404,116 +338,6 @@
       "community": 16,
       "community_name": "createDailyStudyPlan.js",
       "norm_label": "createdailystudyplan()"
-    },
-    {
-      "label": "createStudyPair.js",
-      "file_type": "code",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_createstudypair",
-      "community": 48,
-      "community_name": "createStudyPair.js",
-      "norm_label": "createstudypair.js"
-    },
-    {
-      "label": "{ randomUUID }",
-      "file_type": "code",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_createstudypair_randomuuid",
-      "community": 48,
-      "community_name": "createStudyPair.js",
-      "norm_label": "{ randomuuid }"
-    },
-    {
-      "label": "activePairs",
-      "file_type": "code",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "lib_createstudypair_activepairs",
-      "community": 48,
-      "community_name": "createStudyPair.js",
-      "norm_label": "activepairs"
-    },
-    {
-      "label": "createStudyPair()",
-      "file_type": "code",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "lib_createstudypair_createstudypair",
-      "community": 48,
-      "community_name": "createStudyPair.js",
-      "norm_label": "createstudypair()"
-    },
-    {
-      "label": "detectMockExamAnomalies.js",
-      "file_type": "code",
-      "source_file": "lib/detectMockExamAnomalies.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectmockexamanomalies",
-      "community": 54,
-      "community_name": "detectMockExamAnomalies.js",
-      "norm_label": "detectmockexamanomalies.js"
-    },
-    {
-      "label": "detectMockExamAnomalies()",
-      "file_type": "code",
-      "source_file": "lib/detectMockExamAnomalies.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectmockexamanomalies_detectmockexamanomalies",
-      "community": 54,
-      "community_name": "detectMockExamAnomalies.js",
-      "norm_label": "detectmockexamanomalies()"
-    },
-    {
-      "label": "detectOverStudyRisk.js",
-      "file_type": "code",
-      "source_file": "lib/detectOverStudyRisk.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectoverstudyrisk",
-      "community": 55,
-      "community_name": "detectOverStudyRisk.js",
-      "norm_label": "detectoverstudyrisk.js"
-    },
-    {
-      "label": "detectOverStudyRisk()",
-      "file_type": "code",
-      "source_file": "lib/detectOverStudyRisk.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectoverstudyrisk_detectoverstudyrisk",
-      "community": 55,
-      "community_name": "detectOverStudyRisk.js",
-      "norm_label": "detectoverstudyrisk()"
-    },
-    {
-      "label": "detectStudyAnomaly.js",
-      "file_type": "code",
-      "source_file": "lib/detectStudyAnomaly.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectstudyanomaly",
-      "community": 56,
-      "community_name": "detectStudyAnomaly.js",
-      "norm_label": "detectstudyanomaly.js"
-    },
-    {
-      "label": "detectStudyAnomaly()",
-      "file_type": "code",
-      "source_file": "lib/detectStudyAnomaly.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectstudyanomaly_detectstudyanomaly",
-      "community": 56,
-      "community_name": "detectStudyAnomaly.js",
-      "norm_label": "detectstudyanomaly()"
     },
     {
       "label": "detectSuspiciousBehavior.js",
@@ -538,61 +362,6 @@
       "norm_label": "detectsuspiciousbehavior()"
     },
     {
-      "label": "examMode10016.js",
-      "file_type": "code",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_exammode10016",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "exammode10016.js"
-    },
-    {
-      "label": "BLOCKS",
-      "file_type": "code",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_exammode10016_blocks",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "blocks"
-    },
-    {
-      "label": "examStructure()",
-      "file_type": "code",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L8",
-      "_origin": "ast",
-      "id": "lib_exammode10016_examstructure",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "examstructure()"
-    },
-    {
-      "label": "mulberry32()",
-      "file_type": "code",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "lib_exammode10016_mulberry32",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "mulberry32()"
-    },
-    {
-      "label": "buildExamSession()",
-      "file_type": "code",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "lib_exammode10016_buildexamsession",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "buildexamsession()"
-    },
-    {
       "label": "generateAdaptivePlan.js",
       "file_type": "code",
       "source_file": "lib/generateAdaptivePlan.js",
@@ -613,28 +382,6 @@
       "community": 18,
       "community_name": "generateAdaptivePlan.js",
       "norm_label": "generateadaptiveplan()"
-    },
-    {
-      "label": "generateCatchUpPlan.js",
-      "file_type": "code",
-      "source_file": "lib/generateCatchUpPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatecatchupplan",
-      "community": 57,
-      "community_name": "generateCatchUpPlan.js",
-      "norm_label": "generatecatchupplan.js"
-    },
-    {
-      "label": "generateCatchUpPlan()",
-      "file_type": "code",
-      "source_file": "lib/generateCatchUpPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatecatchupplan_generatecatchupplan",
-      "community": 57,
-      "community_name": "generateCatchUpPlan.js",
-      "norm_label": "generatecatchupplan()"
     },
     {
       "label": "generateCramSchedule.js",
@@ -659,28 +406,6 @@
       "norm_label": "generatecramschedule()"
     },
     {
-      "label": "generateDailyPlan.js",
-      "file_type": "code",
-      "source_file": "lib/generateDailyPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatedailyplan",
-      "community": 58,
-      "community_name": "generateDailyPlan.js",
-      "norm_label": "generatedailyplan.js"
-    },
-    {
-      "label": "generateDailyPlan()",
-      "file_type": "code",
-      "source_file": "lib/generateDailyPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatedailyplan_generatedailyplan",
-      "community": 58,
-      "community_name": "generateDailyPlan.js",
-      "norm_label": "generatedailyplan()"
-    },
-    {
       "label": "generateDailyStudyPlan.js",
       "file_type": "code",
       "source_file": "lib/generateDailyStudyPlan.js",
@@ -701,28 +426,6 @@
       "community": 20,
       "community_name": "generateDailyStudyPlan.js",
       "norm_label": "generatedailystudyplan()"
-    },
-    {
-      "label": "generateEmergencyPlan.js",
-      "file_type": "code",
-      "source_file": "lib/generateEmergencyPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generateemergencyplan",
-      "community": 59,
-      "community_name": "generateEmergencyPlan.js",
-      "norm_label": "generateemergencyplan.js"
-    },
-    {
-      "label": "generateEmergencyPlan()",
-      "file_type": "code",
-      "source_file": "lib/generateEmergencyPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generateemergencyplan_generateemergencyplan",
-      "community": 59,
-      "community_name": "generateEmergencyPlan.js",
-      "norm_label": "generateemergencyplan()"
     },
     {
       "label": "generateInitialStudyPlan.js",
@@ -767,61 +470,6 @@
       "community": 22,
       "community_name": "generateMilestoneMessage.js",
       "norm_label": "generatemilestonemessage()"
-    },
-    {
-      "label": "generateMockExamBundle.js",
-      "file_type": "code",
-      "source_file": "lib/generateMockExamBundle.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatemockexambundle",
-      "community": 49,
-      "community_name": "generateMockExamBundle.js",
-      "norm_label": "generatemockexambundle.js"
-    },
-    {
-      "label": "{ randomUUID }",
-      "file_type": "code",
-      "source_file": "lib/generateMockExamBundle.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatemockexambundle_randomuuid",
-      "community": 49,
-      "community_name": "generateMockExamBundle.js",
-      "norm_label": "{ randomuuid }"
-    },
-    {
-      "label": "generateMockExamBundle()",
-      "file_type": "code",
-      "source_file": "lib/generateMockExamBundle.js",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "lib_generatemockexambundle_generatemockexambundle",
-      "community": 49,
-      "community_name": "generateMockExamBundle.js",
-      "norm_label": "generatemockexambundle()"
-    },
-    {
-      "label": "generateMotivationMessage.js",
-      "file_type": "code",
-      "source_file": "lib/generateMotivationMessage.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatemotivationmessage",
-      "community": 60,
-      "community_name": "generateMotivationMessage.js",
-      "norm_label": "generatemotivationmessage.js"
-    },
-    {
-      "label": "generateMotivationMessage()",
-      "file_type": "code",
-      "source_file": "lib/generateMotivationMessage.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatemotivationmessage_generatemotivationmessage",
-      "community": 60,
-      "community_name": "generateMotivationMessage.js",
-      "norm_label": "generatemotivationmessage()"
     },
     {
       "label": "generateOnboardingPlan.js",
@@ -934,28 +582,6 @@
       "norm_label": "generatereferralcode()"
     },
     {
-      "label": "generateReferralLink.js",
-      "file_type": "code",
-      "source_file": "lib/generateReferralLink.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatereferrallink",
-      "community": 61,
-      "community_name": "generateReferralLink.js",
-      "norm_label": "generatereferrallink.js"
-    },
-    {
-      "label": "generateReferralLink()",
-      "file_type": "code",
-      "source_file": "lib/generateReferralLink.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatereferrallink_generatereferrallink",
-      "community": 61,
-      "community_name": "generateReferralLink.js",
-      "norm_label": "generatereferrallink()"
-    },
-    {
       "label": "generateShareCard.js",
       "file_type": "code",
       "source_file": "lib/generateShareCard.js",
@@ -976,39 +602,6 @@
       "community": 25,
       "community_name": "generateShareCard.js",
       "norm_label": "generatesharecard()"
-    },
-    {
-      "label": "generateStudyProof.js",
-      "file_type": "code",
-      "source_file": "lib/generateStudyProof.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatestudyproof",
-      "community": 50,
-      "community_name": "generateStudyProof.js",
-      "norm_label": "generatestudyproof.js"
-    },
-    {
-      "label": "generateStudyProof()",
-      "file_type": "code",
-      "source_file": "lib/generateStudyProof.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatestudyproof_generatestudyproof",
-      "community": 50,
-      "community_name": "generateStudyProof.js",
-      "norm_label": "generatestudyproof()"
-    },
-    {
-      "label": "verifyStudyProof()",
-      "file_type": "code",
-      "source_file": "lib/generateStudyProof.js",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "lib_generatestudyproof_verifystudyproof",
-      "community": 50,
-      "community_name": "generateStudyProof.js",
-      "norm_label": "verifystudyproof()"
     },
     {
       "label": "getAccountabilityPartnerProgress.js",
@@ -1110,28 +703,6 @@
       "norm_label": "inferweaktopicsfromminimalquiz()"
     },
     {
-      "label": "loadExamPreset.js",
-      "file_type": "code",
-      "source_file": "lib/loadExamPreset.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_loadexampreset",
-      "community": 62,
-      "community_name": "loadExamPreset.js",
-      "norm_label": "loadexampreset.js"
-    },
-    {
-      "label": "loadExamPreset()",
-      "file_type": "code",
-      "source_file": "lib/loadExamPreset.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_loadexampreset_loadexampreset",
-      "community": 62,
-      "community_name": "loadExamPreset.js",
-      "norm_label": "loadexampreset()"
-    },
-    {
       "label": "matchStudyBuddy.js",
       "file_type": "code",
       "source_file": "lib/matchStudyBuddy.js",
@@ -1198,72 +769,6 @@
       "norm_label": "predictreturnprobability()"
     },
     {
-      "label": "questionBank.js",
-      "file_type": "code",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_questionbank",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "questionbank.js"
-    },
-    {
-      "label": "questionBank()",
-      "file_type": "code",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_questionbank_questionbank",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "questionbank()"
-    },
-    {
-      "label": "mulberry32()",
-      "file_type": "code",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L63",
-      "_origin": "ast",
-      "id": "lib_questionbank_mulberry32",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "mulberry32()"
-    },
-    {
-      "label": "pickQuiz()",
-      "file_type": "code",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L73",
-      "_origin": "ast",
-      "id": "lib_questionbank_pickquiz",
-      "community": 46,
-      "community_name": "examMode10016.js",
-      "norm_label": "pickquiz()"
-    },
-    {
-      "label": "quickPassProbability.js",
-      "file_type": "code",
-      "source_file": "lib/quickPassProbability.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_quickpassprobability",
-      "community": 63,
-      "community_name": "quickPassProbability.js",
-      "norm_label": "quickpassprobability.js"
-    },
-    {
-      "label": "quickPassProbability()",
-      "file_type": "code",
-      "source_file": "lib/quickPassProbability.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_quickpassprobability_quickpassprobability",
-      "community": 63,
-      "community_name": "quickPassProbability.js",
-      "norm_label": "quickpassprobability()"
-    },
-    {
       "label": "rebalanceDailyPlan.js",
       "file_type": "code",
       "source_file": "lib/rebalanceDailyPlan.js",
@@ -1306,61 +811,6 @@
       "community": 45,
       "community_name": "resolveCalendarConflicts.js",
       "norm_label": "resolvecalendarconflicts()"
-    },
-    {
-      "label": "signPassProbability.js",
-      "file_type": "code",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_signpassprobability",
-      "community": 47,
-      "community_name": "signPassProbability.js",
-      "norm_label": "signpassprobability.js"
-    },
-    {
-      "label": "crypto",
-      "file_type": "code",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_signpassprobability_crypto",
-      "community": 47,
-      "community_name": "signPassProbability.js",
-      "norm_label": "crypto"
-    },
-    {
-      "label": "canonicalStringify()",
-      "file_type": "code",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "lib_signpassprobability_canonicalstringify",
-      "community": 47,
-      "community_name": "signPassProbability.js",
-      "norm_label": "canonicalstringify()"
-    },
-    {
-      "label": "signPassProbability()",
-      "file_type": "code",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "lib_signpassprobability_signpassprobability",
-      "community": 47,
-      "community_name": "signPassProbability.js",
-      "norm_label": "signpassprobability()"
-    },
-    {
-      "label": "verifyPassProbability()",
-      "file_type": "code",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "lib_signpassprobability_verifypassprobability",
-      "community": 47,
-      "community_name": "signPassProbability.js",
-      "norm_label": "verifypassprobability()"
     },
     {
       "label": "trackReferralRedemption.js",
@@ -2003,18 +1453,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/calculateReferralReward.js",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_calculatereferralreward",
-      "target": "lib_calculatereferralreward_calculatereferralreward",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/calculateResilienceScore.js",
       "source_location": "L57",
       "weight": 1.0,
@@ -2046,18 +1484,6 @@
       "context": "collection",
       "source": "lib_calculatestreakwithgrace",
       "target": "lib_calculatestreakwithgrace_calculatestreakwithgrace",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/calibratedPassProbability.js",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_calibratedpassprobability",
-      "target": "lib_calibratedpassprobability_calibratedpassprobability",
       "confidence_score": 0.5
     },
     {
@@ -2111,18 +1537,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/computeRetentionDiscount.js",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_computeretentiondiscount",
-      "target": "lib_computeretentiondiscount_computeretentiondiscount",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/createDailyStudyPlan.js",
       "source_location": "L37",
       "weight": 1.0,
@@ -2130,76 +1544,6 @@
       "context": "collection",
       "source": "lib_createdailystudyplan",
       "target": "lib_createdailystudyplan_createdailystudyplan",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_createstudypair",
-      "target": "lib_createstudypair_activepairs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L26",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_createstudypair",
-      "target": "lib_createstudypair_createstudypair",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/createStudyPair.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_createstudypair",
-      "target": "lib_createstudypair_randomuuid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/detectMockExamAnomalies.js",
-      "source_location": "L58",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_detectmockexamanomalies",
-      "target": "lib_detectmockexamanomalies_detectmockexamanomalies",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/detectOverStudyRisk.js",
-      "source_location": "L48",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_detectoverstudyrisk",
-      "target": "lib_detectoverstudyrisk_detectoverstudyrisk",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/detectStudyAnomaly.js",
-      "source_location": "L38",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_detectstudyanomaly",
-      "target": "lib_detectstudyanomaly_detectstudyanomaly",
       "confidence_score": 0.5
     },
     {
@@ -2215,100 +1559,6 @@
       "confidence_score": 0.5
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_exammode10016",
-      "target": "lib_exammode10016_blocks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_exammode10016",
-      "target": "lib_exammode10016_buildexamsession",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_exammode10016",
-      "target": "lib_exammode10016_examstructure",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_exammode10016",
-      "target": "lib_exammode10016_mulberry32",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_exammode10016",
-      "target": "lib_questionbank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_exammode10016",
-      "target": "lib_questionbank_questionbank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_exammode10016_buildexamsession",
-      "target": "lib_exammode10016_examstructure",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/examMode10016.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_exammode10016_buildexamsession",
-      "target": "lib_exammode10016_mulberry32",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "lib/generateAdaptivePlan.js",
@@ -2318,18 +1568,6 @@
       "context": "collection",
       "source": "lib_generateadaptiveplan",
       "target": "lib_generateadaptiveplan_generateadaptiveplan",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/generateCatchUpPlan.js",
-      "source_location": "L64",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatecatchupplan",
-      "target": "lib_generatecatchupplan_generatecatchupplan",
       "confidence_score": 0.5
     },
     {
@@ -2347,18 +1585,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/generateDailyPlan.js",
-      "source_location": "L38",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatedailyplan",
-      "target": "lib_generatedailyplan_generatedailyplan",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/generateDailyStudyPlan.js",
       "source_location": "L68",
       "weight": 1.0,
@@ -2366,18 +1592,6 @@
       "context": "collection",
       "source": "lib_generatedailystudyplan",
       "target": "lib_generatedailystudyplan_generatedailystudyplan",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/generateEmergencyPlan.js",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generateemergencyplan",
-      "target": "lib_generateemergencyplan_generateemergencyplan",
       "confidence_score": 0.5
     },
     {
@@ -2402,41 +1616,6 @@
       "context": "collection",
       "source": "lib_generatemilestonemessage",
       "target": "lib_generatemilestonemessage_generatemilestonemessage",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/generateMockExamBundle.js",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatemockexambundle",
-      "target": "lib_generatemockexambundle_generatemockexambundle",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/generateMockExamBundle.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_generatemockexambundle",
-      "target": "lib_generatemockexambundle_randomuuid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/generateMotivationMessage.js",
-      "source_location": "L48",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatemotivationmessage",
-      "target": "lib_generatemotivationmessage_generatemotivationmessage",
       "confidence_score": 0.5
     },
     {
@@ -2512,18 +1691,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/generateReferralLink.js",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatereferrallink",
-      "target": "lib_generatereferrallink_generatereferrallink",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/generateShareCard.js",
       "source_location": "L34",
       "weight": 1.0,
@@ -2532,41 +1699,6 @@
       "source": "lib_generatesharecard",
       "target": "lib_generatesharecard_generatesharecard",
       "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/generateStudyProof.js",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatestudyproof",
-      "target": "lib_generatestudyproof_generatestudyproof",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/generateStudyProof.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_generatestudyproof",
-      "target": "lib_generatestudyproof_verifystudyproof",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/generateStudyProof.js",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_generatestudyproof_verifystudyproof",
-      "target": "lib_generatestudyproof_generatestudyproof",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2630,18 +1762,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/loadExamPreset.js",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_loadexampreset",
-      "target": "lib_loadexampreset_loadexampreset",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/matchStudyBuddy.js",
       "source_location": "L66",
       "weight": 1.0,
@@ -2676,77 +1796,6 @@
       "confidence_score": 0.5
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L63",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_questionbank",
-      "target": "lib_questionbank_mulberry32",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L91",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_questionbank",
-      "target": "lib_questionbank_pickquiz",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L91",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_questionbank",
-      "target": "lib_questionbank_questionbank",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L79",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_questionbank_pickquiz",
-      "target": "lib_questionbank_questionbank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/questionBank.js",
-      "source_location": "L82",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_questionbank_pickquiz",
-      "target": "lib_questionbank_mulberry32",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/quickPassProbability.js",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_quickpassprobability",
-      "target": "lib_quickpassprobability_quickpassprobability",
-      "confidence_score": 0.5
-    },
-    {
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "lib/rebalanceDailyPlan.js",
@@ -2769,75 +1818,6 @@
       "source": "lib_resolvecalendarconflicts",
       "target": "lib_resolvecalendarconflicts_resolvecalendarconflicts",
       "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_signpassprobability",
-      "target": "lib_signpassprobability_canonicalstringify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_signpassprobability",
-      "target": "lib_signpassprobability_crypto",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L75",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_signpassprobability",
-      "target": "lib_signpassprobability_signpassprobability",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_signpassprobability",
-      "target": "lib_signpassprobability_verifypassprobability",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_signpassprobability_signpassprobability",
-      "target": "lib_signpassprobability_canonicalstringify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/signPassProbability.js",
-      "source_location": "L70",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_signpassprobability_verifypassprobability",
-      "target": "lib_signpassprobability_canonicalstringify",
-      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -3280,5 +2260,5 @@
       "source_file": "index.html"
     }
   ],
-  "built_at_commit": "c99debeb9bd6711c6920010c4cc5299a8c401648"
+  "built_at_commit": "884ae7c107bc0f24f9988d89b8e3d6ee827d7c38"
 }
