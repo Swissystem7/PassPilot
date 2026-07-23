@@ -62,13 +62,5 @@
   "60": "generateMotivationMessage.js",
   "61": "generateReferralLink.js",
   "62": "loadExamPreset.js",
-  "63": "quickPassProbability.js",
-  "64": "updateStudyStreak.js",
-  "65": "autoDetectExamSyllabus.js",
-  "66": "calculateRescuePackOffer.js",
-  "67": "createMinimalProfile.js",
-  "68": "detectScorePlateau.js",
-  "69": "generateFirstDayPlan.js",
-  "70": "generateWeakTopicUpsell.js",
-  "71": "offerExamReadinessPack.js"
+  "63": "quickPassProbability.js"
 }

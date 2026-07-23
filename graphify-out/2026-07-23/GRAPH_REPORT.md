@@ -1,16 +1,16 @@
-# Graph Report - PassPilot  (2026-07-23)
+# Graph Report - PassPilot  (2026-07-22)
 
 ## Corpus Check
-- 66 files · ~22,739 words
+- 58 files · ~18,170 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 179 nodes · 125 edges · 72 communities (60 shown, 12 thin omitted)
-- Extraction: 40% EXTRACTED · 60% INFERRED · 0% AMBIGUOUS · INFERRED: 75 edges (avg confidence: 0.54)
+- 162 nodes · 116 edges · 64 communities (53 shown, 11 thin omitted)
+- Extraction: 42% EXTRACTED · 58% INFERRED · 0% AMBIGUOUS · INFERRED: 67 edges (avg confidence: 0.54)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c95eed35`
+- Built from commit: `c99debeb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,7 +33,6 @@
 - createStudyPair.js
 - generateMockExamBundle.js
 - generateStudyProof.js
-- updateStudyStreak.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `PassPilot — תמצית אימות שוק` - 6 edges
@@ -67,7 +66,7 @@
 - **PassPilot Methodology Principles** — README_active_recall, README_spaced_learning, README_mock_exams, README_error_recovery, README_question_list, README_pomodoro, README_ai_usage, README_passing_zone, README_time_allocation [EXTRACTED 1.00]
 - **Exam Topics** — index_html_algebra, index_html_geometry, index_html_probability [EXTRACTED 1.00]
 
-## Communities (72 total, 12 thin omitted)
+## Communities (64 total, 11 thin omitted)
 
 ### Community 0 - "run"
 Cohesion: 0.31
@@ -98,9 +97,9 @@ Cohesion: 0.60
 Nodes (4): canonicalStringify(), crypto, signPassProbability(), verifyPassProbability()
 
 ## Knowledge Gaps
-- **27 isolated node(s):** `{ randomUUID }`, `activePairs`, `BLOCKS`, `{ randomUUID }`, `{ randomUUID }` (+22 more)
+- **26 isolated node(s):** `{ randomUUID }`, `activePairs`, `BLOCKS`, `{ randomUUID }`, `{ randomUUID }` (+21 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -110,4 +109,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 4 inferred relationships involving `PassPilot Main Interface` (e.g. with `Active Recall` and `Mock Exams`) actually correct?**
   _`PassPilot Main Interface` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `{ randomUUID }`, `activePairs`, `BLOCKS` to the rest of the system?**
-  _27 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _26 weakly-connected nodes found - possible documentation gaps or missing edges._

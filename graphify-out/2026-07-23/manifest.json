@@ -298,45 +298,5 @@
     "mtime": 1784601970.8623278,
     "ast_hash": "cb14f7c58fbfb73d5e03bc065cdb36cc",
     "semantic_hash": ""
-  },
-  "lib/autoDetectExamSyllabus.js": {
-    "mtime": 1784760370.9064655,
-    "ast_hash": "a7af05f087755b5a0e899d7213a08a8e",
-    "semantic_hash": ""
-  },
-  "lib/calculateRescuePackOffer.js": {
-    "mtime": 1784731579.0219114,
-    "ast_hash": "4a4b8609600e26b4a1c9720282d7c07e",
-    "semantic_hash": ""
-  },
-  "lib/createMinimalProfile.js": {
-    "mtime": 1784760371.9627597,
-    "ast_hash": "0edc957cbd992437d48c2268b2f68542",
-    "semantic_hash": ""
-  },
-  "lib/detectScorePlateau.js": {
-    "mtime": 1784745966.7432618,
-    "ast_hash": "8d37d0674b69906d82d14cd3c5835e72",
-    "semantic_hash": ""
-  },
-  "lib/generateFirstDayPlan.js": {
-    "mtime": 1784760372.6502573,
-    "ast_hash": "15fefd86860b825cc366dbcfd4aeef45",
-    "semantic_hash": ""
-  },
-  "lib/generateWeakTopicUpsell.js": {
-    "mtime": 1784731580.0957508,
-    "ast_hash": "7aa50aded91e9d342504d7b4cef0a5f4",
-    "semantic_hash": ""
-  },
-  "lib/offerExamReadinessPack.js": {
-    "mtime": 1784731580.665688,
-    "ast_hash": "fdd1ee28577fb0f595448b9012f0374b",
-    "semantic_hash": ""
-  },
-  "lib/updateStudyStreak.js": {
-    "mtime": 1784745965.8839254,
-    "ast_hash": "e0b8479fd80c8a23b3261b0d3e0e2c3a",
-    "semantic_hash": ""
   }
 }

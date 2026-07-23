@@ -120,28 +120,6 @@
       "norm_label": "analyzeweaktopicsfromquiz()"
     },
     {
-      "label": "autoDetectExamSyllabus.js",
-      "file_type": "code",
-      "source_file": "lib/autoDetectExamSyllabus.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_autodetectexamsyllabus",
-      "community": 65,
-      "community_name": "autoDetectExamSyllabus.js",
-      "norm_label": "autodetectexamsyllabus.js"
-    },
-    {
-      "label": "autoDetectExamSyllabus()",
-      "file_type": "code",
-      "source_file": "lib/autoDetectExamSyllabus.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_autodetectexamsyllabus_autodetectexamsyllabus",
-      "community": 65,
-      "community_name": "autoDetectExamSyllabus.js",
-      "norm_label": "autodetectexamsyllabus()"
-    },
-    {
       "label": "calculateComboMultiplier.js",
       "file_type": "code",
       "source_file": "lib/calculateComboMultiplier.js",
@@ -206,28 +184,6 @@
       "community": 51,
       "community_name": "calculateReferralReward.js",
       "norm_label": "calculatereferralreward()"
-    },
-    {
-      "label": "calculateRescuePackOffer.js",
-      "file_type": "code",
-      "source_file": "lib/calculateRescuePackOffer.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_calculaterescuepackoffer",
-      "community": 66,
-      "community_name": "calculateRescuePackOffer.js",
-      "norm_label": "calculaterescuepackoffer.js"
-    },
-    {
-      "label": "calculateRescuePackOffer()",
-      "file_type": "code",
-      "source_file": "lib/calculateRescuePackOffer.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_calculaterescuepackoffer_calculaterescuepackoffer",
-      "community": 66,
-      "community_name": "calculateRescuePackOffer.js",
-      "norm_label": "calculaterescuepackoffer()"
     },
     {
       "label": "calculateResilienceScore.js",
@@ -450,28 +406,6 @@
       "norm_label": "createdailystudyplan()"
     },
     {
-      "label": "createMinimalProfile.js",
-      "file_type": "code",
-      "source_file": "lib/createMinimalProfile.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_createminimalprofile",
-      "community": 67,
-      "community_name": "createMinimalProfile.js",
-      "norm_label": "createminimalprofile.js"
-    },
-    {
-      "label": "createMinimalProfile()",
-      "file_type": "code",
-      "source_file": "lib/createMinimalProfile.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_createminimalprofile_createminimalprofile",
-      "community": 67,
-      "community_name": "createMinimalProfile.js",
-      "norm_label": "createminimalprofile()"
-    },
-    {
       "label": "createStudyPair.js",
       "file_type": "code",
       "source_file": "lib/createStudyPair.js",
@@ -558,28 +492,6 @@
       "community": 55,
       "community_name": "detectOverStudyRisk.js",
       "norm_label": "detectoverstudyrisk()"
-    },
-    {
-      "label": "detectScorePlateau.js",
-      "file_type": "code",
-      "source_file": "lib/detectScorePlateau.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectscoreplateau",
-      "community": 68,
-      "community_name": "detectScorePlateau.js",
-      "norm_label": "detectscoreplateau.js"
-    },
-    {
-      "label": "detectScorePlateau()",
-      "file_type": "code",
-      "source_file": "lib/detectScorePlateau.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_detectscoreplateau_detectscoreplateau",
-      "community": 68,
-      "community_name": "detectScorePlateau.js",
-      "norm_label": "detectscoreplateau()"
     },
     {
       "label": "detectStudyAnomaly.js",
@@ -811,28 +723,6 @@
       "community": 59,
       "community_name": "generateEmergencyPlan.js",
       "norm_label": "generateemergencyplan()"
-    },
-    {
-      "label": "generateFirstDayPlan.js",
-      "file_type": "code",
-      "source_file": "lib/generateFirstDayPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatefirstdayplan",
-      "community": 69,
-      "community_name": "generateFirstDayPlan.js",
-      "norm_label": "generatefirstdayplan.js"
-    },
-    {
-      "label": "generateFirstDayPlan()",
-      "file_type": "code",
-      "source_file": "lib/generateFirstDayPlan.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generatefirstdayplan_generatefirstdayplan",
-      "community": 69,
-      "community_name": "generateFirstDayPlan.js",
-      "norm_label": "generatefirstdayplan()"
     },
     {
       "label": "generateInitialStudyPlan.js",
@@ -1121,28 +1011,6 @@
       "norm_label": "verifystudyproof()"
     },
     {
-      "label": "generateWeakTopicUpsell.js",
-      "file_type": "code",
-      "source_file": "lib/generateWeakTopicUpsell.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generateweaktopicupsell",
-      "community": 70,
-      "community_name": "generateWeakTopicUpsell.js",
-      "norm_label": "generateweaktopicupsell.js"
-    },
-    {
-      "label": "generateWeakTopicUpsell()",
-      "file_type": "code",
-      "source_file": "lib/generateWeakTopicUpsell.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_generateweaktopicupsell_generateweaktopicupsell",
-      "community": 70,
-      "community_name": "generateWeakTopicUpsell.js",
-      "norm_label": "generateweaktopicupsell()"
-    },
-    {
       "label": "getAccountabilityPartnerProgress.js",
       "file_type": "code",
       "source_file": "lib/getAccountabilityPartnerProgress.js",
@@ -1284,28 +1152,6 @@
       "community": 29,
       "community_name": "matchStudyBuddy.js",
       "norm_label": "matchstudybuddy()"
-    },
-    {
-      "label": "offerExamReadinessPack.js",
-      "file_type": "code",
-      "source_file": "lib/offerExamReadinessPack.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_offerexamreadinesspack",
-      "community": 71,
-      "community_name": "offerExamReadinessPack.js",
-      "norm_label": "offerexamreadinesspack.js"
-    },
-    {
-      "label": "offerExamReadinessPack()",
-      "file_type": "code",
-      "source_file": "lib/offerExamReadinessPack.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_offerexamreadinesspack_offerexamreadinesspack",
-      "community": 71,
-      "community_name": "offerExamReadinessPack.js",
-      "norm_label": "offerexamreadinesspack()"
     },
     {
       "label": "optimalReferralReward.js",
@@ -1581,39 +1427,6 @@
       "community": 4,
       "community_name": "trackStudyStreak.js",
       "norm_label": "trackstudystreak()"
-    },
-    {
-      "label": "updateStudyStreak.js",
-      "file_type": "code",
-      "source_file": "lib/updateStudyStreak.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_updatestudystreak",
-      "community": 64,
-      "community_name": "updateStudyStreak.js",
-      "norm_label": "updatestudystreak.js"
-    },
-    {
-      "label": "streakDB",
-      "file_type": "code",
-      "source_file": "lib/updateStudyStreak.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_updatestudystreak_streakdb",
-      "community": 64,
-      "community_name": "updateStudyStreak.js",
-      "norm_label": "streakdb"
-    },
-    {
-      "label": "updateStudyStreak()",
-      "file_type": "code",
-      "source_file": "lib/updateStudyStreak.js",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "lib_updatestudystreak_updatestudystreak",
-      "community": 64,
-      "community_name": "updateStudyStreak.js",
-      "norm_label": "updatestudystreak()"
     },
     {
       "label": "verifyStudyLogIntegrity.js",
@@ -2166,18 +1979,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/autoDetectExamSyllabus.js",
-      "source_location": "L239",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_autodetectexamsyllabus",
-      "target": "lib_autodetectexamsyllabus_autodetectexamsyllabus",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/calculateComboMultiplier.js",
       "source_location": "L8",
       "weight": 1.0,
@@ -2209,18 +2010,6 @@
       "context": "collection",
       "source": "lib_calculatereferralreward",
       "target": "lib_calculatereferralreward_calculatereferralreward",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/calculateRescuePackOffer.js",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_calculaterescuepackoffer",
-      "target": "lib_calculaterescuepackoffer_calculaterescuepackoffer",
       "confidence_score": 0.5
     },
     {
@@ -2344,18 +2133,6 @@
       "confidence_score": 0.5
     },
     {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/createMinimalProfile.js",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_createminimalprofile",
-      "target": "lib_createminimalprofile_createminimalprofile",
-      "confidence_score": 0.5
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/createStudyPair.js",
@@ -2411,18 +2188,6 @@
       "context": "collection",
       "source": "lib_detectoverstudyrisk",
       "target": "lib_detectoverstudyrisk_detectoverstudyrisk",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/detectScorePlateau.js",
-      "source_location": "L81",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_detectscoreplateau",
-      "target": "lib_detectscoreplateau_detectscoreplateau",
       "confidence_score": 0.5
     },
     {
@@ -2618,18 +2383,6 @@
     {
       "relation": "indirect_call",
       "confidence": "INFERRED",
-      "source_file": "lib/generateFirstDayPlan.js",
-      "source_location": "L69",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generatefirstdayplan",
-      "target": "lib_generatefirstdayplan_generatefirstdayplan",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
       "source_file": "lib/generateInitialStudyPlan.js",
       "source_location": "L148",
       "weight": 1.0,
@@ -2816,18 +2569,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/generateWeakTopicUpsell.js",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_generateweaktopicupsell",
-      "target": "lib_generateweaktopicupsell_generateweaktopicupsell",
-      "confidence_score": 0.5
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/getAccountabilityPartnerProgress.js",
@@ -2908,18 +2649,6 @@
       "context": "collection",
       "source": "lib_matchstudybuddy",
       "target": "lib_matchstudybuddy_matchstudybuddy",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/offerExamReadinessPack.js",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_offerexamreadinesspack",
-      "target": "lib_offerexamreadinesspack_offerexamreadinesspack",
       "confidence_score": 0.5
     },
     {
@@ -3167,29 +2896,6 @@
       "source": "lib_trackstudystreak_trackstudystreak",
       "target": "lib_trackstudystreak_parsedate",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/updateStudyStreak.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_updatestudystreak",
-      "target": "lib_updatestudystreak_streakdb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "lib/updateStudyStreak.js",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "collection",
-      "source": "lib_updatestudystreak",
-      "target": "lib_updatestudystreak_updatestudystreak",
-      "confidence_score": 0.5
     },
     {
       "relation": "indirect_call",
@@ -3574,5 +3280,5 @@
       "source_file": "index.html"
     }
   ],
-  "built_at_commit": "c95eed3551611eb512b70b69c1137f23b4964fa1"
+  "built_at_commit": "c99debeb9bd6711c6920010c4cc5299a8c401648"
 }
