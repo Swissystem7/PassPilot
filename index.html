@@ -131,5 +131,123 @@ function gradeExam(correct){examAnswers.push({topic:examBlocks[examAt].topic,cor
 function showExamResults(){$("exam").classList.add("hidden");$("results").classList.remove("hidden");const correct=examAnswers.filter(a=>a.correct).length,pct=correct*25,weak=weakTopicRanker(examAnswers).filter(r=>r.errorRate>0);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent="סיכום מבחן אפקה 10016";$("resultCopy").textContent=`פתרת נכון ${correct} מתוך 4 שאלות כתיבת קוד.`;$("probability").textContent=`${Math.round(calculateInitialPassProbability(correct,4,"hard")*100)}%`;$("probabilityBar").style.width=`${pct}%`;$("trend").textContent="ההערכה מבוססת על ארבעת בלוקי המבחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]}</span><b>דורש חיזוק</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>מצוין</b></li>`;$("studyPlan").innerHTML=examStructure10016.map((b,i)=>`<li><span>יום ${i+1} · ${b.title}</span><b>${weak.some(w=>w.topic===b.topic)?'90':'45'} דקות</b></li>`).join("")}
 $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("examCorrect").onclick=()=>gradeExam(true);$("examWrong").onclick=()=>gradeExam(false);
   </script>
+<script>
+/* PP-HISTORY — keeps quiz sessions across reloads so progress is visible over time.
+   Browser-local only: nothing is uploaded, no account, no server. */
+(function(){
+  var KEY = 'passpilot.history.v1', MAX = 20;
+
+  function read(){
+    try { var v = JSON.parse(localStorage.getItem(KEY)); return Array.isArray(v) ? v : []; }
+    catch(e){ return []; }
+  }
+  function write(list){
+    try { localStorage.setItem(KEY, JSON.stringify(list.slice(-MAX))); return true; }
+    catch(e){ return false; }   // private mode / quota — the quiz itself must still work
+  }
+  function byTopic(list){
+    var acc = {};
+    list.forEach(function(a){
+      var t = acc[a.topic] || (acc[a.topic] = {n:0, ok:0});
+      t.n++; if (a.correct) t.ok++;
+    });
+    return acc;
+  }
+
+  function save(){
+    if (!window.answers || !answers.length) return null;
+    var correct = answers.filter(function(a){return a.correct}).length;
+    var rec = {
+      ts: Date.now(),
+      total: answers.length,
+      correct: correct,
+      pct: Math.round(correct / answers.length * 100),
+      topics: byTopic(answers)
+    };
+    var list = read(); list.push(rec); write(list);
+    return { rec: rec, list: list };
+  }
+
+  function fmt(ts){
+    var d = new Date(ts);
+    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') +
+           ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+
+  function render(saved){
+    var host = document.getElementById('results');
+    if (!host) return;
+    var box = document.getElementById('PP-HISTORY');
+    if (!box){
+      box = document.createElement('div');
+      box.id = 'PP-HISTORY';
+      box.style.cssText = 'margin-top:22px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.03);direction:rtl;text-align:right';
+      host.appendChild(box);
+    }
+    var list = saved ? saved.list : read();
+    if (!list.length){ box.innerHTML = ''; return; }
+
+    var best = list.reduce(function(m,r){ return r.pct > m ? r.pct : m; }, 0);
+    var first = list[0].pct, last = list[list.length-1].pct;
+    var delta = list.length > 1 ? last - first : null;
+
+    // per-topic accuracy across every stored session — this is the actual gap map
+    var agg = {};
+    list.forEach(function(r){
+      Object.keys(r.topics || {}).forEach(function(k){
+        var a = agg[k] || (agg[k] = {n:0, ok:0});
+        a.n += r.topics[k].n; a.ok += r.topics[k].ok;
+      });
+    });
+    var names = (typeof topicNames === 'object' && topicNames) || {};
+    var rows = Object.keys(agg).map(function(k){
+      var a = agg[k], rate = Math.round(a.ok / a.n * 100);
+      return { name: names[k] || k, rate: rate, n: a.n };
+    }).sort(function(x,y){ return x.rate - y.rate; });
+
+    var recent = list.slice(-5).reverse().map(function(r){
+      return '<li style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:.82rem">' +
+             '<span style="opacity:.65">' + fmt(r.ts) + '</span>' +
+             '<span><b>' + r.pct + '%</b> · ' + r.correct + '/' + r.total + '</span></li>';
+    }).join('');
+
+    var bars = rows.map(function(t){
+      var col = t.rate >= 70 ? '#10b981' : t.rate >= 50 ? '#f59e0b' : '#ef4444';
+      return '<div style="margin-bottom:7px">' +
+        '<div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px">' +
+        '<span>' + t.name + '</span><span style="opacity:.7">' + t.rate + '% · ' + t.n + ' שאלות</span></div>' +
+        '<div style="height:6px;border-radius:3px;background:rgba(255,255,255,.08)">' +
+        '<div style="height:6px;border-radius:3px;width:' + t.rate + '%;background:' + col + '"></div></div></div>';
+    }).join('');
+
+    box.innerHTML =
+      '<div style="font-weight:800;margin-bottom:4px">📈 ההיסטוריה שלך</div>' +
+      '<div style="font-size:.8rem;opacity:.7;margin-bottom:12px">' + list.length + ' מפגשים · הציון הגבוה ' + best + '%' +
+        (delta === null ? '' : ' · שינוי מהמפגש הראשון ' + (delta >= 0 ? '+' : '') + delta + ' נקודות') +
+      '</div>' +
+      '<div style="font-weight:700;font-size:.84rem;margin-bottom:6px">דיוק לפי נושא, מצטבר</div>' + bars +
+      '<div style="font-weight:700;font-size:.84rem;margin:12px 0 4px">מפגשים אחרונים</div>' +
+      '<ul style="list-style:none;padding:0;margin:0">' + recent + '</ul>' +
+      '<button id="PP-CLEAR" style="margin-top:12px;font:600 .76rem system-ui;background:transparent;border:1px solid rgba(255,255,255,.18);color:inherit;border-radius:8px;padding:5px 12px;cursor:pointer">מחיקת ההיסטוריה</button>' +
+      '<div style="font-size:.68rem;opacity:.5;margin-top:8px">נשמר בדפדפן הזה בלבד — בלי חשבון, בלי שרת, בלי העלאה.</div>';
+
+    var btn = document.getElementById('PP-CLEAR');
+    if (btn) btn.onclick = function(){
+      try { localStorage.removeItem(KEY); } catch(e){}
+      box.innerHTML = '';
+    };
+  }
+
+  // showResults is a top-level declaration, so the global binding can be wrapped.
+  if (typeof showResults === 'function'){
+    var orig = showResults;
+    showResults = function(){
+      var out = orig.apply(this, arguments);
+      try { render(save()); } catch(e){}
+      return out;
+    };
+  }
+})();
+</script>
 </body>
 </html>
