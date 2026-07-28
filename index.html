@@ -306,13 +306,38 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
   var pyBank = window.questionBank, pyNames = null;
   try { pyNames = JSON.parse(JSON.stringify(topicNames)); } catch(e){}
 
+  var ARCH_MODE = false;
+
+  // startQuiz reads a const questionBank, so the pool is swapped at the button
+  // instead of at the function: the original handler still serves Python.
+  (function(){
+    var btn = document.getElementById('startBtn');
+    if (!btn || btn.dataset.ppArchStart) return;
+    var orig = btn.onclick;
+    btn.dataset.ppArchStart = '1';
+    btn.id = 'startBtn';
+    btn.onclick = function(){
+      if (!ARCH_MODE) return orig && orig.apply(this, arguments);   // PP-ARCH-START
+      var picked = [].slice.call(document.querySelectorAll('#topics input:checked')).map(function(x){ return x.value; });
+      if (!picked.length){ alert('בחר לפחות נושא אחד'); return; }
+      var diff = document.getElementById('difficulty').value;
+      var pool = ARCH.filter(function(q){ return picked.indexOf(q.topic) > -1 && (!diff || q.difficulty === +diff); });
+      if (!pool.length){ alert('אין שאלות בשילוב שבחרת'); return; }
+      quiz = seededQuiz(pool, +document.getElementById('count').value);
+      at = 0; answers = [];
+      document.getElementById('start').classList.add('hidden');
+      document.getElementById('results').classList.add('hidden');
+      document.getElementById('quiz').classList.remove('hidden');
+      showQuestion();
+    };
+  })();
+
   function setCourse(c){
+    ARCH_MODE = (c === 'arch');
     if (c === 'arch'){
-      window.questionBank = function(){ return ARCH.slice(); };
       Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
       Object.keys(ARCH_NAMES).forEach(function(k){ topicNames[k] = ARCH_NAMES[k]; });
     } else {
-      window.questionBank = pyBank;
       Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
       Object.keys(pyNames || {}).forEach(function(k){ topicNames[k] = pyNames[k]; });
     }
