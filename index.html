@@ -303,10 +303,69 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
 
   ARCH.forEach(function(q,i){ q.id = 1000 + i; });
 
+
+  var HEDVA_NAMES = {
+    limits:    "גבולות ורציפות",
+    deriv:     "נגזרות וכללי גזירה",
+    analysis:  "חקירת פונקציה",
+    integrals: "אינטגרלים ושיטות",
+    series:    "טורים והתכנסות",
+    multivar:  "פונקציות רב-משתניות"
+  };
+
+  /* PP-HEDVA — חדו"א 1+2, מועד ב' 05/08/2026.
+     Aimed at the pass threshold: the mechanical, high-frequency moves that carry
+     most of the points, not proofs. */
+  var HEDVA = [
+    // גבולות ורציפות
+    {topic:"limits",difficulty:1,question:"מה הגבול של (sin 3x)/x כאשר x שואף ל-0?",options:["0","1","3","לא קיים"],answerIdx:2,explanation:"מרחיבים: (sin3x)/(3x)·3 → 1·3 = 3."},
+    {topic:"limits",difficulty:2,question:"מתי מותר להשתמש בכלל לופיטל?",options:["תמיד כשיש שבר","רק בצורות לא מוגדרות 0/0 או ∞/∞","רק בגבול באינסוף","רק כשהמונה גזיר"],answerIdx:1,explanation:"צורות כמו 0·∞ או ∞−∞ יש להביא קודם לצורת שבר."},
+    {topic:"limits",difficulty:2,question:"מה הגבול של (1+1/x)^x כאשר x שואף לאינסוף?",options:["1","e","∞","0"],answerIdx:1,explanation:"זו ההגדרה הקלאסית של e — מופיע כמעט בכל מבחן."},
+    {topic:"limits",difficulty:3,question:"פונקציה f רציפה בקטע סגור [a,b] ומקיימת f(a)·f(b)<0. מה מובטח?",options:["f מונוטונית","קיימת נקודה c בקטע שבה f(c)=0","f גזירה","f חסומה בלבד"],answerIdx:1,explanation:"משפט ערך הביניים — שאלה חוזרת על קיום שורש."},
+    {topic:"limits",difficulty:2,question:"מה תנאי הרציפות של f בנקודה x₀?",options:["f מוגדרת ב-x₀ בלבד","הגבול קיים בלבד","f(x₀) מוגדרת, הגבול קיים, והם שווים","f גזירה ב-x₀"],answerIdx:2,explanation:"שלושת התנאים יחד; גזירות גוררת רציפות אך לא להפך."},
+
+    // נגזרות
+    {topic:"deriv",difficulty:1,question:"מהי הנגזרת של x·ln x?",options:["ln x","1/x","ln x + 1","x/ln x"],answerIdx:2,explanation:"כלל המכפלה: 1·ln x + x·(1/x)."},
+    {topic:"deriv",difficulty:2,question:"מהי הנגזרת של e^(x²)?",options:["e^(x²)","2x·e^(x²)","x²·e^(x²)","2x"],answerIdx:1,explanation:"כלל השרשרת: הנגזרת החיצונית כפול הפנימית."},
+    {topic:"deriv",difficulty:2,question:"בגזירה סתומה של x²+y²=25, מהו dy/dx?",options:["−x/y","x/y","−y/x","2x+2y"],answerIdx:0,explanation:"גוזרים לפי x: 2x+2y·y'=0 ולכן y' = −x/y."},
+    {topic:"deriv",difficulty:3,question:"אם f גזירה ו-f'(x₀)=0, מה בהכרח נכון?",options:["x₀ נקודת מקסימום","x₀ נקודת מינימום","x₀ נקודה חשודה לקיצון בלבד","f אינה רציפה"],answerIdx:2,explanation:"נדרשת בדיקת סימן הנגזרת או הנגזרת השנייה; ייתכן גם פיתול."},
+    {topic:"deriv",difficulty:2,question:"מהי הנגזרת של arctan x?",options:["1/(1+x²)","1/√(1−x²)","−1/(1+x²)","1/x"],answerIdx:0,explanation:"מדף הנוסחאות — מופיע גם באינטגרלים."},
+
+    // חקירת פונקציה
+    {topic:"analysis",difficulty:2,question:"איך מוצאים אסימפטוטה אנכית?",options:["גבול באינסוף","נקודות שבהן המכנה מתאפס והגבול שואף לאינסוף","נגזרת שנייה אפס","חיתוך עם הצירים"],answerIdx:1,explanation:"יש לוודא שהמונה אינו מתאפס באותה נקודה, אחרת זו נקודת אי-רציפות סליקה."},
+    {topic:"analysis",difficulty:2,question:"מה קובעת הנגזרת השנייה?",options:["מונוטוניות","קמירות וקעירות ונקודות פיתול","אסימפטוטות","תחום הגדרה"],answerIdx:1,explanation:"f''>0 קמורה כלפי מעלה, f''<0 קעורה; שינוי סימן = פיתול."},
+    {topic:"analysis",difficulty:3,question:"איך מוצאים אסימפטוטה משופעת y=mx+n?",options:["m = גבול f(x)/x ו-n = גבול (f(x)−mx)","m = f'(x) ו-n = f(0)","רק כשיש אסימפטוטה אנכית","אין דרך כללית"],answerIdx:0,explanation:"שני גבולות באינסוף; אם אחד לא קיים אין אסימפטוטה משופעת."},
+    {topic:"analysis",difficulty:2,question:"מה מבטיח משפט לגראנז' לפונקציה רציפה ב-[a,b] וגזירה ב-(a,b)?",options:["קיים c שבו f'(c) = (f(b)−f(a))/(b−a)","f מונוטונית","f'(c)=0 תמיד","f קמורה"],answerIdx:0,explanation:"רול הוא המקרה הפרטי שבו f(a)=f(b)."},
+
+    // אינטגרלים
+    {topic:"integrals",difficulty:1,question:"מהו האינטגרל של 1/x?",options:["ln x + C","ln|x| + C","−1/x² + C","x·ln x + C"],answerIdx:1,explanation:"הערך המוחלט הכרחי — שגיאה שחוזרת בבדיקות."},
+    {topic:"integrals",difficulty:2,question:"איזו שיטה מתאימה לאינטגרל של x·e^x?",options:["הצבה","אינטגרציה בחלקים","שברים חלקיים","זהות טריגונומטרית"],answerIdx:1,explanation:"בוחרים u=x כי הנגזרת שלו מפשטת, ו-dv=e^x dx."},
+    {topic:"integrals",difficulty:2,question:"איזו שיטה מתאימה ל-∫ 1/(x²−1) dx?",options:["בחלקים","שברים חלקיים","הצבה טריגונומטרית","גזירה"],answerIdx:1,explanation:"מפרקים ל-A/(x−1)+B/(x+1)."},
+    {topic:"integrals",difficulty:3,question:"מה נותן המשפט היסודי של החדו\"א?",options:["הנגזרת של אינטגרל מסוים עם גבול עליון x היא f(x)","כל פונקציה רציפה גזירה","האינטגרל תמיד חיובי","גבול של סכום רימן אינו קיים"],answerIdx:0,explanation:"הקשר בין גזירה לאינטגרציה — בסיס לחישוב אינטגרלים מסוימים."},
+    {topic:"integrals",difficulty:3,question:"איך מחשבים שטח בין שתי פונקציות f מעל g בקטע [a,b]?",options:["∫(f+g)","∫(f−g)","∫f · ∫g","∫|f|"],answerIdx:1,explanation:"חובה לבדוק נקודות חיתוך; אם הסדר מתחלף מפצלים לקטעים."},
+    {topic:"integrals",difficulty:3,question:"מתי אינטגרל לא אמיתי ∫₁^∞ 1/x^p dx מתכנס?",options:["p>1","p<1","p=1","תמיד"],answerIdx:0,explanation:"עבור p≤1 הוא מתבדר — קריטריון בסיסי שגם משמש למבחן ההשוואה בטורים."},
+
+    // טורים
+    {topic:"series",difficulty:2,question:"מתי הטור הגיאומטרי Σq^n מתכנס?",options:["|q|<1","|q|>1","q>0","תמיד"],answerIdx:0,explanation:"והסכום הוא 1/(1−q) עבור טור המתחיל ב-n=0."},
+    {topic:"series",difficulty:2,question:"מה אומר מבחן ההכרח (תנאי הכרחי להתכנסות)?",options:["אם האיבר הכללי לא שואף ל-0 הטור מתבדר","אם האיבר שואף ל-0 הטור מתכנס","הטור תמיד מתכנס","אין קשר"],answerIdx:0,explanation:"הכיוון ההפוך אינו נכון — הטור ההרמוני מתבדר למרות ש-1/n→0."},
+    {topic:"series",difficulty:3,question:"מה קובע מבחן המנה (דלאמבר) כאשר הגבול L<1?",options:["הטור מתכנס בהחלט","הטור מתבדר","אין מסקנה","הטור מתכנס בתנאי"],answerIdx:0,explanation:"L>1 מתבדר; L=1 המבחן אינו מכריע וצריך כלי אחר."},
+    {topic:"series",difficulty:3,question:"מהו רדיוס ההתכנסות של טור חזקות Σaₙ(x−x₀)ⁿ?",options:["R = lim |aₙ/aₙ₊₁|","R = lim aₙ","R = x₀","תמיד 1"],answerIdx:0,explanation:"בקצוות הקטע יש לבדוק התכנסות בנפרד."},
+    {topic:"series",difficulty:2,question:"מהו פיתוח טיילור של e^x סביב 0?",options:["Σ xⁿ","Σ xⁿ/n!","Σ (−1)ⁿxⁿ","Σ n·xⁿ"],answerIdx:1,explanation:"מתכנס לכל x; ממנו גוזרים גם את פיתוחי sin ו-cos."},
+
+    // רב-משתני
+    {topic:"multivar",difficulty:2,question:"מהי הנגזרת החלקית ∂/∂x של f(x,y)=x²y+y³?",options:["2xy","x²+3y²","2xy+3y²","2x"],answerIdx:0,explanation:"גוזרים לפי x ומתייחסים ל-y כקבוע, לכן y³ מתאפס."},
+    {topic:"multivar",difficulty:3,question:"מה תנאי הכרחי לנקודת קיצון פנימית של f(x,y)?",options:["שתי הנגזרות החלקיות מתאפסות","רק ∂f/∂x מתאפסת","הפונקציה רציפה","הדטרמיננטה חיובית"],answerIdx:0,explanation:"נקודה קריטית; הסיווג נעשה במבחן ההסיאן."},
+    {topic:"multivar",difficulty:3,question:"במבחן ההסיאן, אם D>0 ו-fxx>0 — מהי הנקודה?",options:["מקסימום מקומי","מינימום מקומי","אוכף","לא ניתן לקבוע"],answerIdx:1,explanation:"D>0 ו-fxx<0 מקסימום; D<0 אוכף; D=0 לא מכריע."},
+    {topic:"multivar",difficulty:3,question:"למה משמשת שיטת כופלי לגראנז'?",options:["לקיצון תחת אילוץ","לחישוב אינטגרל כפול","למציאת אסימפטוטות","לפיתוח לטור"],answerIdx:0,explanation:"פותרים ∇f = λ∇g יחד עם משוואת האילוץ."},
+    {topic:"multivar",difficulty:2,question:"מה מתאר הגרדיאנט ∇f בנקודה?",options:["כיוון העלייה התלולה ביותר","כיוון הירידה","הערך המקסימלי","שטח מתחת לפונקציה"],answerIdx:0,explanation:"וגודלו הוא קצב השינוי המרבי; הוא ניצב לקווי הגובה."}
+  ];
+  HEDVA.forEach(function(q,i){ q.id = 2000 + i; });
+
   var pyBank = window.questionBank, pyNames = null;
   try { pyNames = JSON.parse(JSON.stringify(topicNames)); } catch(e){}
 
   var ARCH_MODE = false;
+  var CUSTOM_BANK = null;   // null = the built-in Python bank
 
   // startQuiz reads a const questionBank, so the pool is swapped at the button
   // instead of at the function: the original handler still serves Python.
@@ -317,11 +376,11 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     btn.dataset.ppArchStart = '1';
     btn.id = 'startBtn';
     btn.onclick = function(){
-      if (!ARCH_MODE) return orig && orig.apply(this, arguments);   // PP-ARCH-START
+      if (!CUSTOM_BANK) return orig && orig.apply(this, arguments);   // PP-ARCH-START
       var picked = [].slice.call(document.querySelectorAll('#topics input:checked')).map(function(x){ return x.value; });
       if (!picked.length){ alert('בחר לפחות נושא אחד'); return; }
       var diff = document.getElementById('difficulty').value;
-      var pool = ARCH.filter(function(q){ return picked.indexOf(q.topic) > -1 && (!diff || q.difficulty === +diff); });
+      var pool = CUSTOM_BANK.filter(function(q){ return picked.indexOf(q.topic) > -1 && (!diff || q.difficulty === +diff); });
       if (!pool.length){ alert('אין שאלות בשילוב שבחרת'); return; }
       quiz = seededQuiz(pool, +document.getElementById('count').value);
       at = 0; answers = [];
@@ -334,16 +393,18 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
 
   function setCourse(c){
     ARCH_MODE = (c === 'arch');
-    if (c === 'arch'){
+    CUSTOM_BANK = c === 'arch' ? ARCH : c === 'hedva' ? HEDVA : null;
+    var names = c === 'arch' ? ARCH_NAMES : c === 'hedva' ? HEDVA_NAMES : null;
+    if (names){
       Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
-      Object.keys(ARCH_NAMES).forEach(function(k){ topicNames[k] = ARCH_NAMES[k]; });
+      Object.keys(names).forEach(function(k){ topicNames[k] = names[k]; });
     } else {
       Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
       Object.keys(pyNames || {}).forEach(function(k){ topicNames[k] = pyNames[k]; });
     }
     if (typeof renderTopics === 'function') renderTopics();
     var b = document.getElementById('PP-EXAMBTN');
-    if (b) b.style.display = (c === 'arch') ? 'none' : '';
+    if (b) b.style.display = (c === 'python') ? '' : 'none';
   }
 
   var host = document.getElementById('start');
@@ -356,6 +417,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
       '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
       '<button data-c="python" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:inherit;font:700 .82rem system-ui;cursor:pointer">פייתון 10016</button>' +
       '<button data-c="arch" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">ארגון המחשב 10145</button>' +
+      '<button data-c="hedva" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">חדו״א 1+2</button>' +
       '</div>' +
       '<div id="PP-COURSE-NOTE" style="font-size:.72rem;opacity:.65;margin-top:8px"></div>';
     host.insertBefore(sel, host.firstChild);
@@ -368,6 +430,8 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
         setCourse(btn.dataset.c);
         note.textContent = btn.dataset.c === 'arch'
           ? 'מבחן 18.8, מועד יחיד. 55-60% מהמבחן הוא datapath, pipeline ומטמון — שאלה 11 לבדה 44 נקודות, ולכן רוב המאגר שם.'
+          : btn.dataset.c === 'hedva'
+          ? 'מועד ב\' 5.8. המאגר ממוקד במהלכים המכניים שנושאים את רוב הנקודות — גבולות, גזירה, חקירה, אינטגרלים, טורים ורב-משתני — ולא בהוכחות.'
           : '';
       };
     });
