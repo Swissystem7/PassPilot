@@ -304,13 +304,18 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
   ARCH.forEach(function(q,i){ q.id = 1000 + i; });
 
 
-  var HEDVA_NAMES = {
+  /* PP-SPLIT — חדו"א 1 ו-2 הם שני קורסים נפרדים, ולכן שני מאגרים נפרדים. */
+  var H1_NAMES = {
     limits:    "גבולות ורציפות",
     deriv:     "נגזרות וכללי גזירה",
     analysis:  "חקירת פונקציה",
-    integrals: "אינטגרלים ושיטות",
+    integrals: "אינטגרלים ושיטות"
+  };
+  var H2_NAMES = {
+    improper:  "אינטגרלים לא אמיתיים",
     series:    "טורים והתכנסות",
-    multivar:  "פונקציות רב-משתניות"
+    multivar:  "פונקציות רב-משתניות",
+    complex:   "מספרים מרוכבים"
   };
 
   /* PP-HEDVA — חדו"א 1+2, מועד ב' 05/08/2026.
@@ -343,7 +348,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     {topic:"integrals",difficulty:2,question:"איזו שיטה מתאימה ל-∫ 1/(x²−1) dx?",options:["בחלקים","שברים חלקיים","הצבה טריגונומטרית","גזירה"],answerIdx:1,explanation:"מפרקים ל-A/(x−1)+B/(x+1)."},
     {topic:"integrals",difficulty:3,question:"מה נותן המשפט היסודי של החדו\"א?",options:["הנגזרת של אינטגרל מסוים עם גבול עליון x היא f(x)","כל פונקציה רציפה גזירה","האינטגרל תמיד חיובי","גבול של סכום רימן אינו קיים"],answerIdx:0,explanation:"הקשר בין גזירה לאינטגרציה — בסיס לחישוב אינטגרלים מסוימים."},
     {topic:"integrals",difficulty:3,question:"איך מחשבים שטח בין שתי פונקציות f מעל g בקטע [a,b]?",options:["∫(f+g)","∫(f−g)","∫f · ∫g","∫|f|"],answerIdx:1,explanation:"חובה לבדוק נקודות חיתוך; אם הסדר מתחלף מפצלים לקטעים."},
-    {topic:"integrals",difficulty:3,question:"מתי אינטגרל לא אמיתי ∫₁^∞ 1/x^p dx מתכנס?",options:["p>1","p<1","p=1","תמיד"],answerIdx:0,explanation:"עבור p≤1 הוא מתבדר — קריטריון בסיסי שגם משמש למבחן ההשוואה בטורים."},
+    {topic:"improper",difficulty:3,question:"מתי אינטגרל לא אמיתי ∫₁^∞ 1/x^p dx מתכנס?",options:["p>1","p<1","p=1","תמיד"],answerIdx:0,explanation:"עבור p≤1 הוא מתבדר — קריטריון בסיסי שגם משמש למבחן ההשוואה בטורים."},
 
     // טורים
     {topic:"series",difficulty:2,question:"מתי הטור הגיאומטרי Σq^n מתכנס?",options:["|q|<1","|q|>1","q>0","תמיד"],answerIdx:0,explanation:"והסכום הוא 1/(1−q) עבור טור המתחיל ב-n=0."},
@@ -359,6 +364,15 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     {topic:"multivar",difficulty:3,question:"למה משמשת שיטת כופלי לגראנז'?",options:["לקיצון תחת אילוץ","לחישוב אינטגרל כפול","למציאת אסימפטוטות","לפיתוח לטור"],answerIdx:0,explanation:"פותרים ∇f = λ∇g יחד עם משוואת האילוץ."},
     {topic:"multivar",difficulty:2,question:"מה מתאר הגרדיאנט ∇f בנקודה?",options:["כיוון העלייה התלולה ביותר","כיוון הירידה","הערך המקסימלי","שטח מתחת לפונקציה"],answerIdx:0,explanation:"וגודלו הוא קצב השינוי המרבי; הוא ניצב לקווי הגובה."}
   ];
+  HEDVA.push(
+    {topic:"improper",difficulty:2,question:"איך מטפלים באינטגרל ∫₀¹ 1/√x dx?",options:["הוא לא מוגדר","כגבול כאשר הגבול התחתון שואף ל-0 מימין","גוזרים תחילה","מציבים x=1"],answerIdx:1,explanation:"אי-רציפות בקצה: מחשבים lim(t→0⁺) ∫ₜ¹ ומקבלים 2 — מתכנס."},
+    {topic:"improper",difficulty:3,question:"מה אומר מבחן ההשוואה לאינטגרלים לא אמיתיים?",options:["אם 0≤f≤g ו-∫g מתכנס אז ∫f מתכנס","אם f≤g אז שניהם מתבדרים","רק לפונקציות שליליות","אין מבחן כזה"],answerIdx:0,explanation:"ובכיוון ההפוך: אם ∫f מתבדר אז גם ∫g. משווים בדרך כלל ל-1/x^p."},
+    {topic:"improper",difficulty:2,question:"מתי ∫₀¹ 1/x^p dx מתכנס?",options:["p<1","p>1","p=1","תמיד"],answerIdx:0,explanation:"שים לב שזה הפוך מהמקרה של ∫₁^∞ — מלכודת נפוצה."},
+    {topic:"complex",difficulty:1,question:"מהי הצורה הפולרית של מספר מרוכב z?",options:["z = a+bi","z = r(cos θ + i·sin θ)","z = r·θ","z = a·bi"],answerIdx:1,explanation:"r=|z| ו-θ הארגומנט; שקול ל-re^(iθ) לפי אוילר."},
+    {topic:"complex",difficulty:2,question:"לפי נוסחת דה-מואבר, מהו z^n בצורה פולרית?",options:["rⁿ(cos nθ + i·sin nθ)","r(cos nθ + i·sin nθ)","rⁿ(cos θ + i·sin θ)","nr(cos θ + i·sin θ)"],answerIdx:0,explanation:"הרדיוס בחזקה, הזווית מוכפלת — הבסיס לחישוב שורשים."},
+    {topic:"complex",difficulty:3,question:"כמה שורשים מסדר n יש למספר מרוכב שאינו אפס?",options:["1","2","n שורשים שונים","אינסוף"],answerIdx:2,explanation:"מפוזרים באופן שווה על מעגל ברדיוס r^(1/n), בהפרשי זווית 2π/n."},
+    {topic:"complex",difficulty:2,question:"מהו הצמוד של z=a+bi ומה z·z̄?",options:["a−bi, והמכפלה a²+b²","a+bi, והמכפלה a²−b²","−a−bi, והמכפלה 0","b+ai, והמכפלה 2ab"],answerIdx:0,explanation:"המכפלה היא |z|² ולכן ממשית — כך מחלקים מרוכבים."}
+  );
   HEDVA.forEach(function(q,i){ q.id = 2000 + i; });
 
   var pyBank = window.questionBank, pyNames = null;
@@ -393,8 +407,14 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
 
   function setCourse(c){
     ARCH_MODE = (c === 'arch');
-    CUSTOM_BANK = c === 'arch' ? ARCH : c === 'hedva' ? HEDVA : null;
-    var names = c === 'arch' ? ARCH_NAMES : c === 'hedva' ? HEDVA_NAMES : null;
+    var names = null;
+    if (c === 'arch'){ CUSTOM_BANK = ARCH; names = ARCH_NAMES; }
+    else if (c === 'hedva1' || c === 'hedva2'){
+      var set = (c === 'hedva1') ? H1_NAMES : H2_NAMES;
+      CUSTOM_BANK = HEDVA.filter(function(q){ return set.hasOwnProperty(q.topic); });
+      names = set;
+    }
+    else CUSTOM_BANK = null;
     if (names){
       Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
       Object.keys(names).forEach(function(k){ topicNames[k] = names[k]; });
@@ -417,7 +437,8 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
       '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
       '<button data-c="python" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:inherit;font:700 .82rem system-ui;cursor:pointer">פייתון 10016</button>' +
       '<button data-c="arch" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">ארגון המחשב 10145</button>' +
-      '<button data-c="hedva" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">חדו״א 1+2</button>' +
+      '<button data-c="hedva1" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">חדו״א 1 · 90901</button>' +
+      '<button data-c="hedva2" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">חדו״א 2 · 90902</button>' +
       '</div>' +
       '<div id="PP-COURSE-NOTE" style="font-size:.72rem;opacity:.65;margin-top:8px"></div>';
     host.insertBefore(sel, host.firstChild);
@@ -430,8 +451,10 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
         setCourse(btn.dataset.c);
         note.textContent = btn.dataset.c === 'arch'
           ? 'מבחן 18.8, מועד יחיד. 55-60% מהמבחן הוא datapath, pipeline ומטמון — שאלה 11 לבדה 44 נקודות, ולכן רוב המאגר שם.'
-          : btn.dataset.c === 'hedva'
-          ? 'מועד ב\' 5.8. המאגר ממוקד במהלכים המכניים שנושאים את רוב הנקודות — גבולות, גזירה, חקירה, אינטגרלים, טורים ורב-משתני — ולא בהוכחות.'
+          : btn.dataset.c === 'hedva1'
+          ? 'מועד ב\' 5.8. גבולות ורציפות, כללי גזירה, חקירת פונקציה ואינטגרלים — המהלכים המכניים שנושאים את רוב הנקודות, לא הוכחות.'
+          : btn.dataset.c === 'hedva2'
+          ? 'מועד ב\' 5.8. אינטגרלים לא אמיתיים, טורים והתכנסות, פונקציות רב-משתניות ומספרים מרוכבים.'
           : '';
       };
     });
