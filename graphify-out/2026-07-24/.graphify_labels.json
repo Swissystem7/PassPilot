@@ -70,12 +70,5 @@
   "68": "detectScorePlateau.js",
   "69": "generateFirstDayPlan.js",
   "70": "generateWeakTopicUpsell.js",
-  "71": "offerExamReadinessPack.js",
-  "72": "encryptUserProgress.js",
-  "73": "generatePlanFromAvailability.js",
-  "74": "generatePlanIntegrityToken.js",
-  "75": "analyzeQuickDiagnostic.js",
-  "76": "calibratePassProbability.js",
-  "77": "validatePassProbability.js",
-  "78": "verifyStudyPlanSafety.js"
+  "71": "offerExamReadinessPack.js"
 }

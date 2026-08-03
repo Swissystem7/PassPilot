@@ -1,16 +1,16 @@
-# Graph Report - PassPilot  (2026-07-24)
+# Graph Report - PassPilot  (2026-07-23)
 
 ## Corpus Check
-- 73 files · ~24,614 words
+- 66 files · ~22,739 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 199 nodes · 141 edges · 79 communities (66 shown, 13 thin omitted)
-- Extraction: 40% EXTRACTED · 60% INFERRED · 0% AMBIGUOUS · INFERRED: 84 edges (avg confidence: 0.53)
+- 179 nodes · 125 edges · 72 communities (60 shown, 12 thin omitted)
+- Extraction: 40% EXTRACTED · 60% INFERRED · 0% AMBIGUOUS · INFERRED: 75 edges (avg confidence: 0.54)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `05fd00f4`
+- Built from commit: `c95eed35`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -34,9 +34,6 @@
 - generateMockExamBundle.js
 - generateStudyProof.js
 - updateStudyStreak.js
-- encryptUserProgress.js
-- generatePlanFromAvailability.js
-- generatePlanIntegrityToken.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `PassPilot — תמצית אימות שוק` - 6 edges
@@ -47,8 +44,8 @@
 6. `factory-ci workflow` - 4 edges
 7. `analyzeMockExamIntegrity()` - 3 edges
 8. `buildExamSession()` - 3 edges
-9. `generatePlanFromAvailability()` - 3 edges
-10. `questionBank()` - 3 edges
+9. `questionBank()` - 3 edges
+10. `pickQuiz()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `PassPilot Main Interface` --implements--> `PassPilot`  [INFERRED]
@@ -70,7 +67,7 @@
 - **PassPilot Methodology Principles** — README_active_recall, README_spaced_learning, README_mock_exams, README_error_recovery, README_question_list, README_pomodoro, README_ai_usage, README_passing_zone, README_time_allocation [EXTRACTED 1.00]
 - **Exam Topics** — index_html_algebra, index_html_geometry, index_html_probability [EXTRACTED 1.00]
 
-## Communities (79 total, 13 thin omitted)
+## Communities (72 total, 12 thin omitted)
 
 ### Community 0 - "run"
 Cohesion: 0.31
@@ -100,18 +97,10 @@ Nodes (7): BLOCKS, buildExamSession(), examStructure(), mulberry32(), mulberry32
 Cohesion: 0.60
 Nodes (4): canonicalStringify(), crypto, signPassProbability(), verifyPassProbability()
 
-### Community 73 - "generatePlanFromAvailability.js"
-Cohesion: 0.83
-Nodes (3): generatePlanFromAvailability(), mergeSlots(), parseIsoDate()
-
-### Community 74 - "generatePlanIntegrityToken.js"
-Cohesion: 0.67
-Nodes (3): crypto, generatePlanIntegrityToken(), verifyPlanIntegrity()
-
 ## Knowledge Gaps
-- **29 isolated node(s):** `{ randomUUID }`, `activePairs`, `crypto`, `BLOCKS`, `{ randomUUID }` (+24 more)
+- **27 isolated node(s):** `{ randomUUID }`, `activePairs`, `BLOCKS`, `{ randomUUID }`, `{ randomUUID }` (+22 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -120,5 +109,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`PassPilot` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 4 inferred relationships involving `PassPilot Main Interface` (e.g. with `Active Recall` and `Mock Exams`) actually correct?**
   _`PassPilot Main Interface` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `{ randomUUID }`, `activePairs`, `crypto` to the rest of the system?**
-  _29 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `{ randomUUID }`, `activePairs`, `BLOCKS` to the rest of the system?**
+  _27 weakly-connected nodes found - possible documentation gaps or missing edges._

@@ -338,40 +338,5 @@
     "mtime": 1784745965.8839254,
     "ast_hash": "e0b8479fd80c8a23b3261b0d3e0e2c3a",
     "semantic_hash": ""
-  },
-  "lib/analyzeQuickDiagnostic.js": {
-    "mtime": 1784803566.3871603,
-    "ast_hash": "555b746bf437c9a4eba965989197c7ee",
-    "semantic_hash": ""
-  },
-  "lib/calibratePassProbability.js": {
-    "mtime": 1784817982.1507308,
-    "ast_hash": "b69cb01e20d674da41dc9e9eed673117",
-    "semantic_hash": ""
-  },
-  "lib/encryptUserProgress.js": {
-    "mtime": 1784774782.3718095,
-    "ast_hash": "ac5b6ab87f6480f11928fccf5037691b",
-    "semantic_hash": ""
-  },
-  "lib/generatePlanFromAvailability.js": {
-    "mtime": 1784803567.0086157,
-    "ast_hash": "14c1066dff77028f389d532760da4a39",
-    "semantic_hash": ""
-  },
-  "lib/generatePlanIntegrityToken.js": {
-    "mtime": 1784774787.6401474,
-    "ast_hash": "e6f4672034e0a998f37f0ac3eeebd92b",
-    "semantic_hash": ""
-  },
-  "lib/validatePassProbability.js": {
-    "mtime": 1784774787.1608202,
-    "ast_hash": "47da7e0df1b91adb6682f073541365f1",
-    "semantic_hash": ""
-  },
-  "lib/verifyStudyPlanSafety.js": {
-    "mtime": 1784817983.2601025,
-    "ast_hash": "ebf1de2fa3eb098dae46db1c1a75d1a9",
-    "semantic_hash": ""
   }
 }
