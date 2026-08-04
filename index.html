@@ -50,6 +50,8 @@
       <div class="center"><button id="restartBtn" class="restart">בוחן חדש</button></div>
     </section>
   </main>
+  <!-- לוגיקת הליבה, מכוסה בטסטים. אותו קובץ בדיוק רץ תחת node --test. -->
+  <script src="src/lib/planner.js"></script>
   <script>
 const questionBank = () => [
   { id: 1, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor i in range(3):\n    print(i)", options: ["1 2 3", "0 1 2", "0 1 2 3", "1 2"], answerIdx: 1, explanation: "range(3) מייצר את המספרים 0, 1, 2; הגבול העליון אינו נכלל." },
@@ -100,9 +102,8 @@ const questionBank = () => [
 ];
 
 const topicNames={loops:"לולאות",functions:"פונקציות",strings:"מחרוזות",lists:"רשימות",conditions:"תנאים",recursion:"רקורסיה"};
-function weakTopicRanker(results){if(!Array.isArray(results))throw new TypeError("Input must be an array");const valid=results.filter(r=>r&&typeof r.topic==="string"&&Number.isFinite(r.secondsSpent)&&r.secondsSpent>=0);const map=new Map;for(const r of valid){if(!map.has(r.topic))map.set(r.topic,{total:0,wrong:0,seconds:0});const d=map.get(r.topic);d.total++;if(!r.correct)d.wrong++;d.seconds+=r.secondsSpent}const rows=[...map].map(([topic,d])=>({topic,total:d.total,wrong:d.wrong,avgSeconds:d.seconds/d.total}));const max=Math.max(0,...rows.map(r=>r.avgSeconds));return rows.map(r=>({topic:r.topic,score:Math.round(((r.wrong/r.total)*.7+(max?r.avgSeconds/max:0)*.3)*1000)/1000,attempts:r.total,errorRate:Math.round(r.wrong/r.total*1000)/1000})).sort((a,b)=>b.score-a.score||a.topic.localeCompare(b.topic))}
-function calculateInitialPassProbability(correct,total,difficulty="medium"){if(!Number.isInteger(total)||total<=0||!Number.isInteger(correct)||correct<0||correct>total)throw new Error("invalid score");if(correct===0)return 0;return correct/total*({easy:1,medium:.8,hard:.6}[difficulty]||.8)}
-function generateInitialStudyPlan(examDate,topics,slots){const plan=[],warnings=[];const ordered=[...topics].sort((a,b)=>b.estimatedHoursTotal-a.estimatedHoursTotal);let index=0;for(const slot of slots){if(!ordered.length)break;const topic=ordered[index%ordered.length];plan.push({date:slot.day,topic:topic.name,hours:Math.min(1,slot.endHour-slot.startHour),type:index<2?"review":"practice"});index++}if(!plan.length)warnings.push("No available study slots");return{plan,warnings}}
+// weakTopicRanker / calculateInitialPassProbability / generateInitialStudyPlan
+// חיים ב-src/lib/planner.js ומכוסים ב-21 טסטים.
 
 const $=id=>document.getElementById(id);let quiz=[],at=0,answers=[],questionStarted=0,timerId;
 function renderTopics(){$("topics").innerHTML=Object.entries(topicNames).map(([key,name])=>`<label class="topic"><input type="checkbox" value="${key}" checked><span>${name}</span></label>`).join("")}
