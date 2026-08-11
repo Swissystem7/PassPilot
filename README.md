@@ -1,5 +1,15 @@
 # PassPilot — מנווט המעבר 🎯
 
+## What / For whom
+
+**What:** PassPilot is a study-planning tool built around *distance-to-passing-grade*, not syllabus coverage. Instead of asking "how much of the material have I covered?", it asks "how many points am I away from passing?" and plans your effort accordingly.
+
+**For whom:** Students preparing for exams who want to focus their limited time where it matters most — reaching a passing grade efficiently, not mastering the entire syllabus.
+
+**How:** A browser-only tool — no server, no sign-up, no installation. Open `index.html` (or visit GitHub Pages) and start planning immediately. All data is saved locally in your browser.
+
+---
+
 > **[לדמו החי](https://swissystem7.github.io/PassPilot/)** — בוחן Python ממוקד שמזהה פערים ובונה לסטודנטים מסלול קצר ואישי לציון עובר.
 
 כלי למידה לסטודנט שצריך **רק לעבור** מבחנים (ציון 50-61), לא לדעת 60% מהחומר.
