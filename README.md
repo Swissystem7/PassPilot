@@ -1,6 +1,6 @@
 # PassPilot — מנווט המעבר 🎯
 
-## What / For whom
+## What / For whom / How
 
 **What:** PassPilot is a study-planning tool built around *distance-to-passing-grade*, not syllabus coverage. Instead of asking "how much of the material have I covered?", it asks "how many points am I away from passing?" and plans your effort accordingly.
 
