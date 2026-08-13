@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PassPilot | פייתון 10016</title>
+  <meta name="description" content="אבחון מבנה מבחן לאפקה — איפה מאבדים נקודות, לא תחזית ציון. בלי שרת ובלי הרשמה.">
+  <meta name="theme-color" content="#087f5b">
+  <title>PassPilot</title>
   <style>
     :root{color-scheme:light dark;--bg:#f3f7f5;--panel:#fff;--ink:#15221d;--muted:#3f524a;--brand:#087f5b;--brand2:#0ca678;--line:#dbe6e0;--good:#16794b;--bad:#a31b1b;--soft:#e9f7f1;--shadow:0 18px 48px #183c2c18;--focus:#0b6b4d}
     @media(prefers-color-scheme:dark){:root{--bg:#101713;--panel:#18221d;--ink:#eef7f2;--muted:#c5d4cc;--line:#34463d;--soft:#203c31;--shadow:0 18px 48px #0006;--focus:#5ee0b5}}
@@ -45,6 +47,11 @@
     .topic-note h3{margin:0 0 6px;font-size:1rem}
     .brand-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
     .locked-note{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;font-size:.88rem}
+    .how{margin:0 0 18px;padding:0;padding-inline-start:1.2em;color:var(--muted);font-size:1rem}
+    .how li{margin:4px 0}
+    .student-path{margin-top:8px}
+    .kbd-hint{margin:0 0 12px;font-size:.82rem}
+    [role="dialog"]{outline:none}
     .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
     @media(max-width:620px){.price-grid{grid-template-columns:1fr}.brand{flex-wrap:wrap;gap:10px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
@@ -61,7 +68,7 @@
   <a class="skip-link" href="#main">דלג לתוכן</a>
   <main class="shell" id="main" tabindex="-1">
     <header class="brand">
-      <div class="logo">Pass<span>Pilot</span> 🎯</div>
+      <div class="logo">Pass<span>Pilot</span></div>
       <nav class="brand-nav no-print" aria-label="מחיר והצעה לאגודה">
         <button id="offerNavBtn" class="ghost" type="button" style="width:auto;margin:0;padding:8px 12px">מחיר</button>
         <button id="unionNavBtn" class="ghost" type="button" style="width:auto;margin:0;padding:8px 12px">הצעה לאגודה</button>
@@ -71,12 +78,48 @@
     </header>
     <section id="start" class="card">
       <h1>לא רק ללמוד.<br>לדעת איפה אתה מאבד נקודות.</h1>
-      <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן. זה אבחון מבנה, לא תחזית ציון.</p>
-      <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. מחיר הניסוי: תוספת 20–40 ₪ שהאגודה גובה ב־PayPal שלה. אין משתמשים משלמים היום ואין הבטחת ציון.</div>
+      <p class="lead">בוחן קצר. אחר כך דירוג נושאים חלשים ותוכנית לפי תאריך המבחן. זה אבחון מבנה, לא תחזית ציון.</p>
+      <ol class="how" id="howSteps">
+        <li>בוחרים קורס ותאריך מבחן</li>
+        <li>עונים על בוחן קצר</li>
+        <li>רואים באיזה בלוק יקר לטעות</li>
+      </ol>
+      <div class="caveat" id="marathonAddonNote">נספח למרתון אגודת אפקה, לא תחליף. ניסוי: 20–40 ₪ מעל 270 ₪. אין משתמשים משלמים ואין הבטחת ציון.</div>
       <p id="accessStatus" class="muted" role="status"></p>
+      <div class="student-path">
+        <div class="field"><span class="label" id="courseLabel">מקצוע</span><div id="courseButtons" role="group" aria-labelledby="courseLabel"></div><p id="courseNote" class="muted"></p></div>
+        <fieldset class="field" style="border:0;padding:0;margin:24px 0"><legend class="label">אילו נושאים לתרגל?</legend><p class="muted" id="topicHint" style="margin:0 0 8px">מסומנים בלוקי המבחן. אפשר להוסיף נושאי בוחן אחרים.</p><div id="topics" class="topics"></div></fieldset>
+        <div class="controls">
+          <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
+          <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
+        </div>
+        <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל. אם המבחן היום או מחר — אחרי הבוחן תופיע תוכנית ל־90 דקות.</p></div>
+        <div id="srsBox" class="addon-box hidden" aria-live="polite">
+          <h2 class="label" style="font-size:1rem;margin:0 0 6px">תור חזרה להיום</h2>
+          <p class="muted" id="srsHint" style="margin:0 0 8px">נושאים שפספסת ומועד החזרה שלהם הגיע. המרווח גדל אחרי סשן נקי (1→3→7→14 יום). זה לא Anki ולא FSRS.</p>
+          <ul id="srsList" class="weak-list"></ul>
+          <button id="srsStartBtn" class="ghost" type="button">תרגול הנושאים שבתוקף</button>
+        </div>
+        <div id="startAnalytics" class="addon-box hidden" aria-live="polite"></div>
+        <p id="startStatus" class="muted status-flash" role="status" tabindex="-1"></p>
+        <button id="startBtn" class="primary" type="button">מתחילים בבוחן</button>
+        <button id="examBtn" class="exam-button" type="button">מצב מבחן אפקה 10016</button>
+        <div class="field">
+          <label for="marathonMinutes"><span class="label">מצב מרתון — משך הסימולציה</span></label>
+          <select id="marathonMinutes" aria-describedby="marathonHint">
+            <option value="45">45 דקות · ממוקד</option>
+            <option value="90">90 דקות</option>
+            <option value="120" selected>120 דקות · מבנה רב-ברירה</option>
+            <option value="180">180 דקות · כתיבת קוד</option>
+          </select>
+          <p id="marathonHint" class="muted">כל בלוקי מפת המבחן, שעון אחד. פייתון 10016 = ארבעה בלוקי כתיבה; בשאר הקורסים = רב-ברירה לפי המשקל. זה לא שעון המועד הרשמי ולא תחזית ציון.</p>
+        </div>
+        <button id="marathonBtn" class="exam-button" type="button">מצב מרתון — סימולציית מבנה</button>
+        <button id="structureBtn" class="ghost" type="button">מפת מבנה המבחן</button>
+      </div>
       <details class="addon-box" id="redeemBox">
         <summary>קוד מימוש מהאגודה (PPU1)</summary>
-        <p class="muted">אחרי תשלום במרתון האגודה מדביקים כאן קוד שמתחיל ב־PPU1. בלי שרת זה אינו הוכחת תשלום — הגבול נאכף בדפדפן הזה בלבד.</p>
+        <p class="muted">אחרי תשלום במרתון האגודה מדביקים כאן קוד שמתחיל ב־PPU1. בלי שרת זה אינו הוכחת תשלום — הגבול נאכף בדפדפן הזה בלבד. לנסות את הדוח המלא בדמו: «הצעה לאגודה» → הפקת קוד מדריך → פדיון כאן.</p>
         <label class="label" for="redeemIn">קוד מימוש</label>
         <textarea id="redeemIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="redeemMsg" placeholder="PPU1...."></textarea>
         <div class="diag-actions">
@@ -85,94 +128,69 @@
         </div>
         <p id="redeemMsg" class="muted status-flash" role="status"></p>
       </details>
-      <div class="field"><span class="label" id="courseLabel">מקצוע</span><div id="courseButtons" role="group" aria-labelledby="courseLabel"></div><p id="courseNote" class="muted"></p></div>
-      <fieldset class="field" style="border:0;padding:0;margin:24px 0"><legend class="label">אילו נושאים לתרגל?</legend><div id="topics" class="topics"></div></fieldset>
-      <div class="controls">
-        <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
-        <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
-      </div>
-      <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל. אם המבחן היום או מחר — אחרי הבוחן תופיע תוכנית ל־90 דקות.</p></div>
-      <div id="srsBox" class="addon-box hidden" aria-live="polite">
-        <h2 class="label" style="font-size:1rem;margin:0 0 6px">תור חזרה להיום</h2>
-        <p class="muted" id="srsHint" style="margin:0 0 8px">נושאים שפספסת ומועד החזרה שלהם הגיע. המרווח גדל אחרי סשן נקי (1→3→7→14 יום). זה לא Anki ולא FSRS.</p>
-        <ul id="srsList" class="weak-list"></ul>
-        <button id="srsStartBtn" class="ghost" type="button">תרגול הנושאים שבתוקף</button>
-      </div>
-      <details class="addon-box">
-        <summary>קוד אבחון מהאגודה / מהסטודנט</summary>
-        <p class="muted">הדביקו קוד שמתחיל ב־PP1. הקוד מכיל דיוק לפי נושא, תאריך מבחן ומפה אופציונלית — בלי שם, בלי תשובות מלאות, בלי שרת. אפשר גם לפתוח קישור עם ‎#PP1…</p>
-        <label class="label" for="shareIn">קוד אבחון</label>
-        <textarea id="shareIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="shareInMsg"></textarea>
-        <button id="shareLoadBtn" class="ghost" type="button">טעינת האבחון</button>
-        <p id="shareInMsg" class="muted" role="status"></p>
-      </details>
-      <details class="addon-box">
-        <summary>מדריך מרתון: תדריך כיתה</summary>
-        <p class="muted">הדביקו כמה קודי PP1 מהוואטסאפ של הקבוצה. בלי שמות. מתקבלת מפת חום לחדר — באיזה בלוק הכיתה מאבדת נקודות — כדי לפתוח את המרתון שם.</p>
-        <button id="inviteCopyBtn" class="ghost" type="button">העתקת הודעה לקבוצת הוואטסאפ</button>
-        <p id="inviteMsg" class="muted status-flash" role="status"></p>
-        <label class="label" for="cohortIn">קודי אבחון של הכיתה</label>
-        <textarea id="cohortIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="cohortMsg" placeholder="PP1....abcd&#10;PP1....ef01"></textarea>
-        <button id="cohortBtn" class="ghost" type="button">בניית תדריך הכיתה</button>
-        <p id="cohortMsg" class="muted status-flash" role="status"></p>
-      </details>
-      <details class="addon-box">
-        <summary>רכז קורס: מפת מבנה המבחן</summary>
-        <p class="muted">המפה המובנית היא הנחה או פירוק שקוף. עדכנו נקודות לכל בלוק בטופס — בלי JSON. זו לא חתימה של אפקה, אלא מה שנשמר בדפדפן הזה לקורס הנוכחי.</p>
-        <div id="mapBuilder"></div>
-        <p id="mapTotal" class="bp-status" role="status"></p>
-        <div class="diag-actions">
-          <button id="mapApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת המפה</button>
-          <button id="mapExportBtn" class="ghost" type="button" style="width:auto;margin:0">ייצוא JSON</button>
-          <button id="bpResetBtn" class="restart" type="button" style="margin:0">חזרה למפה המובנית</button>
-        </div>
-        <details style="margin-top:12px">
-          <summary>JSON (מתקדם)</summary>
-          <label class="label" for="bpJson">JSON מבנה</label>
-          <textarea id="bpJson" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="bpMsg" placeholder='{"courseId":"python","title":"פייתון 10016","examLabel":"מועד מותאם","blocks":[{"id":"q1","topic":"recursion","label":"רקורסיה","points":40},{"id":"q2","topic":"strings","label":"מחרוזות","points":30},{"id":"q3","topic":"lists","label":"רשימות","points":30}]}'></textarea>
-          <div class="diag-actions">
-            <button id="bpApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת JSON</button>
-            <button id="bpExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
-          </div>
+      <details class="addon-box" id="staffTools">
+        <summary>למדריכים, רכזים ואגודה</summary>
+        <details class="addon-box">
+          <summary>קוד אבחון מהאגודה / מהסטודנט</summary>
+          <p class="muted">הדביקו קוד שמתחיל ב־PP1. הקוד מכיל דיוק לפי נושא, תאריך מבחן ומפה אופציונלית — בלי שם, בלי תשובות מלאות, בלי שרת. אפשר גם לפתוח קישור עם ‎#PP1…</p>
+          <label class="label" for="shareIn">קוד אבחון</label>
+          <textarea id="shareIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="shareInMsg"></textarea>
+          <button id="shareLoadBtn" class="ghost" type="button">טעינת האבחון</button>
+          <p id="shareInMsg" class="muted" role="status"></p>
         </details>
-        <p id="bpMsg" class="muted bp-status" role="status"></p>
+        <details class="addon-box">
+          <summary>מדריך מרתון: תדריך כיתה</summary>
+          <p class="muted">הדביקו כמה קודי PP1 מהוואטסאפ של הקבוצה. בלי שמות. מתקבלת מפת חום לחדר — באיזה בלוק הכיתה מאבדת נקודות — כדי לפתוח את המרתון שם.</p>
+          <button id="inviteCopyBtn" class="ghost" type="button">העתקת הודעה לקבוצת הוואטסאפ</button>
+          <p id="inviteMsg" class="muted status-flash" role="status"></p>
+          <label class="label" for="cohortIn">קודי אבחון של הכיתה</label>
+          <textarea id="cohortIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="cohortMsg" placeholder="PP1....abcd&#10;PP1....ef01"></textarea>
+          <button id="cohortBtn" class="ghost" type="button">בניית תדריך הכיתה</button>
+          <p id="cohortMsg" class="muted status-flash" role="status"></p>
+        </details>
+        <details class="addon-box">
+          <summary>רכז קורס: מפת מבנה המבחן</summary>
+          <p class="muted">המפה המובנית היא הנחה או פירוק שקוף. עדכנו נקודות לכל בלוק בטופס — בלי JSON. זו לא חתימה של אפקה, אלא מה שנשמר בדפדפן הזה לקורס הנוכחי.</p>
+          <div id="mapBuilder"></div>
+          <p id="mapTotal" class="bp-status" role="status"></p>
+          <div class="diag-actions">
+            <button id="mapApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת המפה</button>
+            <button id="mapExportBtn" class="ghost" type="button" style="width:auto;margin:0">ייצוא JSON</button>
+            <button id="bpResetBtn" class="restart" type="button" style="margin:0">חזרה למפה המובנית</button>
+          </div>
+          <details style="margin-top:12px">
+            <summary>JSON (מתקדם)</summary>
+            <label class="label" for="bpJson">JSON מבנה</label>
+            <textarea id="bpJson" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="bpMsg" placeholder='{"courseId":"python","title":"פייתון 10016","examLabel":"מועד מותאם","blocks":[{"id":"q1","topic":"recursion","label":"רקורסיה","points":40},{"id":"q2","topic":"strings","label":"מחרוזות","points":30},{"id":"q3","topic":"lists","label":"רשימות","points":30}]}'></textarea>
+            <div class="diag-actions">
+              <button id="bpApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת JSON</button>
+              <button id="bpExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
+            </div>
+          </details>
+          <p id="bpMsg" class="muted bp-status" role="status"></p>
+        </details>
+        <details class="addon-box">
+          <summary>מדריך: קורס חדש מהדבקה</summary>
+          <p class="muted">הדביקו JSON של קורס — נושאים, שאלות עם פתרון עבודה, ומפת נקודות אופציונלית. הקורס נשמר בדפדפן הזה בלבד. אי אפשר לדרוס את ארבעת קורסי אפקה המובנים.</p>
+          <label class="label" for="coursePackIn">JSON של חבילת קורס</label>
+          <textarea id="coursePackIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="coursePackMsg" placeholder='{"id":"logic-demo","title":"לוגיקה","quizTopics":{"sets":"קבוצות"},"questions":[{"topic":"sets","question":"...","options":["א","ב"],"answerIdx":0,"explanation":"פתרון עבודה..."}]}'></textarea>
+          <div class="diag-actions">
+            <button id="coursePackBtn" class="ghost" type="button" style="width:auto;margin:0">החלת הקורס</button>
+            <button id="coursePackExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
+            <button id="coursePackDeleteBtn" class="restart" type="button" style="margin:0">מחיקת הקורס המודבק</button>
+          </div>
+          <p id="coursePackMsg" class="muted status-flash" role="status"></p>
+        </details>
       </details>
-      <div id="startAnalytics" class="addon-box hidden" aria-live="polite"></div>
-      <details class="addon-box">
-        <summary>מדריך: קורס חדש מהדבקה</summary>
-        <p class="muted">הדביקו JSON של קורס — נושאים, שאלות עם פתרון עבודה, ומפת נקודות אופציונלית. הקורס נשמר בדפדפן הזה בלבד. אי אפשר לדרוס את ארבעת קורסי אפקה המובנים.</p>
-        <label class="label" for="coursePackIn">JSON של חבילת קורס</label>
-        <textarea id="coursePackIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="coursePackMsg" placeholder='{"id":"logic-demo","title":"לוגיקה","quizTopics":{"sets":"קבוצות"},"questions":[{"topic":"sets","question":"...","options":["א","ב"],"answerIdx":0,"explanation":"פתרון עבודה..."}]}'></textarea>
-        <div class="diag-actions">
-          <button id="coursePackBtn" class="ghost" type="button" style="width:auto;margin:0">החלת הקורס</button>
-          <button id="coursePackExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
-          <button id="coursePackDeleteBtn" class="restart" type="button" style="margin:0">מחיקת הקורס המודבק</button>
-        </div>
-        <p id="coursePackMsg" class="muted status-flash" role="status"></p>
-      </details>
-      <p id="startStatus" class="muted status-flash" role="status" tabindex="-1"></p>
-      <button id="startBtn" class="primary" type="button">מתחילים בבוחן</button>
-      <button id="examBtn" class="exam-button" type="button">מצב מבחן אפקה 10016</button>
-      <div class="field">
-        <label for="marathonMinutes"><span class="label">מצב מרתון — משך הסימולציה</span></label>
-        <select id="marathonMinutes" aria-describedby="marathonHint">
-          <option value="45">45 דקות · ממוקד</option>
-          <option value="90">90 דקות</option>
-          <option value="120" selected>120 דקות · מבנה רב-ברירה</option>
-          <option value="180">180 דקות · כתיבת קוד</option>
-        </select>
-        <p id="marathonHint" class="muted">כל בלוקי מפת המבחן, שעון אחד. פייתון 10016 = ארבעה בלוקי כתיבה; בשאר הקורסים = רב-ברירה לפי המשקל. זה לא שעון המועד הרשמי ולא תחזית ציון.</p>
-      </div>
-      <button id="marathonBtn" class="exam-button" type="button">מצב מרתון — סימולציית מבנה</button>
-      <button id="structureBtn" class="ghost" type="button">מפת מבנה המבחן</button>
     </section>
-    <section id="quiz" class="card hidden" aria-labelledby="questionTitle">
+    <section id="quiz" class="card hidden" aria-hidden="true" aria-labelledby="questionTitle">
       <div class="quiz-head"><span id="counter" class="counter" aria-live="polite"></span><div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress" class="progress-bar"></div></div><span id="marathonClock" class="marathon-clock hidden" aria-live="off"></span><span id="timer" class="timer" aria-live="off">00:00</span></div>
+      <p id="quizKeys" class="muted kbd-hint">מקשים 1–4 בוחרים תשובה. Escape סוגר דוח פתוח.</p>
       <div class="question-meta"><span id="topicTag" class="tag"></span><span id="levelTag" class="tag"></span></div>
       <h2 id="questionTitle">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers" role="group" aria-label="אפשרויות תשובה"></div>
       <div id="feedback" class="feedback hidden" aria-live="assertive" role="status"></div><button id="nextBtn" class="next hidden" type="button">לשאלה הבאה</button>
     </section>
-    <section id="exam" class="card hidden" aria-labelledby="examTitle">
+    <section id="exam" class="card hidden" aria-hidden="true" aria-labelledby="examTitle">
       <div class="exam-banner" id="examBanner"><strong>מבחן אפקה 10016 · מועד ב׳</strong><br><span class="muted">ארבע שאלות כתיבת קוד, לפי הסדר האמיתי. הפתרון נחשף רק אחרי שכתבת תשובה.</span><div id="marathonClockExam" class="marathon-clock hidden" aria-live="off"></div></div>
       <div id="blockOrder" class="block-order" role="list" aria-label="סדר בלוקי המבחן"></div>
       <div class="question-meta"><span id="examCounter" class="tag" aria-live="polite"></span><span class="tag">כתיבת קוד</span></div>
@@ -183,7 +201,7 @@
       <p id="examStatus" class="muted status-flash" role="status"></p>
       <div class="exam-actions"><button id="revealBtn" class="next" type="button">הצגת פתרון</button><button id="examCorrect" class="next hidden" type="button">פתרתי נכון</button><button id="examWrong" class="restart hidden" type="button">צריך חיזוק</button></div>
     </section>
-    <section id="results" class="card hidden" aria-labelledby="resultTitle">
+    <section id="results" class="card hidden" aria-hidden="true" aria-labelledby="resultTitle">
       <div class="center"><div id="scoreRing" class="score-ring" aria-hidden="true"><b id="scoreText"></b></div><h2 id="resultTitle" tabindex="-1"></h2><p id="resultCopy" class="lead" style="margin-inline:auto"></p></div>
       <div class="insights">
         <article class="insight wide tonight-card no-print hidden" id="tonightBox">
@@ -224,9 +242,9 @@
       <div id="historyBox" class="no-print" style="margin-top:22px"></div>
       <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="marathonCardBtn" class="ghost" type="button">כרטיס למרתון</button><button id="restartBtn" class="restart" type="button">בוחן חדש</button></div>
     </section>
-    <section id="diagnosisSheet" class="card hidden" aria-label="דוח מרחק ממבנה המבחן"></section>
-    <section id="offerSheet" class="card hidden" aria-label="מחיר והצעה"></section>
-    <section id="unionSheet" class="card hidden" aria-label="הצעה לאגודת הסטודנטים"></section>
+    <section id="diagnosisSheet" class="card hidden" aria-hidden="true" aria-label="דוח מרחק ממבנה המבחן"></section>
+    <section id="offerSheet" class="card hidden" aria-hidden="true" aria-label="מחיר והצעה"></section>
+    <section id="unionSheet" class="card hidden" aria-hidden="true" aria-label="הצעה לאגודת הסטודנטים"></section>
   </main>
 
   <script src="src/lib/planner.js"></script>
@@ -302,10 +320,42 @@ function labels() {
   return course().labelTopics || {};
 }
 
+var lastFocus = null;
+
+function reduceMotion() {
+  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function scrollToEl(el) {
+  if (!el) return;
+  el.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+}
+
+function rememberFocus() {
+  lastFocus = document.activeElement;
+}
+
+function restoreFocus() {
+  if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+}
+
+function setSheet(el, open, labelledBy) {
+  if (!el) return;
+  el.classList.toggle("hidden", !open);
+  el.setAttribute("aria-hidden", open ? "false" : "true");
+  if (open) {
+    rememberFocus();
+    el.setAttribute("role", "dialog");
+    if (labelledBy) el.setAttribute("aria-labelledby", labelledBy);
+  } else {
+    el.removeAttribute("role");
+    restoreFocus();
+  }
+}
+
 function hidePrintSheets() {
   ["diagnosisSheet", "offerSheet", "unionSheet"].forEach(function (id) {
-    var el = $(id);
-    if (el) el.classList.add("hidden");
+    setSheet($(id), false);
   });
 }
 
@@ -376,8 +426,13 @@ function setCourse(id) {
 
 function renderTopics() {
   var names = course().quizTopics;
+  var examTopics = {};
+  var bp = diagnosisBlueprint();
+  if (bp && bp.blocks) bp.blocks.forEach(function (b) { examTopics[b.topic] = true; });
+  var hasExamAligned = Object.keys(names).some(function (k) { return examTopics[k]; });
   $("topics").innerHTML = Object.keys(names).map(function (key) {
-    return '<label class="topic"><input type="checkbox" value="' + key + '" checked><span>' + names[key] + "</span></label>";
+    var onExam = !hasExamAligned || !!examTopics[key];
+    return '<label class="topic"><input type="checkbox" value="' + key + '"' + (onExam ? " checked" : "") + "><span>" + names[key] + "</span></label>";
   }).join("");
 }
 
@@ -610,7 +665,7 @@ function renderResults(rows, opts) {
     $("resultTitle").textContent = "סיכום מבחן אפקה 10016";
     $("resultCopy").textContent = "פתרת נכון " + scored.correct + " מתוך " + scored.total + " שאלות כתיבת קוד.";
   } else {
-    $("resultTitle").textContent = scored.pct >= 70 ? "אתה בכיוון מצוין" : scored.pct >= 50 ? "קרוב למעבר — ממשיכים לדייק" : "מצאנו איפה לחזק";
+    $("resultTitle").textContent = scored.pct >= 70 ? "דיוק גבוה בבוחן הזה" : scored.pct >= 50 ? "יש על מה לעבוד — הנה איפה" : "מצאנו איפה לחזק";
     $("resultCopy").textContent = "ענית נכון על " + scored.correct + " מתוך " + scored.total + ". ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.";
   }
   $("trend").textContent = options.imported ? "יובא מקוד אבחון — אין מגמת זמן בדפדפן הזה." : trendText(rows);
@@ -1364,12 +1419,12 @@ function openCohortSheet() {
       '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
     "</div>" +
     '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. בלי שרת ובלי שמות.</p>';
-  host.classList.remove("hidden");
+  setSheet(host, true, "cohortTitle");
   $("printReportBtn").onclick = function () { window.print(); };
-  $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
+  $("closeReportBtn").onclick = function () { setSheet(host, false); };
   var title = $("cohortTitle");
   if (title) title.focus();
-  host.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToEl(host);
 }
 
 function openReport(useAnswers, focusCard, extras) {
@@ -1455,10 +1510,10 @@ function openReport(useAnswers, focusCard, extras) {
         '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
       "</div>";
     hidePrintSheets();
-    host.classList.remove("hidden");
+    setSheet(host, true);
     $("printReportBtn").onclick = function () { window.print(); };
-    $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
-    host.scrollIntoView({ behavior: "smooth", block: "start" });
+    $("closeReportBtn").onclick = function () { setSheet(host, false); };
+    scrollToEl(host);
     return;
   }
   host.innerHTML =
@@ -1499,10 +1554,10 @@ function openReport(useAnswers, focusCard, extras) {
     "</div>" +
     '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. נשמר בדפדפן בלבד.</p>';
   hidePrintSheets();
-  host.classList.remove("hidden");
+  setSheet(host, true);
   $("printReportBtn").onclick = function () { window.print(); };
-  $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
-  (focusCard && $("marathonCard") ? $("marathonCard") : host).scrollIntoView({ behavior: "smooth", block: "start" });
+  $("closeReportBtn").onclick = function () { setSheet(host, false); };
+  scrollToEl(focusCard && $("marathonCard") ? $("marathonCard") : host);
 }
 
 function renderAccess() {
@@ -1606,13 +1661,13 @@ function openOfferSheet(reason) {
       '<button type="button" class="ghost" id="toUnionFromOffer" style="width:auto;margin:0">הצעה לאגודה</button>' +
       '<button type="button" class="restart" id="closeOfferBtn" style="margin:0">סגירה</button>' +
     "</div>";
-  host.classList.remove("hidden");
+  setSheet(host, true, "offerTitle");
   $("printOfferBtn").onclick = function () { window.print(); };
-  $("closeOfferBtn").onclick = function () { host.classList.add("hidden"); };
+  $("closeOfferBtn").onclick = function () { setSheet(host, false); };
   $("toUnionFromOffer").onclick = function () { openUnionSheet(); };
   var title = $("offerTitle");
   if (title) title.focus();
-  host.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToEl(host);
 }
 
 function openUnionSheet() {
@@ -1683,9 +1738,9 @@ function openUnionSheet() {
       '<button type="button" class="restart" id="closeUnionBtn" style="margin:0">סגירה</button>' +
     "</div>" +
     '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. מקורות: MONETIZATION.md, נבדק ' + esc(market.checkedAt) + ".</p>";
-  host.classList.remove("hidden");
+  setSheet(host, true, "unionTitle");
   $("printUnionBtn").onclick = function () { window.print(); };
-  $("closeUnionBtn").onclick = function () { host.classList.add("hidden"); };
+  $("closeUnionBtn").onclick = function () { setSheet(host, false); };
   $("unionAddon").onchange = function () { openUnionSheet(); };
   $("unionSeats").onchange = function () { openUnionSheet(); };
   $("mintBtn").onclick = function () {
@@ -1699,7 +1754,7 @@ function openUnionSheet() {
   };
   var title = $("unionTitle");
   if (title) title.focus();
-  host.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToEl(host);
 }
 
 function bind() {
@@ -1747,7 +1802,7 @@ function bind() {
         return el && !el.classList.contains("hidden");
       })[0];
       if (sheet) {
-        sheet.classList.add("hidden");
+        setSheet(sheet, false);
         ev.preventDefault();
         return;
       }
@@ -1766,12 +1821,7 @@ loadStoredPacks();
 renderCourseButtons();
 setCourse("python");
 bind();
-renderSrsBox();
-renderMapBuilder();
-renderBlueprintStatus();
-renderExamHint();
-renderStartAnalytics();
-renderAccess();
+go("start");
 bootFromHash();
 
   </script>
