@@ -1,0 +1,82 @@
+// בדיקת אמת לתוכנית הלימוד: node selftest.mjs
+// שולף את הפונקציות הטהורות מתוך index.html כדי שלא תהיה כאן העתקה של הלוגיקה.
+import { readFileSync } from "node:fs";
+import assert from "node:assert/strict";
+
+const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
+const from = html.indexOf("const DEFAULT_HORIZON_DAYS");
+const to = html.indexOf("const $=id=>document.getElementById(id)");
+assert.ok(from > 0 && to > from, "לא נמצא בלוק לוגיקת התוכנית ב-index.html");
+const { parseExamDate, futureSlots, generateInitialStudyPlan } = new Function(
+  `${html.slice(from, to)}\nreturn {parseExamDate,futureSlots,generateInitialStudyPlan}`
+)();
+
+const day = (offset) => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + offset);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+const topics = [
+  { name: "רקורסיה", estimatedHoursTotal: 4 },
+  { name: "מחרוזות", estimatedHoursTotal: 3 },
+];
+const build = (examDate) => {
+  const exam = parseExamDate(examDate);
+  return generateInitialStudyPlan(examDate, topics, futureSlots(exam.days));
+};
+
+// תאריך חסר / לא תקין / שעבר — אזהרה כנה, ובכל זאת תוכנית שמישה
+for (const [value, status] of [[null, "missing"], ["", "missing"], ["לא-תאריך", "invalid"], [day(-3), "past"]]) {
+  const r = build(value);
+  assert.equal(r.examStatus, status, `סטטוס שגוי עבור ${value}`);
+  assert.equal(r.daysToExam, null);
+  assert.ok(r.warnings.length, "חסרה אזהרה");
+  assert.ok(r.plan.length, "תוכנית ריקה למרות אופק ברירת מחדל");
+}
+
+// המבחן משפיע בפועל: קרוב = פחות ימים ויותר שעות ביום
+const soon = build(day(2)), far = build(day(10));
+assert.equal(soon.daysToExam, 2);
+assert.equal(far.daysToExam, 10);
+assert.equal(soon.plan.length, 2, "תוכנית קרובה חייבת לעצור לפני יום המבחן");
+assert.ok(soon.plan.every((p) => p.date < day(2)), "אין לתכנן ביום המבחן");
+assert.ok(soon.plan[0].hours > far.plan[0].hours, "קרוב למבחן חייב להיות אינטנסיבי יותר");
+assert.ok(soon.plan.every((p) => p.type === "review"), "קרוב למבחן = חזרה בלבד");
+assert.ok(far.plan.some((p) => p.type === "practice"), "רחוק מהמבחן = גם תרגול");
+
+// שינוי תאריך משנה תוכנית (הרגרסיה המקורית: examDate היה פרמטר מת)
+assert.notDeepEqual(soon.plan, far.plan);
+
+// המבחן היום — חזרה אחת, לא תוכנית ריקה
+const today = build(day(0));
+assert.equal(today.daysToExam, 0);
+assert.equal(today.plan.length, 1);
+assert.equal(today.plan[0].date, day(0));
+
+// אין הבטחת שווא: כשאין זמן לכל השעות הנדרשות, אומרים זאת
+assert.ok(soon.warnings.some((w) => w.includes("נדרשות")), "חסרה אזהרת חוסר זמן");
+// ולא מקצים יותר שעות ממה שהנושא דורש
+const perTopic = far.plan.reduce((acc, p) => ({ ...acc, [p.topic]: (acc[p.topic] || 0) + p.hours }), {});
+for (const t of topics) assert.ok((perTopic[t.name] || 0) <= t.estimatedHoursTotal + 0.01, `חריגה בשעות ${t.name}`);
+
+// אופק ארוך נחתך ל-14 ימים ומדווח על כך
+const long = build(day(60));
+assert.equal(long.plan.length <= 14, true);
+assert.ok(long.warnings.some((w) => w.includes("14")), "חסר דיווח על חיתוך האופק");
+
+// שומר-אמת: אסור להחזיר ל-UI הסתברות מעבר לא מכוילת
+const banned = [
+  "סיכוי מעבר",
+  "סיכויי המעבר",
+  "calculateInitialPassProbability",
+  "probabilityBar",
+  'id="probability"',
+];
+const offences = [];
+html.split("\n").forEach((line, i) => {
+  for (const phrase of banned) if (line.includes(phrase)) offences.push(`index.html:${i + 1} — "${phrase}"`);
+});
+assert.deepEqual(offences, [], `נמצאה טענת הסתברות מעבר לא מכוילת:\n${offences.join("\n")}`);
+
+console.log("selftest: כל הבדיקות עברו");

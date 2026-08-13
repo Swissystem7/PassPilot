@@ -9,6 +9,9 @@
     @media(prefers-color-scheme:dark){:root{--bg:#101713;--panel:#18221d;--ink:#eef7f2;--muted:#a8b8b0;--line:#34463d;--soft:#203c31;--shadow:0 18px 48px #0006}}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0,#0ca67820,transparent 35%),var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}button,select{font:inherit}button{cursor:pointer}.shell{width:min(880px,calc(100% - 28px));margin:auto;padding:28px 0 60px}.brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.logo{font-weight:900;font-size:1.3rem}.logo span{color:var(--brand2)}.pill{font-size:.82rem;background:var(--soft);color:var(--brand);padding:5px 10px;border-radius:99px}.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,5vw,42px);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;margin-bottom:14px}h2{font-size:clamp(1.5rem,4vw,2.2rem)}.lead{color:var(--muted);font-size:1.08rem;max-width:620px}.field{margin:24px 0}.label{font-weight:800;display:block;margin-bottom:10px}.topics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.topic{position:relative}.topic input{position:absolute;opacity:0}.topic span{display:block;text-align:center;border:1px solid var(--line);padding:11px 8px;border-radius:12px;transition:.2s}.topic input:checked+span{background:var(--soft);border-color:var(--brand2);color:var(--brand);font-weight:800}.controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}.controls select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)}.primary,.next{border:0;border-radius:13px;padding:13px 24px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;font-weight:850;box-shadow:0 8px 20px #087f5b35}.primary{width:100%;margin-top:8px}.primary:hover,.next:hover{filter:brightness(1.06);transform:translateY(-1px)}.hidden{display:none!important}.quiz-head{display:flex;align-items:center;gap:14px;margin-bottom:24px}.progress-track{height:8px;background:var(--line);border-radius:9px;overflow:hidden;flex:1}.progress-bar{height:100%;background:var(--brand2);transition:width .3s}.counter,.timer{white-space:nowrap;color:var(--muted);font-size:.9rem}.question-meta{display:flex;gap:8px;margin-bottom:12px}.tag{background:var(--soft);color:var(--brand);border-radius:7px;padding:3px 8px;font-size:.78rem;font-weight:750}.prompt{white-space:pre-wrap;direction:ltr;text-align:left;background:#111b17;color:#e7fff4;border-radius:15px;padding:18px;overflow:auto;font:600 .95rem/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;margin:15px 0 20px}.answers{display:grid;gap:11px}.answer{border:1px solid var(--line);border-radius:13px;padding:13px 16px;background:transparent;color:var(--ink);text-align:right;transition:.15s}.answer:hover:not(:disabled){border-color:var(--brand2);background:var(--soft)}.answer.correct{background:#dff7e9;color:#126b41;border-color:#51cf66}.answer.wrong{background:#ffe3e3;color:#a51111;border-color:#ff8787}.answer:disabled{cursor:default}.feedback{margin-top:18px;padding:15px;border-radius:13px;background:var(--soft)}.feedback strong{display:block;margin-bottom:4px}.next{display:block;margin:17px 0 0 auto}.score-ring{width:136px;height:136px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;background:conic-gradient(var(--brand2) var(--score),var(--line) 0);position:relative}.score-ring:after{content:"";position:absolute;inset:11px;background:var(--panel);border-radius:50%}.score-ring b{z-index:1;font-size:2rem}.center{text-align:center}.insights{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}.insight{border:1px solid var(--line);border-radius:16px;padding:18px}.insight.wide{grid-column:1/-1}.insight h3{font-size:1rem;margin-bottom:10px}.meter{height:9px;background:var(--line);border-radius:10px;overflow:hidden;margin:10px 0}.meter i{display:block;height:100%;background:var(--brand2)}.weak-list,.plan{margin:0;padding:0;list-style:none}.weak-list li,.plan li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:8px 0}.weak-list li:first-child,.plan li:first-child{border-top:0}.muted{color:var(--muted);font-size:.9rem}.restart{margin-top:24px;background:transparent;color:var(--brand2);border:1px solid var(--brand2);border-radius:12px;padding:10px 18px;font-weight:800}@media(max-width:620px){.topics{grid-template-columns:1fr 1fr}.controls,.insights{grid-template-columns:1fr}.insight.wide{grid-column:auto}.card{border-radius:18px}.quiz-head{flex-wrap:wrap}.progress-track{order:3;flex-basis:100%}}
     .exam-button{width:100%;margin-top:12px;border:2px solid var(--brand2);border-radius:13px;padding:13px;background:transparent;color:var(--brand2);font-weight:900}.exam-banner{background:var(--soft);border-radius:14px;padding:14px;margin-bottom:20px}.code-input{width:100%;min-height:180px;resize:vertical;direction:ltr;text-align:left;background:#111b17;color:#e7fff4;border:1px solid var(--line);border-radius:15px;padding:16px;font:600 .95rem/1.6 ui-monospace,Consolas,monospace}.exam-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.solution{direction:ltr;text-align:left;white-space:pre-wrap}.block-order{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.block-order span{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:.82rem}.block-order .active{background:var(--soft);border-color:var(--brand2);font-weight:800}@media(max-width:620px){.block-order{grid-template-columns:1fr 1fr}}
+    #examDate{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)}
+    #planWarnings{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:var(--soft)}
+    #planWarnings:empty{display:none}
   </style>
 </head>
 <body>
@@ -22,6 +25,7 @@
         <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
         <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
       </div>
+      <div class="field"><label><span class="label">תאריך המבחן</span><input type="date" id="examDate"></label><p class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל.</p></div>
       <button id="startBtn" class="primary">מתחילים בבוחן</button>
       <button id="examBtn" class="exam-button">מצב מבחן אפקה 10016</button>
     </section>
@@ -45,7 +49,7 @@
       <div class="insights">
         <article class="insight"><h3>סיכוי מעבר משוער</h3><strong id="probability"></strong><div class="meter"><i id="probabilityBar"></i></div><p id="trend" class="muted"></p></article>
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
-        <article class="insight wide"><h3>תוכנית התרגול שלך</h3><ul id="studyPlan" class="plan"></ul></article>
+        <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
       </div>
       <div class="center"><button id="restartBtn" class="restart">בוחן חדש</button></div>
     </section>
@@ -102,8 +106,102 @@ const questionBank = () => [
 ];
 
 const topicNames={loops:"לולאות",functions:"פונקציות",strings:"מחרוזות",lists:"רשימות",conditions:"תנאים",recursion:"רקורסיה"};
-// weakTopicRanker / calculateInitialPassProbability / generateInitialStudyPlan
-// חיים ב-src/lib/planner.js ומכוסים ב-21 טסטים.
+
+const DEFAULT_HORIZON_DAYS = 5;
+const MAX_HORIZON_DAYS = 14;
+function formatLocalDate(date) {
+  return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+}
+function startOfToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+function parseExamDate(value) {
+  if (value == null || String(value).trim() === "") {
+    return { status: "missing", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
+  }
+  const raw = String(value).trim();
+  const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) {
+    return { status: "invalid", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
+  }
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const dayNum = Number(match[3]);
+  const exam = new Date(year, month - 1, dayNum);
+  exam.setHours(0, 0, 0, 0);
+  if (exam.getFullYear() !== year || exam.getMonth() !== month - 1 || exam.getDate() !== dayNum) {
+    return { status: "invalid", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
+  }
+  const today = startOfToday();
+  const diff = Math.round((exam.getTime() - today.getTime()) / 86400000);
+  if (diff < 0) {
+    return { status: "past", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
+  }
+  return { status: "ok", days: diff, daysToExam: diff };
+}
+function futureSlots(horizonDays) {
+  const count = horizonDays === 0 ? 1 : Math.max(0, Number(horizonDays) || 0);
+  const slots = [];
+  for (let i = 0; i < count; i++) {
+    const d = startOfToday();
+    d.setDate(d.getDate() + i);
+    slots.push({ day: formatLocalDate(d), startHour: 18, endHour: 19 });
+  }
+  return slots;
+}
+const generateInitialStudyPlan = function (examDate, topics, slots) {
+  const parsed = parseExamDate(examDate);
+  const warnings = [];
+  const examStatus = parsed.status;
+  const daysToExam = parsed.daysToExam;
+  const list = Array.isArray(topics) ? topics : [];
+  const incoming = Array.isArray(slots) ? slots : [];
+  if (examStatus === "missing") warnings.push("לא צוין תאריך מבחן — נבנתה תוכנית ל־" + DEFAULT_HORIZON_DAYS + " ימים");
+  else if (examStatus === "invalid") warnings.push("תאריך המבחן אינו תקין — נבנתה תוכנית ל־" + DEFAULT_HORIZON_DAYS + " ימים");
+  else if (examStatus === "past") warnings.push("תאריך המבחן כבר עבר — נבנתה תוכנית ל־" + DEFAULT_HORIZON_DAYS + " ימים");
+  if (daysToExam != null && daysToExam > MAX_HORIZON_DAYS) {
+    warnings.push("האופק נחתך ל-14 ימים");
+  }
+  const usable = incoming.slice(0, MAX_HORIZON_DAYS);
+  const plan = [];
+  if (!list.length || !usable.length) {
+    warnings.push("No available study slots");
+    return { plan: plan, warnings: warnings, examStatus: examStatus, daysToExam: daysToExam };
+  }
+  const remaining = new Map(list.map(function (t) { return [t.name, Number(t.estimatedHoursTotal) || 0]; }));
+  const ordered = list.slice().sort(function (a, b) { return b.estimatedHoursTotal - a.estimatedHoursTotal; });
+  const totalNeeded = list.reduce(function (sum, t) { return sum + (Number(t.estimatedHoursTotal) || 0); }, 0);
+  const closeness = daysToExam == null ? DEFAULT_HORIZON_DAYS : daysToExam;
+  const hoursPerDay = closeness === 0 ? 2 : Math.min(3, 6 / Math.max(closeness, 1));
+  const reviewOnly = daysToExam != null && daysToExam <= 2;
+  let index = 0;
+  for (let s = 0; s < usable.length; s++) {
+    let topic = null;
+    for (let k = 0; k < ordered.length; k++) {
+      const cand = ordered[index % ordered.length];
+      index++;
+      if ((remaining.get(cand.name) || 0) > 0) { topic = cand; break; }
+    }
+    if (!topic) break;
+    const rem = remaining.get(topic.name);
+    const hours = Math.min(hoursPerDay, rem);
+    if (hours <= 0) break;
+    plan.push({
+      date: usable[s].day,
+      topic: topic.name,
+      hours: Math.round(hours * 1000) / 1000,
+      type: reviewOnly || s < 2 ? "review" : "practice"
+    });
+    remaining.set(topic.name, rem - hours);
+  }
+  const allocated = plan.reduce(function (sum, p) { return sum + p.hours; }, 0);
+  if (allocated + 0.01 < totalNeeded) {
+    warnings.push("נדרשות " + totalNeeded + " שעות, ונותרו רק " + (Math.round(allocated * 10) / 10) + " בלוח הזמנים");
+  }
+  return { plan: plan, warnings: warnings, examStatus: examStatus, daysToExam: daysToExam };
+};
 
 const $=id=>document.getElementById(id);let quiz=[],at=0,answers=[],questionStarted=0,timerId;
 function renderTopics(){$("topics").innerHTML=Object.entries(topicNames).map(([key,name])=>`<label class="topic"><input type="checkbox" value="${key}" checked><span>${name}</span></label>`).join("")}
@@ -113,8 +211,10 @@ function showQuestion(){const q=quiz[at];questionStarted=Date.now();$("counter")
 function tick(){const sec=Math.floor((Date.now()-questionStarted)/1000);$("timer").textContent=`${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`}
 function answerQuestion(selected){clearInterval(timerId);const q=quiz[at],correct=selected===q.answerIdx,seconds=(Date.now()-questionStarted)/1000;answers.push({topic:q.topic,correct,secondsSpent:seconds});document.querySelectorAll(".answer").forEach((b,i)=>{b.disabled=true;if(i===q.answerIdx)b.classList.add("correct");else if(i===selected)b.classList.add("wrong")});$("feedback").innerHTML=`<strong>${correct?"✓ תשובה נכונה":"✗ כמעט — הנה הפתרון"}</strong>${q.explanation}`;$("feedback").classList.remove("hidden");$("nextBtn").textContent=at===quiz.length-1?"לתוצאות":"לשאלה הבאה";$("nextBtn").classList.remove("hidden")}
 function next(){at++;if(at<quiz.length)showQuestion();else showResults()}
-function futureSlots(){const slots=[];for(let i=1;i<=5;i++){const d=new Date;d.setDate(d.getDate()+i);slots.push({day:d.toISOString().slice(0,10),startHour:18,endHour:19})}return slots}
-function showResults(){clearInterval(timerId);$("quiz").classList.add("hidden");$("results").classList.remove("hidden");const correct=answers.filter(a=>a.correct).length,pct=Math.round(correct/answers.length*100),prob=calculateInitialPassProbability(correct,answers.length,"medium"),ranked=weakTopicRanker(answers),weak=ranked.filter(r=>r.errorRate>0).slice(0,3);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent=pct>=70?"אתה בכיוון מצוין":pct>=50?"קרוב למעבר — ממשיכים לדייק":"מצאנו איפה לחזק";$("resultCopy").textContent=`ענית נכון על ${correct} מתוך ${answers.length}. ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.`;$("probability").textContent=`${Math.round(prob*100)}%`;$("probabilityBar").style.width=`${prob*100}%`;const midpoint=Math.max(1,Math.floor(answers.length/2)),first=answers.slice(0,midpoint).filter(a=>a.correct).length/midpoint,last=answers.slice(midpoint),second=last.length?last.filter(a=>a.correct).length/last.length:first;$("trend").textContent=second>first?"מגמה חיובית: השתפרת לאורך הבוחן.":second<first?"הדיוק ירד בחצי השני — כדאי לתרגל בקצב רגוע.":"הדיוק נשאר יציב לאורך הבוחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]}</span><b>${Math.round(r.errorRate*100)}% טעויות</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>`;const focus=(weak.length?weak:ranked.slice(0,2)).map((r,i)=>({name:topicNames[r.topic],difficulty:i?"medium":"hard",estimatedHoursTotal:2-i*.5}));const plan=generateInitialStudyPlan(new Date(Date.now()+7*864e5),focus,futureSlots()).plan;$("studyPlan").innerHTML=plan.length?plan.map(p=>`<li><span>${new Date(p.date+"T00:00:00").toLocaleDateString("he-IL",{weekday:"short",day:"numeric",month:"numeric"})} · ${p.topic}</span><b>${p.hours} שעה</b></li>`).join(""):`<li>אין צורך בתוכנית חיזוק כרגע.</li>`}
+function readExamDate(){const el=document.getElementById("examDate");return el?el.value:null}
+function buildFocusPlan(focus){const examValue=readExamDate();const parsed=parseExamDate(examValue);return generateInitialStudyPlan(examValue,focus,futureSlots(parsed.days))}
+function renderStudyPlan(result){const warn=$("planWarnings");if(warn)warn.innerHTML=(result.warnings||[]).map(w=>`<p class="muted" style="margin:0 0 6px">${w}</p>`).join("");const plan=result.plan||[];$("studyPlan").innerHTML=plan.length?plan.map(p=>`<li><span>${new Date(p.date+"T00:00:00").toLocaleDateString("he-IL",{weekday:"short",day:"numeric",month:"numeric"})} · ${p.topic}</span><b>${p.hours} שעות · ${p.type==="review"?"חזרה":"תרגול"}</b></li>`).join(""):`<li>אין צורך בתוכנית חיזוק כרגע.</li>`}
+function showResults(){clearInterval(timerId);$("quiz").classList.add("hidden");$("results").classList.remove("hidden");const correct=answers.filter(a=>a.correct).length,pct=Math.round(correct/answers.length*100),prob=calculateInitialPassProbability(correct,answers.length,"medium"),ranked=weakTopicRanker(answers),weak=ranked.filter(r=>r.errorRate>0).slice(0,3);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent=pct>=70?"אתה בכיוון מצוין":pct>=50?"קרוב למעבר — ממשיכים לדייק":"מצאנו איפה לחזק";$("resultCopy").textContent=`ענית נכון על ${correct} מתוך ${answers.length}. ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.`;$("probability").textContent=`${Math.round(prob*100)}%`;$("probabilityBar").style.width=`${prob*100}%`;const midpoint=Math.max(1,Math.floor(answers.length/2)),first=answers.slice(0,midpoint).filter(a=>a.correct).length/midpoint,last=answers.slice(midpoint),second=last.length?last.filter(a=>a.correct).length/last.length:first;$("trend").textContent=second>first?"מגמה חיובית: השתפרת לאורך הבוחן.":second<first?"הדיוק ירד בחצי השני — כדאי לתרגל בקצב רגוע.":"הדיוק נשאר יציב לאורך הבוחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]}</span><b>${Math.round(r.errorRate*100)}% טעויות</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>`;const focus=(weak.length?weak:ranked.slice(0,2)).map((r,i)=>({name:topicNames[r.topic],difficulty:i?"medium":"hard",estimatedHoursTotal:2-i*.5}));renderStudyPlan(buildFocusPlan(focus))}
 $("startBtn").onclick=startQuiz;$("nextBtn").onclick=next;$("restartBtn").onclick=()=>{$("results").classList.add("hidden");$("start").classList.remove("hidden")};renderTopics();
 const examStructure10016=[{number:1,topic:"recursion",title:"שאלה 1 - רקורסיה",emphasis:"תנאי עצירה, צעד רקורסיבי ומחסנית קריאות"},{number:2,topic:"strings",title:"שאלה 2 - מחרוזות",emphasis:"כל פעולות המחרוזת: חיתוך, חיפוש, פיצול והחלפה"},{number:3,topic:"lists",title:"שאלה 3 - רשימות",emphasis:"מעבר, שינוי, חיתוך, מיון ו-list comprehensions"},{number:4,topic:"dictionaries",title:"שאלה 4 - מבני נתונים - מילונים",emphasis:"יצירה, עדכון, items וספירת מופעים"}];
 const examCodeBank=[
@@ -129,7 +229,7 @@ function startExam(){examBlocks=buildExamSession10016();examAt=0;examAnswers=[];
 function showExamBlock(){const b=examBlocks[examAt],q=b.questions[0];examStarted=Date.now();$("blockOrder").innerHTML=examBlocks.map((x,i)=>`<span class="${i===examAt?'active':''}">${x.title}</span>`).join("");$("examCounter").textContent=`${examAt+1} מתוך 4`;$("examTitle").textContent=b.title;$("examEmphasis").textContent=b.emphasis;$("examPrompt").textContent=q.prompt;$("codeAnswer").value="";$("examSolution").classList.add("hidden");$("revealBtn").classList.remove("hidden");$("examCorrect").classList.add("hidden");$("examWrong").classList.add("hidden")}
 function revealExamSolution(){const q=examBlocks[examAt].questions[0];$("referenceCode").textContent=q.referenceSolution;$("solutionExplanation").textContent=q.explanation;$("examSolution").classList.remove("hidden");$("revealBtn").classList.add("hidden");$("examCorrect").classList.remove("hidden");$("examWrong").classList.remove("hidden")}
 function gradeExam(correct){examAnswers.push({topic:examBlocks[examAt].topic,correct,secondsSpent:(Date.now()-examStarted)/1000});if(++examAt<4)showExamBlock();else showExamResults()}
-function showExamResults(){$("exam").classList.add("hidden");$("results").classList.remove("hidden");const correct=examAnswers.filter(a=>a.correct).length,pct=correct*25,weak=weakTopicRanker(examAnswers).filter(r=>r.errorRate>0);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent="סיכום מבחן אפקה 10016";$("resultCopy").textContent=`פתרת נכון ${correct} מתוך 4 שאלות כתיבת קוד.`;$("probability").textContent=`${Math.round(calculateInitialPassProbability(correct,4,"hard")*100)}%`;$("probabilityBar").style.width=`${pct}%`;$("trend").textContent="ההערכה מבוססת על ארבעת בלוקי המבחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]}</span><b>דורש חיזוק</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>מצוין</b></li>`;$("studyPlan").innerHTML=examStructure10016.map((b,i)=>`<li><span>יום ${i+1} · ${b.title}</span><b>${weak.some(w=>w.topic===b.topic)?'90':'45'} דקות</b></li>`).join("")}
+function showExamResults(){$("exam").classList.add("hidden");$("results").classList.remove("hidden");const correct=examAnswers.filter(a=>a.correct).length,pct=correct*25,weak=weakTopicRanker(examAnswers).filter(r=>r.errorRate>0);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent="סיכום מבחן אפקה 10016";$("resultCopy").textContent=`פתרת נכון ${correct} מתוך 4 שאלות כתיבת קוד.`;$("probability").textContent=`${Math.round(calculateInitialPassProbability(correct,4,"hard")*100)}%`;$("probabilityBar").style.width=`${pct}%`;$("trend").textContent="ההערכה מבוססת על ארבעת בלוקי המבחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]||r.topic}</span><b>דורש חיזוק</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>מצוין</b></li>`;const focus=(weak.length?weak:weakTopicRanker(examAnswers).slice(0,2)).map((r,i)=>({name:topicNames[r.topic]||r.topic,estimatedHoursTotal:weak.some(w=>w.topic===r.topic)?2:1.5}));renderStudyPlan(buildFocusPlan(focus.length?focus:examStructure10016.map((b,i)=>({name:b.title,estimatedHoursTotal:i?1.5:2}))))}
 $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("examCorrect").onclick=()=>gradeExam(true);$("examWrong").onclick=()=>gradeExam(false);
   </script>
 <script>
