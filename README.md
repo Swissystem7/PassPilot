@@ -10,7 +10,7 @@
 
 **For whom:** Afeka students who already buy union marathons or lecturer video (GOOL / Alon Bauman / Danny Bauman) and want a short diagnosis of *which exam blocks they are losing*, not another video course.
 
-**How:** Open `index.html` or the [live demo](https://swissystem7.github.io/PassPilot/). Pick a course, optional exam date, run a quiz or the 10016 exam mode, then open **דוח מרחק ממבנה המבחן**, **מסלול 55**, or **כרטיס למרתון**. History stays in `localStorage` on this browser only. Run `node selftest.mjs` to check the planner contract.
+**How:** Open `index.html` or the [live demo](https://swissystem7.github.io/PassPilot/). Pick a course, optional exam date, run a quiz or the 10016 exam mode, then open **דוח מרחק ממבנה המבחן**, **מסלול 55**, or **כרטיס למרתון**. Copy the **PP1** diagnosis code for the union instructor, or paste a coordinator JSON map. History stays in `localStorage` on this browser only. Run `npm test` (or `node selftest.mjs`) to check the planner contract.
 
 ## מה עובד היום
 
@@ -25,10 +25,13 @@
 - **דוח מרחק ממבנה המבחן.** עמוד אחד להדפסה: מפת נושא×נקודות, איפה מאבדים, 2–3 הבלוקים היקרים, תוכנית ימים. רק שאלה 11 ב-10145 מתועדת כ-44 נק׳; שאר החלוקות מסומנות כהנחה.
 - **מסלול 55.** מסלול חמדן (נקודות לשעת מאמץ) עם חשבון גלוי. ציון עובר רשמי באפקה הוא **60**; 55 הוא רצפת ביניים של הפיצ׳ר, לא הבטחת מעבר.
 - **כרטיס למרתון.** פיצול 16 שעות + שלוש שאלות למדריך — הארטיפקט שמיועד לצירוף למרתון אגודה.
+- **קוד אבחון לשיתוף (`PP1…`).** אחרי בוחן נוצר קוד להעתקה. האגודה או המדריך מדביקים אותו אצלם ורואים את אותה מפת אובדן-נקודות. בלי שם, בלי תשובות מלאות, בלי שרת. קוד פגום נדחה.
+- **מפת מבחן מותאמת לרכז.** רכז מדביק JSON של נושא×נקודות במקום ההנחה השווה המובנית. המפה מסומנת «הודבק על ידי רכז» — לא חתימה של אפקה.
+- **תור חזרה לנושאים שפספסת.** מרווח 1→3→7→14 יום אחרי סשן נקי. זה לא Anki ולא FSRS; רק הנושאים שהבוחן כבר בדק.
 - **בלי מספר «סיכוי מעבר».** הנוסחה הישנה הוסרה.
 - **תאריכי תוכנית לפי שעון מקומי.** היסטוריה לפי קורס, כולל מצב מבחן. מעבר קורס לא מחזיר «מילונים» לבוחן הפייתון.
 
-ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה.
+ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`, קוד שיתוף ב-`src/lib/shareCode.js`, תור חזרה ב-`src/lib/srsQueue.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה.
 
 ## מה זה *לא*
 

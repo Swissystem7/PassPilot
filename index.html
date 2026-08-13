@@ -24,6 +24,13 @@
     .topic input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
     .pp-course[aria-pressed="true"]{background:rgba(8,127,91,.14);border-color:var(--brand2)!important}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .addon-box{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:16px 0;background:var(--panel)}
+    .addon-box summary{font-weight:800;cursor:pointer}
+    .addon-box[open] summary{margin-bottom:10px}
+    .addon-box .code-input{min-height:88px;margin:8px 0}
+    .share-out{min-height:72px;word-break:break-all}
+    .bp-status{font-size:.82rem;margin:8px 0 0}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
     @media print{
       body{background:#fff;color:#111}
       .shell{width:100%;max-width:none;margin:0;padding:0}
@@ -34,13 +41,13 @@
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#start">דלג לתוכן</a>
-  <main class="shell">
+  <a class="skip-link" href="#main">דלג לתוכן</a>
+  <main class="shell" id="main" tabindex="-1">
     <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill" id="coursePill">פייתון 10016</div></header>
     <section id="start" class="card">
-      <h1>לא רק ללמוד.<br>לדעת שתעבור.</h1>
-      <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן.</p>
-      <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. המוצר שמוצע לאגודה: תוספת 20–40 ₪ על כרטיס כניסה להדפסה.</div>
+      <h1>לא רק ללמוד.<br>לדעת איפה אתה מאבד נקודות.</h1>
+      <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן. זה אבחון מבנה, לא תחזית ציון.</p>
+      <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. המוצר שמוצע לאגודה: תוספת 20–40 ₪ על כרטיס כניסה להדפסה + קוד אבחון שאפשר להעביר למדריך.</div>
       <div class="field"><span class="label" id="courseLabel">מקצוע</span><div id="courseButtons" role="group" aria-labelledby="courseLabel"></div><p id="courseNote" class="muted"></p></div>
       <fieldset class="field" style="border:0;padding:0;margin:24px 0"><legend class="label">אילו נושאים לתרגל?</legend><div id="topics" class="topics"></div></fieldset>
       <div class="controls">
@@ -48,6 +55,32 @@
         <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
       </div>
       <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל.</p></div>
+      <div id="srsBox" class="addon-box hidden" aria-live="polite">
+        <h2 class="label" style="font-size:1rem;margin:0 0 6px">תור חזרה להיום</h2>
+        <p class="muted" id="srsHint" style="margin:0 0 8px">נושאים שפספסת ומועד החזרה שלהם הגיע. המרווח גדל אחרי סשן נקי (1→3→7→14 יום). זה לא Anki ולא FSRS.</p>
+        <ul id="srsList" class="weak-list"></ul>
+        <button id="srsStartBtn" class="ghost" type="button">תרגול הנושאים שבתוקף</button>
+      </div>
+      <details class="addon-box">
+        <summary>קוד אבחון מהאגודה / מהסטודנט</summary>
+        <p class="muted">הדביקו קוד שמתחיל ב־PP1. הקוד מכיל דיוק לפי נושא, תאריך מבחן ומפה אופציונלית — בלי שם, בלי תשובות מלאות, בלי שרת.</p>
+        <label class="label" for="shareIn">קוד אבחון</label>
+        <textarea id="shareIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="shareInMsg"></textarea>
+        <button id="shareLoadBtn" class="ghost" type="button">טעינת האבחון</button>
+        <p id="shareInMsg" class="muted" role="status"></p>
+      </details>
+      <details class="addon-box">
+        <summary>רכז קורס: הדבקת מבנה מבחן (JSON)</summary>
+        <p class="muted">המפה המובנית היא הנחה או פירוק שקוף. רכז יכול להדביק מפת נושא×נקודות אמיתית. זו לא חתימה של אפקה — זה מה שהודבק בדפדפן הזה.</p>
+        <label class="label" for="bpJson">JSON מבנה</label>
+        <textarea id="bpJson" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="bpMsg" placeholder='{"courseId":"python","title":"פייתון 10016","examLabel":"מועד מותאם","blocks":[{"id":"q1","topic":"recursion","label":"רקורסיה","points":40},{"id":"q2","topic":"strings","label":"מחרוזות","points":30},{"id":"q3","topic":"lists","label":"רשימות","points":30}]}'></textarea>
+        <div class="diag-actions">
+          <button id="bpApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת המפה</button>
+          <button id="bpExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
+          <button id="bpResetBtn" class="restart" type="button" style="margin:0">חזרה למפה המובנית</button>
+        </div>
+        <p id="bpMsg" class="muted bp-status" role="status"></p>
+      </details>
       <button id="startBtn" class="primary" type="button">מתחילים בבוחן</button>
       <button id="examBtn" class="exam-button" type="button">מצב מבחן אפקה 10016</button>
       <button id="structureBtn" class="ghost" type="button">מפת מבנה המבחן</button>
@@ -74,9 +107,17 @@
         <article class="insight"><h3>מגמה בבוחן</h3><p id="trend" class="muted"></p></article>
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
+        <article class="insight wide no-print" id="shareBox">
+          <h3>קוד אבחון למרתון</h3>
+          <p class="muted">העתיקו והעבירו למדריך או לאגודה. בלי שם ובלי שרת. מי שמדביק את הקוד רואה את אותה מפת אובדן נקודות.</p>
+          <label class="label" for="shareOut">קוד לשיתוף</label>
+          <textarea id="shareOut" class="code-input share-out" readonly dir="ltr" spellcheck="false"></textarea>
+          <button id="shareCopyBtn" class="ghost" type="button">העתקת הקוד</button>
+          <p id="shareOutMsg" class="muted" role="status"></p>
+        </article>
       </div>
       <div id="historyBox" class="no-print" style="margin-top:22px"></div>
-      <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="marathonCardBtn" class="ghost" type="button">כרטיס למרתון</button><button id="restartBtn" class="restart">בוחן חדש</button></div>
+      <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="marathonCardBtn" class="ghost" type="button">כרטיס למרתון</button><button id="restartBtn" class="restart" type="button">בוחן חדש</button></div>
     </section>
     <section id="diagnosisSheet" class="card hidden" aria-label="דוח מרחק ממבנה המבחן"></section>
   </main>
@@ -86,8 +127,22 @@
   <script src="src/lib/examBlueprint.js"></script>
   <script src="src/lib/banks.js"></script>
   <script src="src/lib/history.js"></script>
+  <script src="src/lib/shareCode.js"></script>
+  <script src="src/lib/srsQueue.js"></script>
   <script>
 const $ = function (id) { return document.getElementById(id); };
+
+const BP_STORE = "passpilot.blueprint.v1";
+const EXAMPLE_BLUEPRINT = {
+  courseId: "python",
+  title: "פייתון 10016 · מועד מותאם",
+  examLabel: "מפתח שהדביק הרכז — לא מפתח רשמי של אפקה",
+  blocks: [
+    { id: "q1", topic: "recursion", label: "שאלה 1 · רקורסיה", points: 40 },
+    { id: "q2", topic: "strings", label: "שאלה 2 · מחרוזות", points: 30 },
+    { id: "q3", topic: "lists", label: "שאלה 3 · רשימות", points: 30 }
+  ]
+};
 
 const state = {
   screen: "start",
@@ -96,7 +151,9 @@ const state = {
   items: [],
   index: 0,
   answers: [],
-  startedAt: 0
+  startedAt: 0,
+  overlay: null,
+  imported: false
 };
 
 
@@ -122,6 +179,7 @@ function go(screen) {
     var sheet = $("diagnosisSheet");
     if (sheet) sheet.classList.add("hidden");
   }
+  if (screen === "start") renderSrsBox();
 }
 
 function setCourse(id) {
@@ -139,6 +197,8 @@ function setCourse(id) {
     btn.setAttribute("aria-pressed", on ? "true" : "false");
   });
   renderTopics();
+  renderSrsBox();
+  renderBlueprintStatus();
 }
 
 function renderTopics() {
@@ -256,7 +316,8 @@ function renderExamItem() {
   var q = b.item;
   state.startedAt = Date.now();
   $("blockOrder").innerHTML = state.items.map(function (x, i) {
-    return '<span role="listitem" class="' + (i === state.index ? "active" : "") + '">' + x.title + "</span>";
+    return '<span role="listitem" class="' + (i === state.index ? "active" : "") + '"' +
+      (i === state.index ? ' aria-current="step"' : "") + ">" + x.title + "</span>";
   }).join("");
   $("examCounter").textContent = (state.index + 1) + " מתוך " + state.items.length;
   $("examTitle").textContent = b.title;
@@ -310,21 +371,32 @@ function trendText(rows) {
 
 function finishSession() {
   clearInterval(state.timerId);
-  var scored = scoreRows(state.answers);
-  var ranked = weakTopicRanker(state.answers);
+  state.imported = false;
+  writeSrs(applySession(readSrs(), state.courseId, state.answers, Date.now()));
+  renderResults(state.answers, { save: true, imported: false });
+}
+
+function renderResults(rows, opts) {
+  var options = opts || {};
+  var scored = scoreRows(rows);
+  var ranked = weakTopicRanker(rows);
   var weak = ranked.filter(function (r) { return r.errorRate > 0; }).slice(0, 3);
   var map = labels();
   go("results");
   $("scoreRing").style.setProperty("--score", (scored.pct * 3.6) + "deg");
   $("scoreText").textContent = scored.pct + "%";
-  if (state.kind === "exam") {
+  if (options.imported) {
+    $("resultTitle").textContent = "אבחון שנפתח מקוד";
+    $("resultCopy").textContent = "נטען אבחון מוכן: " + scored.correct + " נכונות מתוך " + scored.total +
+      " לפי נושא. אין זמני מענה בקוד — הדירוג כאן הוא לפי דיוק בלבד.";
+  } else if (state.kind === "exam") {
     $("resultTitle").textContent = "סיכום מבחן אפקה 10016";
     $("resultCopy").textContent = "פתרת נכון " + scored.correct + " מתוך " + scored.total + " שאלות כתיבת קוד.";
   } else {
     $("resultTitle").textContent = scored.pct >= 70 ? "אתה בכיוון מצוין" : scored.pct >= 50 ? "קרוב למעבר — ממשיכים לדייק" : "מצאנו איפה לחזק";
     $("resultCopy").textContent = "ענית נכון על " + scored.correct + " מתוך " + scored.total + ". ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.";
   }
-  $("trend").textContent = trendText(state.answers);
+  $("trend").textContent = options.imported ? "יובא מקוד אבחון — אין מגמת זמן בדפדפן הזה." : trendText(rows);
   $("weakTopics").innerHTML = weak.length
     ? weak.map(function (r) {
       return "<li><span>" + (map[r.topic] || r.topic) + "</span><b>" + Math.round(r.errorRate * 100) + "% טעויות</b></li>";
@@ -332,7 +404,9 @@ function finishSession() {
     : "<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>";
   var focus = focusFromRanked(ranked, map);
   renderStudyPlan(planFromExamDate(readExamDate(), focus));
-  renderHistory(saveHistory(state.answers, state.kind));
+  if (options.save) renderHistory(saveHistory(rows, state.kind));
+  else renderHistory({ list: readHistory() });
+  fillShareCode(rows);
   if ($("resultTitle")) $("resultTitle").focus();
 }
 
@@ -427,12 +501,184 @@ function sourceHe(src) {
   if (src === "booklet") return "מתועד בחוברת";
   if (src === "cluster-estimate") return "פירוק ליבת 55–60%";
   if (src === "remainder-split") return "יתרה מפוצלת";
+  if (src === "coordinator") return "הודבק על ידי רכז";
   return "הנחה שווה";
+}
+
+function activeBlueprint() {
+  if (state.overlay && (!state.overlay.courseId || state.overlay.courseId === state.courseId)) {
+    return state.overlay;
+  }
+  return null;
+}
+
+function currentDiagnosis(rows) {
+  return diagnoseCourse(state.courseId, rows || [], activeBlueprint());
+}
+
+function readSrs() {
+  try { return parseSrs(localStorage.getItem(SRS_KEY)); }
+  catch (e) { return []; }
+}
+
+function writeSrs(list) {
+  try { localStorage.setItem(SRS_KEY, JSON.stringify(list || [])); return true; }
+  catch (e) { return false; }
+}
+
+function renderSrsBox() {
+  var box = $("srsBox");
+  if (!box) return;
+  var due = dueItems(readSrs(), Date.now(), state.courseId);
+  var map = labels();
+  if (!due.length) {
+    box.classList.add("hidden");
+    return;
+  }
+  box.classList.remove("hidden");
+  $("srsList").innerHTML = due.map(function (item) {
+    return "<li><span>" + esc(map[item.topic] || item.topic) + "</span><b>מרווח " + item.intervalDays + " ימים</b></li>";
+  }).join("");
+}
+
+function startSrsQuiz() {
+  var due = dueTopics(readSrs(), Date.now(), state.courseId);
+  if (!due.length) { alert("אין נושאים בתוקף היום"); return; }
+  document.querySelectorAll("#topics input").forEach(function (box) {
+    box.checked = due.indexOf(box.value) > -1;
+  });
+  var count = $("count");
+  if (count) count.value = "5";
+  startQuiz();
+}
+
+function fillShareCode(rows) {
+  var out = $("shareOut");
+  if (!out) return;
+  var overlay = activeBlueprint();
+  out.value = encodeDiagnosis({
+    courseId: state.courseId,
+    examDate: readExamDate() || "",
+    kind: state.kind,
+    rows: rows || [],
+    b: overlay ? compactBlueprint(overlay) : null
+  });
+  if ($("shareOutMsg")) $("shareOutMsg").textContent = "";
+}
+
+function copyShareCode() {
+  var out = $("shareOut");
+  var msg = $("shareOutMsg");
+  if (!out || !out.value) return;
+  var done = function () {
+    if (msg) msg.textContent = "הועתק. אפשר לשלוח בוואטסאפ למדריך.";
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(out.value).then(done).catch(function () {
+      out.select();
+      document.execCommand("copy");
+      done();
+    });
+  } else {
+    out.select();
+    document.execCommand("copy");
+    done();
+  }
+}
+
+function loadShareCode() {
+  var raw = $("shareIn") ? $("shareIn").value : "";
+  var decoded = decodeDiagnosis(raw);
+  var msg = $("shareInMsg");
+  if (!decoded.ok) {
+    if (msg) msg.textContent = decoded.error;
+    return;
+  }
+  var p = decoded.payload;
+  if (p.blueprint) {
+    var expanded = expandBlueprint(p.blueprint, p.courseId);
+    if (expanded) {
+      state.overlay = expanded;
+      persistOverlay(expanded);
+    }
+  }
+  setCourse(p.courseId);
+  if (p.examDate && $("examDate")) $("examDate").value = p.examDate;
+  state.kind = p.kind;
+  state.answers = p.rows;
+  state.imported = true;
+  if (msg) msg.textContent = "נטען אבחון לקורס " + p.courseId + ".";
+  renderResults(state.answers, { save: false, imported: true });
+}
+
+function persistOverlay(bp) {
+  try {
+    if (!bp) localStorage.removeItem(BP_STORE);
+    else localStorage.setItem(BP_STORE, JSON.stringify(bp));
+  } catch (e) {}
+}
+
+function loadStoredOverlay() {
+  try {
+    var raw = localStorage.getItem(BP_STORE);
+    if (!raw) return;
+    var parsed = parseCoordinatorBlueprint(raw);
+    if (parsed.ok) state.overlay = parsed.blueprint;
+    else {
+      var obj = JSON.parse(raw);
+      if (obj && obj.blocks) state.overlay = obj;
+    }
+  } catch (e) {}
+}
+
+function renderBlueprintStatus() {
+  var msg = $("bpMsg");
+  if (!msg) return;
+  var bp = activeBlueprint();
+  if (!bp) {
+    msg.textContent = "פעילה המפה המובנית של הקורס — הנחה או פירוק שקוף, לא מפתח מועד.";
+    return;
+  }
+  msg.textContent = "מפה פעילה: " + bp.title + " · " + bp.blocks.length + " בלוקים · " + bp.totalPoints + " נק׳ (הודבקה בדפדפן הזה).";
+}
+
+function applyBlueprintJson() {
+  var raw = $("bpJson") ? $("bpJson").value : "";
+  var parsed = parseCoordinatorBlueprint(raw, state.courseId);
+  var msg = $("bpMsg");
+  if (!parsed.ok) {
+    if (msg) msg.textContent = parsed.errors.join(" · ");
+    return;
+  }
+  state.overlay = parsed.blueprint;
+  persistOverlay(parsed.blueprint);
+  if (parsed.blueprint.courseId && parsed.blueprint.courseId !== state.courseId) {
+    setCourse(parsed.blueprint.courseId);
+  } else {
+    renderBlueprintStatus();
+  }
+  if (msg) {
+    msg.textContent = (parsed.warnings.length ? parsed.warnings.join(" · ") + " · " : "") +
+      "המפה הוחלה על " + parsed.blueprint.title + ".";
+  }
+}
+
+function resetBlueprint() {
+  state.overlay = null;
+  persistOverlay(null);
+  if ($("bpJson")) $("bpJson").value = "";
+  renderBlueprintStatus();
+}
+
+function fillExampleBlueprint() {
+  if ($("bpJson")) $("bpJson").value = JSON.stringify(EXAMPLE_BLUEPRINT, null, 2);
+  if ($("bpMsg")) $("bpMsg").textContent = "זו דוגמה בלבד — לחצו «החלת המפה» כדי להפעיל אותה.";
 }
 
 function openReport(useAnswers, focusCard) {
   var rows = useAnswers ? state.answers : [];
-  var diag = diagnoseCourse(state.courseId, rows);
+  fillShareCode(useAnswers ? state.answers : (state.answers || []));
+  var diag = currentDiagnosis(rows);
   var bp = diag.blueprint;
   var when = new Date();
   var whenStr = String(when.getDate()).padStart(2, "0") + "." + String(when.getMonth() + 1).padStart(2, "0") + "." + when.getFullYear();
@@ -487,7 +733,8 @@ function openReport(useAnswers, focusCard) {
     '<div id="marathonCard" style="border:2px solid var(--brand2);border-radius:16px;padding:16px;margin:0 0 22px">' +
       "<h3 style=\"margin:0 0 8px\">כרטיס כניסה למרתון</h3>" +
       '<p class="muted" style="margin:0 0 10px">דף למדריך ולסטודנט. מרתון אגודה טיפוסי = 16 שעות / 270 ₪. זו הצעת חלוקה לפי אובדן נקודות במפה — לא סילבוס המרתון.</p>' +
-      "<p><strong>" + esc(bp.title) + "</strong> · תאריך מבחן: " + esc(examStr) + "</p>" +
+      "<p><strong>" + esc(bp.title) + "</strong> · תאריך מבחן: " + esc(examStr) +
+        ($("shareOut") && $("shareOut").value ? "<br>קוד אבחון: <span dir=\"ltr\">" + esc($("shareOut").value) + "</span>" : "") + "</p>" +
       "<h4 style=\"margin:12px 0 6px\">איך לפצל 16 שעות מרתון</h4><ul class=\"plan\">" + splitRows + "</ul>" +
       "<h4 style=\"margin:12px 0 6px\">שלוש שאלות לפתוח עם המרצה</h4><ul class=\"weak-list\">" + qs + "</ul>" +
       '<p class="muted" style="margin:10px 0 0;font-size:.8rem">הסטודנט מביא את הדף. האגודה מוכרת את המרתון. PassPilot הוא התוספת, לא המתחרה.</p>' +
@@ -526,7 +773,21 @@ function bind() {
   $("reportBtn").onclick = function () { openReport(true); };
   $("path55Btn").onclick = function () { openReport(true); };
   $("marathonCardBtn").onclick = function () { openReport(true, true); };
+  if ($("shareCopyBtn")) $("shareCopyBtn").onclick = copyShareCode;
+  if ($("shareLoadBtn")) $("shareLoadBtn").onclick = loadShareCode;
+  if ($("bpApplyBtn")) $("bpApplyBtn").onclick = applyBlueprintJson;
+  if ($("bpResetBtn")) $("bpResetBtn").onclick = resetBlueprint;
+  if ($("bpExampleBtn")) $("bpExampleBtn").onclick = fillExampleBlueprint;
+  if ($("srsStartBtn")) $("srsStartBtn").onclick = startSrsQuiz;
   document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape") {
+      var sheet = $("diagnosisSheet");
+      if (sheet && !sheet.classList.contains("hidden")) {
+        sheet.classList.add("hidden");
+        ev.preventDefault();
+        return;
+      }
+    }
     if (state.screen !== "quiz") return;
     if ($("nextBtn") && !$("nextBtn").classList.contains("hidden")) return;
     var n = ev.key === "1" || ev.key === "2" || ev.key === "3" || ev.key === "4" ? +ev.key : 0;
@@ -536,9 +797,12 @@ function bind() {
   });
 }
 
+loadStoredOverlay();
 renderCourseButtons();
 setCourse("python");
 bind();
+renderSrsBox();
+renderBlueprintStatus();
 
   </script>
 </body>
