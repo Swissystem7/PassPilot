@@ -5,7 +5,7 @@
   else Object.assign(root, api);
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   const HIST_KEY = "passpilot.history.v1";
-  const HIST_MAX = 20;
+  const HIST_MAX = 40;
 
   function byTopic(rows) {
     const acc = {};
