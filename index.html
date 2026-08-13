@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PassPilot | בוחן Python</title>
+  <title>PassPilot | פייתון 10016</title>
   <style>
     :root{color-scheme:light dark;--bg:#f3f7f5;--panel:#fff;--ink:#15221d;--muted:#65736d;--brand:#087f5b;--brand2:#0ca678;--line:#dbe6e0;--good:#16794b;--bad:#c92a2a;--soft:#e9f7f1;--shadow:0 18px 48px #183c2c18}
     @media(prefers-color-scheme:dark){:root{--bg:#101713;--panel:#18221d;--ink:#eef7f2;--muted:#a8b8b0;--line:#34463d;--soft:#203c31;--shadow:0 18px 48px #0006}}
@@ -16,7 +16,7 @@
 </head>
 <body>
   <main class="shell">
-    <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill">Python Intro</div></header>
+    <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill">פייתון 10016</div></header>
     <section id="start" class="card">
       <h1>לא רק ללמוד.<br>לדעת שתעבור.</h1>
       <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן.</p>
@@ -488,8 +488,21 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
   );
   HEDVA.forEach(function(q,i){ q.id = 2000 + i; });
 
-  var pyBank = window.questionBank, pyNames = null;
-  try { pyNames = JSON.parse(JSON.stringify(topicNames)); } catch(e){}
+  var pyBank = window.questionBank;
+  var pyNames = {
+    loops: "לולאות",
+    functions: "פונקציות",
+    strings: "מחרוזות",
+    lists: "רשימות",
+    conditions: "תנאים",
+    recursion: "רקורסיה"
+  };
+  var COURSE_TITLES = {
+    python: "פייתון 10016",
+    arch: "ארגון המחשב 10145",
+    hedva1: "חדו״א 1 · 90901",
+    hedva2: "חדו״א 2 · 90902"
+  };
 
   var ARCH_MODE = false;
   var CUSTOM_BANK = null;   // null = the built-in Python bank
@@ -537,6 +550,9 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
       Object.keys(pyNames || {}).forEach(function(k){ topicNames[k] = pyNames[k]; });
     }
     if (typeof renderTopics === 'function') renderTopics();
+    var pill = document.querySelector('.brand .pill');
+    if (pill) pill.textContent = COURSE_TITLES[c] || c;
+    document.title = 'PassPilot | ' + (COURSE_TITLES[c] || c);
     var b = document.getElementById('PP-EXAMBTN');
     if (b) b.style.display = (c === 'python') ? '' : 'none';
   }
