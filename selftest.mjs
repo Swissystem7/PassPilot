@@ -1,10 +1,13 @@
 // בדיקת אמת לתוכנית הלימוד: node selftest.mjs
 // המנוע אחד — אותו src/lib/engine.js שהדף טוען.
 import { createRequire } from "node:module";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import assert from "node:assert/strict";
 
 const require = createRequire(import.meta.url);
+const here = dirname(fileURLToPath(import.meta.url));
 const { parseExamDate, futureSlots, generateInitialStudyPlan } = require("./src/lib/engine.js");
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
@@ -68,11 +71,15 @@ const banned = [
   "סיכוי מעבר",
   "סיכויי המעבר",
   "calculateInitialPassProbability",
+  "calibratePassProbability",
+  "validatePassProbability",
   "probabilityBar",
   'id="probability"',
 ];
 const honestyFiles = [
   ["index.html", html],
+  ["src/lib/planner.js", readFileSync(new URL("./src/lib/planner.js", import.meta.url), "utf8")],
+  ["src/lib/engine.js", readFileSync(new URL("./src/lib/engine.js", import.meta.url), "utf8")],
   ["src/lib/tonight.js", readFileSync(new URL("./src/lib/tonight.js", import.meta.url), "utf8")],
   ["src/lib/cohort.js", readFileSync(new URL("./src/lib/cohort.js", import.meta.url), "utf8")],
   ["src/lib/blueprintStore.js", readFileSync(new URL("./src/lib/blueprintStore.js", import.meta.url), "utf8")],
@@ -91,6 +98,9 @@ honestyFiles.forEach(([name, text]) => {
 });
 assert.deepEqual(offences, [], `נמצאה טענת הסתברות מעבר לא מכוילת:\n${offences.join("\n")}`);
 
+assert.equal(existsSync(join(here, "lib")), false, "תיקיית lib/ הישנה עדיין קיימת");
+assert.equal(existsSync(join(here, ".github", "workflows")), false, ".github/workflows/ אסור בריפו הזה");
+
 // החוזה מול שלושת המשתמשים חייב להישאר בדף — לא מודול יתום
 for (const token of [
   'id="tonightBox"',
@@ -104,6 +114,11 @@ for (const token of [
   'id="offerSheet"',
   'id="unionSheet"',
   'id="redeemIn"',
+  'id="staffTools"',
+  'id="howSteps"',
+  'id="quizKeys"',
+  'lang="he"',
+  'dir="rtl"',
   "src/lib/tonight.js",
   "src/lib/cohort.js",
   "src/lib/blueprintStore.js",
@@ -116,5 +131,9 @@ for (const token of [
 ]) {
   assert.ok(html.includes(token), "חסר בדף: " + token);
 }
+
+const startAt = html.indexOf('id="startBtn"');
+const staffAt = html.indexOf('id="staffTools"');
+assert.ok(startAt > 0 && staffAt > startAt, "כפתור הבוחן חייב להופיע לפני כלי המדריך");
 
 console.log("selftest: כל הבדיקות עברו");
