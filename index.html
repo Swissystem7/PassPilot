@@ -203,7 +203,7 @@ const generateInitialStudyPlan = function (examDate, topics, slots) {
   return { plan: plan, warnings: warnings, examStatus: examStatus, daysToExam: daysToExam };
 };
 
-const $=id=>document.getElementById(id);let quiz=[],at=0,answers=[],questionStarted=0,timerId;
+const $=id=>document.getElementById(id);let quiz=[],at=0,answers=[],questionStarted=0,timerId;var currentCourseId="python";
 function renderTopics(){$("topics").innerHTML=Object.entries(topicNames).map(([key,name])=>`<label class="topic"><input type="checkbox" value="${key}" checked><span>${name}</span></label>`).join("")}
 function seededQuiz(pool,count){let seed=(Date.now()^performance.now()*1000)|0,r=[...pool];const rnd=()=>{seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^seed>>>15,1|seed);t=(t+Math.imul(t^t>>>7,61|t))^t;return((t^t>>>14)>>>0)/4294967296};for(let i=r.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r.slice(0,Math.min(count,r.length))}
 function startQuiz(){const topics=[...document.querySelectorAll("#topics input:checked")].map(x=>x.value);if(!topics.length){alert("בחר לפחות נושא אחד");return}const diff=$("difficulty").value;const pool=questionBank().filter(q=>topics.includes(q.topic)&&(!diff||q.difficulty===+diff));quiz=seededQuiz(pool,+$("count").value);if(!quiz.length){alert("אין שאלות בשילוב שבחרת");return}at=0;answers=[];$("start").classList.add("hidden");$("results").classList.add("hidden");$("quiz").classList.remove("hidden");showQuestion()}
@@ -255,15 +255,24 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     return acc;
   }
 
-  function save(){
-    if (!window.answers || !answers.length) return null;
-    var correct = answers.filter(function(a){return a.correct}).length;
+  function currentCourse(){
+    return (typeof currentCourseId === 'string' && currentCourseId) || 'python';
+  }
+  function forCourse(list){
+    var id = currentCourse();
+    return list.filter(function(r){ return (r.courseId || 'python') === id; });
+  }
+  function save(rows, kind){
+    if (!rows || !rows.length) return null;
+    var correct = rows.filter(function(a){return a.correct}).length;
     var rec = {
       ts: Date.now(),
-      total: answers.length,
+      courseId: currentCourse(),
+      kind: kind || 'quiz',
+      total: rows.length,
       correct: correct,
-      pct: Math.round(correct / answers.length * 100),
-      topics: byTopic(answers)
+      pct: Math.round(correct / rows.length * 100),
+      topics: byTopic(rows)
     };
     var list = read(); list.push(rec); write(list);
     return { rec: rec, list: list };
@@ -285,7 +294,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
       box.style.cssText = 'margin-top:22px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.03);direction:rtl;text-align:right';
       host.appendChild(box);
     }
-    var list = saved ? saved.list : read();
+    var list = forCourse(saved ? saved.list : read());
     if (!list.length){ box.innerHTML = ''; return; }
 
     var best = list.reduce(function(m,r){ return r.pct > m ? r.pct : m; }, 0);
@@ -309,7 +318,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     var recent = list.slice(-5).reverse().map(function(r){
       return '<li style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:.82rem">' +
              '<span style="opacity:.65">' + fmt(r.ts) + '</span>' +
-             '<span><b>' + r.pct + '%</b> · ' + r.correct + '/' + r.total + '</span></li>';
+             '<span><b>' + r.pct + '%</b> · ' + r.correct + '/' + r.total + (r.kind === 'exam' ? ' · מבחן' : '') + '</span></li>';
     }).join('');
 
     var bars = rows.map(function(t){
@@ -322,7 +331,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     }).join('');
 
     box.innerHTML =
-      '<div style="font-weight:800;margin-bottom:4px">📈 ההיסטוריה שלך</div>' +
+      '<div style="font-weight:800;margin-bottom:4px">📈 ההיסטוריה שלך בקורס זה</div>' +
       '<div style="font-size:.8rem;opacity:.7;margin-bottom:12px">' + list.length + ' מפגשים · הציון הגבוה ' + best + '%' +
         (delta === null ? '' : ' · שינוי מהמפגש הראשון ' + (delta >= 0 ? '+' : '') + delta + ' נקודות') +
       '</div>' +
@@ -334,20 +343,23 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
 
     var btn = document.getElementById('PP-CLEAR');
     if (btn) btn.onclick = function(){
-      try { localStorage.removeItem(KEY); } catch(e){}
+      var id = currentCourse();
+      write(read().filter(function(r){ return (r.courseId || 'python') !== id; }));
       box.innerHTML = '';
     };
   }
 
-  // showResults is a top-level declaration, so the global binding can be wrapped.
-  if (typeof showResults === 'function'){
-    var orig = showResults;
-    showResults = function(){
+  function wrap(name, rowsFn, kind){
+    if (typeof window[name] !== 'function') return;
+    var orig = window[name];
+    window[name] = function(){
       var out = orig.apply(this, arguments);
-      try { render(save()); } catch(e){}
+      try { render(save(rowsFn(), kind)); } catch(e){}
       return out;
     };
   }
+  wrap('showResults', function(){ return answers; }, 'quiz');
+  wrap('showExamResults', function(){ return examAnswers; }, 'exam');
 })();
 </script>
 <script>
@@ -507,6 +519,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
   })();
 
   function setCourse(c){
+    currentCourseId = c;
     ARCH_MODE = (c === 'arch');
     var names = null;
     if (c === 'arch'){ CUSTOM_BANK = ARCH; names = ARCH_NAMES; }
