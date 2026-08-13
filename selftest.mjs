@@ -76,6 +76,10 @@ const honestyFiles = [
   ["src/lib/tonight.js", readFileSync(new URL("./src/lib/tonight.js", import.meta.url), "utf8")],
   ["src/lib/cohort.js", readFileSync(new URL("./src/lib/cohort.js", import.meta.url), "utf8")],
   ["src/lib/blueprintStore.js", readFileSync(new URL("./src/lib/blueprintStore.js", import.meta.url), "utf8")],
+  ["src/lib/topicExplain.js", readFileSync(new URL("./src/lib/topicExplain.js", import.meta.url), "utf8")],
+  ["src/lib/marathon.js", readFileSync(new URL("./src/lib/marathon.js", import.meta.url), "utf8")],
+  ["src/lib/coursePack.js", readFileSync(new URL("./src/lib/coursePack.js", import.meta.url), "utf8")],
+  ["src/lib/analytics.js", readFileSync(new URL("./src/lib/analytics.js", import.meta.url), "utf8")],
 ];
 const offences = [];
 honestyFiles.forEach(([name, text]) => {
@@ -91,9 +95,17 @@ for (const token of [
   'id="cohortIn"',
   'id="mapBuilder"',
   'id="inviteCopyBtn"',
+  'id="marathonBtn"',
+  'id="coursePackIn"',
+  'id="topicExplain"',
+  'id="startAnalytics"',
   "src/lib/tonight.js",
   "src/lib/cohort.js",
   "src/lib/blueprintStore.js",
+  "src/lib/topicExplain.js",
+  "src/lib/marathon.js",
+  "src/lib/coursePack.js",
+  "src/lib/analytics.js",
 ]) {
   assert.ok(html.includes(token), "חסר בדף: " + token);
 }

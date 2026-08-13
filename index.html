@@ -39,6 +39,10 @@
     .drill-btn{font-size:.82rem}
     .cohort-table{width:100%;border-collapse:collapse;font-size:.86rem}
     .cohort-table th,.cohort-table td{border-top:1px solid var(--line);padding:6px 4px;text-align:right}
+    .marathon-clock{font-weight:850;color:var(--brand);font-variant-numeric:tabular-nums;white-space:nowrap}
+    .marathon-clock.warn{color:var(--bad)}
+    .topic-note{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px;background:var(--panel)}
+    .topic-note h3{margin:0 0 6px;font-size:1rem}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
     @media print{
       body{background:#fff;color:#111}
@@ -109,19 +113,43 @@
         </details>
         <p id="bpMsg" class="muted bp-status" role="status"></p>
       </details>
+      <div id="startAnalytics" class="addon-box hidden" aria-live="polite"></div>
+      <details class="addon-box">
+        <summary>מדריך: קורס חדש מהדבקה</summary>
+        <p class="muted">הדביקו JSON של קורס — נושאים, שאלות עם פתרון עבודה, ומפת נקודות אופציונלית. הקורס נשמר בדפדפן הזה בלבד. אי אפשר לדרוס את ארבעת קורסי אפקה המובנים.</p>
+        <label class="label" for="coursePackIn">JSON של חבילת קורס</label>
+        <textarea id="coursePackIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="coursePackMsg" placeholder='{"id":"logic-demo","title":"לוגיקה","quizTopics":{"sets":"קבוצות"},"questions":[{"topic":"sets","question":"...","options":["א","ב"],"answerIdx":0,"explanation":"פתרון עבודה..."}]}'></textarea>
+        <div class="diag-actions">
+          <button id="coursePackBtn" class="ghost" type="button" style="width:auto;margin:0">החלת הקורס</button>
+          <button id="coursePackExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
+          <button id="coursePackDeleteBtn" class="restart" type="button" style="margin:0">מחיקת הקורס המודבק</button>
+        </div>
+        <p id="coursePackMsg" class="muted status-flash" role="status"></p>
+      </details>
       <p id="startStatus" class="muted status-flash" role="status" tabindex="-1"></p>
       <button id="startBtn" class="primary" type="button">מתחילים בבוחן</button>
       <button id="examBtn" class="exam-button" type="button">מצב מבחן אפקה 10016</button>
+      <div class="field">
+        <label for="marathonMinutes"><span class="label">מצב מרתון — משך הסימולציה</span></label>
+        <select id="marathonMinutes" aria-describedby="marathonHint">
+          <option value="45">45 דקות · ממוקד</option>
+          <option value="90">90 דקות</option>
+          <option value="120" selected>120 דקות · מבנה רב-ברירה</option>
+          <option value="180">180 דקות · כתיבת קוד</option>
+        </select>
+        <p id="marathonHint" class="muted">כל בלוקי מפת המבחן, שעון אחד. פייתון 10016 = ארבעה בלוקי כתיבה; בשאר הקורסים = רב-ברירה לפי המשקל. זה לא שעון המועד הרשמי ולא תחזית ציון.</p>
+      </div>
+      <button id="marathonBtn" class="exam-button" type="button">מצב מרתון — סימולציית מבנה</button>
       <button id="structureBtn" class="ghost" type="button">מפת מבנה המבחן</button>
     </section>
     <section id="quiz" class="card hidden" aria-labelledby="questionTitle">
-      <div class="quiz-head"><span id="counter" class="counter" aria-live="polite"></span><div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress" class="progress-bar"></div></div><span id="timer" class="timer" aria-live="off">00:00</span></div>
+      <div class="quiz-head"><span id="counter" class="counter" aria-live="polite"></span><div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress" class="progress-bar"></div></div><span id="marathonClock" class="marathon-clock hidden" aria-live="off"></span><span id="timer" class="timer" aria-live="off">00:00</span></div>
       <div class="question-meta"><span id="topicTag" class="tag"></span><span id="levelTag" class="tag"></span></div>
       <h2 id="questionTitle">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers" role="group" aria-label="אפשרויות תשובה"></div>
       <div id="feedback" class="feedback hidden" aria-live="assertive" role="status"></div><button id="nextBtn" class="next hidden" type="button">לשאלה הבאה</button>
     </section>
     <section id="exam" class="card hidden" aria-labelledby="examTitle">
-      <div class="exam-banner"><strong>מבחן אפקה 10016 · מועד ב׳</strong><br><span class="muted">ארבע שאלות כתיבת קוד, לפי הסדר האמיתי. הפתרון נחשף רק אחרי שכתבת תשובה.</span></div>
+      <div class="exam-banner" id="examBanner"><strong>מבחן אפקה 10016 · מועד ב׳</strong><br><span class="muted">ארבע שאלות כתיבת קוד, לפי הסדר האמיתי. הפתרון נחשף רק אחרי שכתבת תשובה.</span><div id="marathonClockExam" class="marathon-clock hidden" aria-live="off"></div></div>
       <div id="blockOrder" class="block-order" role="list" aria-label="סדר בלוקי המבחן"></div>
       <div class="question-meta"><span id="examCounter" class="tag" aria-live="polite"></span><span class="tag">כתיבת קוד</span></div>
       <h2 id="examTitle"></h2><p id="examEmphasis" class="muted"></p><p id="examPrompt"></p>
@@ -143,6 +171,11 @@
         </article>
         <article class="insight"><h3>מגמה בבוחן</h3><p id="trend" class="muted"></p></article>
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
+        <article class="insight wide" id="topicExplainBox">
+          <h3>למה זה נפל — לפי נושא</h3>
+          <p class="muted">הסבר על הנושא שפספסתם, לא רק על הפריט הבודד. זה לא תחזית ציון.</p>
+          <div id="topicExplain"></div>
+        </article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
         <article class="insight wide no-print" id="shareBox">
           <h3>קוד אבחון למרתון</h3>
@@ -172,6 +205,10 @@
   <script src="src/lib/tonight.js"></script>
   <script src="src/lib/cohort.js"></script>
   <script src="src/lib/blueprintStore.js"></script>
+  <script src="src/lib/topicExplain.js"></script>
+  <script src="src/lib/marathon.js"></script>
+  <script src="src/lib/coursePack.js"></script>
+  <script src="src/lib/analytics.js"></script>
   <script>
 const $ = function (id) { return document.getElementById(id); };
 
@@ -196,13 +233,33 @@ const state = {
   startedAt: 0,
   overlays: {},
   mapDrafts: {},
-  imported: false
+  packs: {},
+  imported: false,
+  marathon: null,
+  marathonEndsAt: 0,
+  marathonWarned: false,
+  marathonExpired: false
 };
 
-
+function allCourses() {
+  var out = {};
+  Object.keys(COURSES).forEach(function (id) { out[id] = COURSES[id]; });
+  Object.keys(state.packs || {}).forEach(function (id) {
+    out[id] = packToCourse(state.packs[id]) || state.packs[id];
+  });
+  return out;
+}
 
 function course() {
-  return getCourse(state.courseId);
+  var all = allCourses();
+  return all[state.courseId] || getCourse(state.courseId);
+}
+
+function diagnosisBlueprint() {
+  if (activeBlueprint()) return activeBlueprint();
+  var pack = state.packs && state.packs[state.courseId];
+  if (pack && pack.blueprint) return pack.blueprint;
+  return BLUEPRINTS[state.courseId] || null;
 }
 
 function labels() {
@@ -223,9 +280,15 @@ function go(screen) {
     if (sheet) sheet.classList.add("hidden");
   }
   if (screen === "start") {
+    clearMarathonClock();
+    state.marathon = null;
+    state.marathonEndsAt = 0;
+    state.marathonWarned = false;
+    state.marathonExpired = false;
     renderSrsBox();
     renderMapBuilder();
     renderExamHint();
+    renderStartAnalytics();
   }
 }
 
@@ -248,6 +311,7 @@ function setCourse(id) {
   renderMapBuilder();
   renderBlueprintStatus();
   renderExamHint();
+  renderStartAnalytics();
 }
 
 function renderTopics() {
@@ -260,9 +324,11 @@ function renderTopics() {
 function renderCourseButtons() {
   var host = $("courseButtons");
   if (!host) return;
-  host.innerHTML = Object.keys(COURSES).map(function (id) {
+  var catalog = allCourses();
+  host.innerHTML = Object.keys(catalog).map(function (id) {
+    var custom = catalog[id] && catalog[id].custom ? " · הודבק" : "";
     return '<button type="button" data-c="' + id + '" class="pp-course" aria-pressed="false" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);color:inherit;font:700 .82rem system-ui;cursor:pointer">' +
-      COURSES[id].title + "</button>";
+      catalog[id].title + custom + "</button>";
   }).join("");
   host.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
   host.querySelectorAll(".pp-course").forEach(function (btn) {
@@ -277,6 +343,7 @@ function seedNow() {
 }
 
 function startQuiz() {
+  clearMarathonRun();
   var picked = [].slice.call(document.querySelectorAll("#topics input:checked")).map(function (x) { return x.value; });
   if (!picked.length) { setStatus("startStatus", "בחרו לפחות נושא אחד"); return; }
   var items = pickQuiz(course().questions, picked, $("difficulty").value, +$("count").value, seedNow());
@@ -301,7 +368,7 @@ function renderQuizItem() {
     track.setAttribute("aria-valuenow", String(pctNow));
     track.setAttribute("aria-label", "התקדמות הבוחן " + (state.index + 1) + " מתוך " + state.items.length);
   }
-  $("topicTag").textContent = labels()[q.topic] || q.topic;
+  $("topicTag").textContent = (q.blockLabel ? q.blockLabel + " · " : "") + (labels()[q.topic] || q.topic);
   $("levelTag").textContent = "רמה " + q.difficulty;
   var parts = q.question.split("\n");
   $("questionTitle").textContent = parts.shift();
@@ -322,8 +389,20 @@ function renderQuizItem() {
 }
 
 function tick() {
+  if (state.kind === "marathon" && state.marathonEndsAt) {
+    var clk = clockState(state.marathonEndsAt, Date.now());
+    updateMarathonClock(clk);
+    if (clk.expired) {
+      clearInterval(state.timerId);
+      state.marathonExpired = true;
+      finishSession();
+      return;
+    }
+  }
+  var el = $("timer");
+  if (!el || !state.startedAt) return;
   var sec = Math.floor((Date.now() - state.startedAt) / 1000);
-  $("timer").textContent = String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
+  el.textContent = String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
 }
 
 function answerQuiz(selected) {
@@ -336,7 +415,13 @@ function answerQuiz(selected) {
     if (i === q.answerIdx) b.classList.add("correct");
     else if (i === selected) b.classList.add("wrong");
   });
-  $("feedback").innerHTML = "<strong>" + (correct ? "✓ תשובה נכונה" : "✗ כמעט — הנה הפתרון") + "</strong>" + q.explanation;
+  var extra = "";
+  if (!correct) {
+    var n = noteFor(state.courseId, q.topic, course().topicNotes);
+    extra = '<p class="muted" style="margin:8px 0 0"><strong>למה הנושא הזה נופל: </strong>' + esc(n.gist) + "</p>";
+  }
+  $("feedback").innerHTML = "<strong>" + (correct ? "✓ תשובה נכונה" : "✗ כמעט — הנה פתרון העבודה") + "</strong>" +
+    esc(q.explanation).replace(/\n/g, "<br>") + extra;
   $("feedback").classList.remove("hidden");
   $("nextBtn").textContent = state.index === state.items.length - 1 ? "לתוצאות" : "לשאלה הבאה";
   $("nextBtn").classList.remove("hidden");
@@ -350,8 +435,10 @@ function nextQuiz() {
 }
 
 function startExam() {
+  clearMarathonRun();
   var c = course();
   if (!c.hasExam) return;
+  updateExamBanner(false);
   var blocks = pickExamBlocks(c.examBlocks, c.examItems, seedNow());
   state.kind = "exam";
   state.items = blocks;
@@ -379,6 +466,11 @@ function renderExamItem() {
   $("examCorrect").classList.add("hidden");
   $("examWrong").classList.add("hidden");
   $("codeAnswer").focus();
+  if (state.kind === "marathon") {
+    clearInterval(state.timerId);
+    tick();
+    state.timerId = setInterval(tick, 1000);
+  }
 }
 
 function revealExam() {
@@ -410,6 +502,11 @@ function gradeExam(correct) {
 }
 
 function trendText(rows) {
+  if (state.kind === "marathon") {
+    return state.marathonExpired
+      ? "השעון נגמר. מה שלא הספקתם נשאר לא-נבחן — לא מסומן כטעות."
+      : "סימולציית מבנה: דיוק לפי בלוק, לא לפי שעון המועד הרשמי.";
+  }
   if (state.kind === "exam") return "הסיכום מבוסס על ארבעת בלוקי המבחן.";
   var mid = Math.max(1, Math.floor(rows.length / 2));
   var first = rows.slice(0, mid).filter(function (a) { return a.correct; }).length / mid;
@@ -440,6 +537,11 @@ function renderResults(rows, opts) {
     $("resultTitle").textContent = "אבחון שנפתח מקוד";
     $("resultCopy").textContent = "נטען אבחון מוכן: " + scored.correct + " נכונות מתוך " + scored.total +
       " לפי נושא. אין זמני מענה בקוד — הדירוג כאן הוא לפי דיוק בלבד.";
+  } else if (state.kind === "marathon") {
+    $("resultTitle").textContent = "סיכום סימולציית מבנה";
+    $("resultCopy").textContent = "עניתם נכון על " + scored.correct + " מתוך " + scored.total +
+      (state.marathonExpired ? ". הזמן נגמר — בלוקים שלא נענו נשארו לא-נבחנים." : ".") +
+      " זו סימולציה לפי מפת הנקודות, לא ציון מועד.";
   } else if (state.kind === "exam") {
     $("resultTitle").textContent = "סיכום מבחן אפקה 10016";
     $("resultCopy").textContent = "פתרת נכון " + scored.correct + " מתוך " + scored.total + " שאלות כתיבת קוד.";
@@ -463,6 +565,7 @@ function renderResults(rows, opts) {
   if (!focus.length) focus = focusFromRanked(ranked, map);
   renderStudyPlan(planFromExamDate(readExamDate(), focus));
   renderTonightCard(rows);
+  renderTopicExplain(rows);
   if (options.save) renderHistory(saveHistory(rows, state.kind));
   else renderHistory({ list: readHistory() });
   fillShareCode(rows);
@@ -533,15 +636,39 @@ function renderHistory(saved) {
   }).join("");
   var recent = list.slice(-5).reverse().map(function (r) {
     return '<li style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:.82rem"><span style="opacity:.65">' +
-      fmtTs(r.ts) + "</span><span><b>" + r.pct + "%</b> · " + r.correct + "/" + r.total + (r.kind === "exam" ? " · מבחן" : "") + "</span></li>";
+      fmtTs(r.ts) + "</span><span><b>" + r.pct + "%</b> · " + r.correct + "/" + r.total +
+      (r.kind === "exam" ? " · מבחן" : r.kind === "marathon" ? " · מרתון" : "") + "</span></li>";
   }).join("");
+  var report = analyzeProgress(list, state.courseId, diagnosisBlueprint() || { blocks: [] });
+  var map2 = labels();
+  var moved = "";
+  if (report.improved.length) {
+    moved += '<div style="font-weight:700;font-size:.84rem;margin:12px 0 4px">השתפר בין מחצית מוקדמת למאוחרת</div><ul class="weak-list">' +
+      report.improved.slice(0, 3).map(function (t) {
+        return "<li><span>" + esc(map2[t.topic] || t.topic) + "</span><b>+" + t.delta + " נקודות דיוק</b></li>";
+      }).join("") + "</ul>";
+  }
+  if (report.worsened.length) {
+    moved += '<div style="font-weight:700;font-size:.84rem;margin:12px 0 4px">נחלש בין המפגשים</div><ul class="weak-list">' +
+      report.worsened.slice(0, 3).map(function (t) {
+        return "<li><span>" + esc(map2[t.topic] || t.topic) + "</span><b>" + t.delta + " נקודות דיוק</b></li>";
+      }).join("") + "</ul>";
+  }
+  var untested = report.untested.length
+    ? '<p class="muted" style="margin:8px 0 0">בלוקים במפה שעוד לא נבחנו בדפדפן הזה: ' +
+      report.untested.map(function (b) { return esc(b.label); }).join(" · ") + ".</p>"
+    : "";
+  var kinds = "בוחן " + report.kinds.quiz + " · מבחן " + report.kinds.exam + " · מרתון " + report.kinds.marathon;
   box.innerHTML =
-    '<div style="font-weight:800;margin-bottom:4px">ההיסטוריה שלך בקורס זה</div>' +
-    '<div class="muted" style="margin-bottom:12px">' + list.length + " מפגשים · הציון הגבוה " + best + "%" +
-      (delta == null ? "" : " · שינוי מהמפגש הראשון " + (delta >= 0 ? "+" : "") + delta + " נקודות") + "</div>" +
+    '<div style="font-weight:800;margin-bottom:4px">מגמות בין מפגשים בקורס זה</div>' +
+    '<div class="muted" style="margin-bottom:12px">' + list.length + " מפגשים · " + kinds +
+      " · הציון הגבוה " + best + "%" +
+      (delta == null ? "" : " · שינוי מהמפגש הראשון " + (delta >= 0 ? "+" : "") + delta + " נקודות דיוק") + "</div>" +
     '<div style="font-weight:700;font-size:.84rem;margin-bottom:6px">דיוק לפי נושא, מצטבר</div>' + bars +
+    moved + untested +
     '<div style="font-weight:700;font-size:.84rem;margin:12px 0 4px">מפגשים אחרונים</div>' +
     '<ul class="plan">' + recent + "</ul>" +
+    '<p class="muted" style="margin:10px 0 0;font-size:.8rem">' + esc(report.caveat) + "</p>" +
     '<button type="button" id="clearHistoryBtn" class="restart" style="margin-top:12px">מחיקת ההיסטוריה</button>' +
     '<div class="muted" style="font-size:.68rem;margin-top:8px">נשמר בדפדפן הזה בלבד — בלי חשבון, בלי שרת, בלי העלאה.</div>';
   var btn = $("clearHistoryBtn");
@@ -600,7 +727,7 @@ function activeBlueprint() {
 }
 
 function currentDiagnosis(rows) {
-  return diagnoseCourse(state.courseId, rows || [], activeBlueprint());
+  return diagnoseCourse(state.courseId, rows || [], diagnosisBlueprint());
 }
 
 function readSrs() {
@@ -851,7 +978,194 @@ function exportMapJson() {
   if ($("bpMsg")) $("bpMsg").textContent = "JSON עודכן למטה. אפשר להעתיק לרכז אחר.";
 }
 
+function clearMarathonRun() {
+  state.marathon = null;
+  state.marathonEndsAt = 0;
+  state.marathonWarned = false;
+  state.marathonExpired = false;
+  clearMarathonClock();
+}
+
+function clearMarathonClock() {
+  ["marathonClock", "marathonClockExam"].forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    el.classList.add("hidden");
+    el.textContent = "";
+    el.classList.remove("warn");
+    el.setAttribute("aria-live", "off");
+  });
+}
+
+function updateMarathonClock(clk) {
+  ["marathonClock", "marathonClockExam"].forEach(function (id) {
+    var el = $(id);
+    if (!el) return;
+    if (state.kind !== "marathon") {
+      el.classList.add("hidden");
+      return;
+    }
+    el.classList.remove("hidden");
+    el.textContent = "נותרו " + clk.label;
+    el.classList.toggle("warn", !!clk.warn);
+    if (clk.warn && !state.marathonWarned) {
+      state.marathonWarned = true;
+      el.setAttribute("aria-live", "assertive");
+    }
+  });
+}
+
+function updateExamBanner(isMarathon) {
+  var el = $("examBanner");
+  if (!el) return;
+  var clock = '<div id="marathonClockExam" class="marathon-clock' + (isMarathon ? "" : " hidden") + '" aria-live="off"></div>';
+  if (isMarathon) {
+    el.innerHTML = "<strong>מצב מרתון · סימולציית מבנה</strong><br><span class=\"muted\">" +
+      esc((state.marathon && state.marathon.caveat) || "שעון אחד לכל הבלוקים. לא המועד הרשמי.") +
+      "</span>" + clock;
+  } else {
+    el.innerHTML = "<strong>מבחן אפקה 10016 · מועד ב׳</strong><br><span class=\"muted\">ארבע שאלות כתיבת קוד, לפי הסדר האמיתי. הפתרון נחשף רק אחרי שכתבת תשובה.</span>" + clock;
+  }
+}
+
+function startMarathon() {
+  var minutes = $("marathonMinutes") ? +$("marathonMinutes").value : 0;
+  var built = buildMarathon({
+    course: course(),
+    blueprint: diagnosisBlueprint() || { blocks: [] },
+    seed: seedNow(),
+    minutes: minutes
+  });
+  if (!built.ok) {
+    setStatus("startStatus", built.error);
+    return;
+  }
+  setStatus("startStatus", "");
+  state.kind = "marathon";
+  state.marathon = built.spec;
+  state.marathonEndsAt = Date.now() + built.spec.totalMinutes * 60 * 1000;
+  state.marathonWarned = false;
+  state.marathonExpired = false;
+  state.items = built.spec.items;
+  state.index = 0;
+  state.answers = [];
+  if (built.spec.mode === "code") {
+    updateExamBanner(true);
+    go("exam");
+    renderExamItem();
+  } else {
+    go("quiz");
+    renderQuizItem();
+  }
+}
+
+function renderTopicExplain(rows) {
+  var host = $("topicExplain");
+  var box = $("topicExplainBox");
+  if (!host) return;
+  var notes = explainMisses(rows, state.courseId, labels(), course().topicNotes);
+  if (!notes.length) {
+    if (box) box.classList.add("hidden");
+    host.innerHTML = "";
+    return;
+  }
+  if (box) box.classList.remove("hidden");
+  host.innerHTML = notes.map(function (n) {
+    return '<article class="topic-note"><h3>' + esc(n.label) + " · " + n.wrong + "/" + n.n +
+      " טעויות</h3><p style=\"margin:0 0 8px\">" + esc(n.gist) +
+      '</p><p class="muted" style="margin:0"><strong>הצעד הבא: </strong>' + esc(n.nextMove) + "</p></article>";
+  }).join("");
+}
+
+function renderStartAnalytics() {
+  var box = $("startAnalytics");
+  if (!box) return;
+  var list = forCourse(readHistory(), state.courseId);
+  if (!list.length) {
+    box.classList.add("hidden");
+    box.innerHTML = "";
+    return;
+  }
+  var report = analyzeProgress(list, state.courseId, diagnosisBlueprint() || { blocks: [] });
+  var map = labels();
+  var line = report.count + " מפגשים בדפדפן הזה";
+  if (report.delta != null) {
+    line += " · שינוי מהראשון " + (report.delta >= 0 ? "+" : "") + report.delta + " נקודות דיוק";
+  }
+  var better = report.improved[0];
+  var worse = report.worsened[0];
+  box.classList.remove("hidden");
+  box.innerHTML = '<h2 class="label" style="font-size:1rem;margin:0 0 6px">מגמות בין מפגשים</h2>' +
+    '<p class="muted" style="margin:0 0 8px">' + esc(line) + "</p>" +
+    (better ? "<p style=\"margin:0 0 4px\">השתפר: " + esc(map[better.topic] || better.topic) + " (+" + better.delta + ")</p>" : "") +
+    (worse ? "<p style=\"margin:0 0 4px\">נחלש: " + esc(map[worse.topic] || worse.topic) + " (" + worse.delta + ")</p>" : "") +
+    (report.untested.length
+      ? '<p class="muted" style="margin:0">בלוקים שעוד לא נבחנו: ' +
+        report.untested.map(function (b) { return esc(b.label); }).join(" · ") + "</p>"
+      : "") +
+    '<p class="muted" style="margin:8px 0 0;font-size:.8rem">' + esc(report.caveat) + "</p>";
+}
+
+function persistPacks() {
+  try { savePacks(localStorage, state.packs); } catch (e) {}
+}
+
+function loadStoredPacks() {
+  try { state.packs = loadPacks(localStorage); }
+  catch (e) { state.packs = {}; }
+  Object.keys(state.packs).forEach(function (id) {
+    if (!getOverlay(state.overlays, id) && state.packs[id].blueprint) {
+      state.overlays = putOverlay(state.overlays, id, state.packs[id].blueprint);
+    }
+  });
+}
+
+function applyCoursePack() {
+  var raw = $("coursePackIn") ? $("coursePackIn").value : "";
+  var parsed = parseCoursePack(raw);
+  var msg = $("coursePackMsg");
+  if (!parsed.ok) {
+    if (msg) msg.textContent = parsed.errors.join(" · ");
+    return;
+  }
+  state.packs = putPack(state.packs, parsed.pack);
+  persistPacks();
+  if (parsed.pack.blueprint) {
+    state.overlays = putOverlay(state.overlays, parsed.pack.id, parsed.pack.blueprint);
+    persistOverlays();
+  }
+  renderCourseButtons();
+  setCourse(parsed.pack.id);
+  if (msg) {
+    msg.textContent = (parsed.warnings.length ? parsed.warnings.join(" · ") + " · " : "") +
+      "הקורס «" + parsed.pack.title + "» זמין בלי לגעת בקוד.";
+  }
+}
+
+function fillExamplePack() {
+  if ($("coursePackIn")) $("coursePackIn").value = JSON.stringify(EXAMPLE_PACK, null, 2);
+  if ($("coursePackMsg")) $("coursePackMsg").textContent = "זו דוגמה בלבד — לחצו «החלת הקורס» כדי להפעיל אותה בדפדפן הזה.";
+}
+
+function removeCurrentPack() {
+  var msg = $("coursePackMsg");
+  if (!course().custom) {
+    if (msg) msg.textContent = "אפשר למחוק רק קורס שהודבק, לא אחד מארבעת קורסי אפקה.";
+    return;
+  }
+  var id = state.courseId;
+  state.packs = dropPack(state.packs, id);
+  persistPacks();
+  state.overlays = dropOverlay(state.overlays, id);
+  persistOverlays();
+  delete state.mapDrafts[id];
+  renderCourseButtons();
+  setCourse("python");
+  if (msg) msg.textContent = "הקורס המודבק נמחק מהדפדפן הזה.";
+}
+
 function startTopicDrill(topic) {
+  clearMarathonRun();
   var items = pickQuiz(course().questions, [topic], "", 5, seedNow());
   var msg = $("tonightMsg") || $("startStatus");
   if (!items.length) {
@@ -916,7 +1230,8 @@ function bootFromHash() {
 function openCohortSheet() {
   var raw = $("cohortIn") ? $("cohortIn").value : "";
   var titles = {};
-  Object.keys(COURSES).forEach(function (id) { titles[id] = COURSES[id].title; });
+  var catalog = allCourses();
+  Object.keys(catalog).forEach(function (id) { titles[id] = catalog[id].title; });
   var cohort = buildCohort(raw, { overlays: state.overlays, titles: titles });
   var msg = $("cohortMsg");
   if (!cohort.ok) {
@@ -1075,6 +1390,10 @@ function bind() {
   $("startBtn").onclick = startQuiz;
   $("nextBtn").onclick = nextQuiz;
   $("examBtn").onclick = startExam;
+  if ($("marathonBtn")) $("marathonBtn").onclick = startMarathon;
+  if ($("coursePackBtn")) $("coursePackBtn").onclick = applyCoursePack;
+  if ($("coursePackExampleBtn")) $("coursePackExampleBtn").onclick = fillExamplePack;
+  if ($("coursePackDeleteBtn")) $("coursePackDeleteBtn").onclick = removeCurrentPack;
   $("revealBtn").onclick = revealExam;
   $("examCorrect").onclick = function () { gradeExam(true); };
   $("examWrong").onclick = function () { gradeExam(false); };
@@ -1114,6 +1433,7 @@ function bind() {
 }
 
 loadStoredOverlay();
+loadStoredPacks();
 renderCourseButtons();
 setCourse("python");
 bind();
@@ -1121,6 +1441,7 @@ renderSrsBox();
 renderMapBuilder();
 renderBlueprintStatus();
 renderExamHint();
+renderStartAnalytics();
 bootFromHash();
 
   </script>
