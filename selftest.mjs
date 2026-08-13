@@ -1,15 +1,13 @@
 // בדיקת אמת לתוכנית הלימוד: node selftest.mjs
-// שולף את הפונקציות הטהורות מתוך index.html כדי שלא תהיה כאן העתקה של הלוגיקה.
+// המנוע אחד — אותו src/lib/engine.js שהדף טוען.
+import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 
+const require = createRequire(import.meta.url);
+const { parseExamDate, futureSlots, generateInitialStudyPlan } = require("./src/lib/engine.js");
+
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
-const from = html.indexOf("const DEFAULT_HORIZON_DAYS");
-const to = html.indexOf("const $=id=>document.getElementById(id)");
-assert.ok(from > 0 && to > from, "לא נמצא בלוק לוגיקת התוכנית ב-index.html");
-const { parseExamDate, futureSlots, generateInitialStudyPlan } = new Function(
-  `${html.slice(from, to)}\nreturn {parseExamDate,futureSlots,generateInitialStudyPlan}`
-)();
 
 const day = (offset) => {
   const d = new Date();
