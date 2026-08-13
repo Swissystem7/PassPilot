@@ -134,10 +134,72 @@
     };
   }
 
+  // Greedy by points recovered per hour. Not an optimal knapsack; the steps
+  // are meant to be readable on the page. Untested blocks count as 0 secured.
+  function pickSecurePath(blocks, target) {
+    const goal = Number(target);
+    const items = (Array.isArray(blocks) ? blocks : []).map(function (b) {
+      const acc = b.accuracy == null ? 0 : b.accuracy;
+      const have = Math.round(acc * b.points * 10) / 10;
+      const gain = Math.round((b.points - have) * 10) / 10;
+      const effort = Math.round(Math.max(0.5, (1 - acc) * Math.max(1, b.points / 20)) * 10) / 10;
+      const value = effort > 0 ? Math.round((gain / effort) * 100) / 100 : 0;
+      return {
+        id: b.id,
+        topic: b.topic,
+        label: b.label,
+        points: b.points,
+        accuracy: b.accuracy,
+        have: have,
+        gain: gain,
+        effort: effort,
+        value: value,
+      };
+    });
+    const secured = Math.round(items.reduce(function (sum, it) { return sum + it.have; }, 0) * 10) / 10;
+    const remaining = items.filter(function (it) { return it.gain > 0.05; })
+      .sort(function (a, b) { return b.value - a.value || b.gain - a.gain; });
+    const picked = [];
+    let total = secured;
+    const steps = [{
+      kind: "start",
+      total: secured,
+      text: "מובטח לפי דיוק נוכחי × משקל בלוק: " + secured + " נקודות. יעד: " + goal + ".",
+    }];
+    for (let i = 0; i < remaining.length; i++) {
+      if (total + 0.01 >= goal) break;
+      const it = remaining[i];
+      picked.push(it);
+      total = Math.round((total + it.gain) * 10) / 10;
+      steps.push({
+        kind: "pick",
+        label: it.label,
+        gain: it.gain,
+        effort: it.effort,
+        value: it.value,
+        total: total,
+        text: "לוקחים «" + it.label + "»: +" + it.gain + " נק׳ תמורת ~" + it.effort +
+          " שעות (" + it.value + " נק׳/שעה) → " + total,
+      });
+    }
+    return {
+      target: goal,
+      secured: secured,
+      total: total,
+      reached: total + 0.01 >= goal,
+      picked: picked,
+      steps: steps,
+      shortfall: Math.max(0, Math.round((goal - total) * 10) / 10),
+      effortHours: Math.round(picked.reduce(function (sum, it) { return sum + it.effort; }, 0) * 10) / 10,
+    };
+  }
+
   return {
     AFEKA_PASS: AFEKA_PASS,
+    FLOOR_55: 55,
     BLUEPRINTS: BLUEPRINTS,
     topicStats: topicStats,
     diagnoseCourse: diagnoseCourse,
+    pickSecurePath: pickSecurePath,
   };
 });

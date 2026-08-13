@@ -64,7 +64,7 @@
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
       </div>
-      <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="restartBtn" class="restart">בוחן חדש</button></div>
+      <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="restartBtn" class="restart">בוחן חדש</button></div>
     </section>
     <section id="diagnosisSheet" class="card hidden" aria-label="דוח מרחק ממבנה המבחן"></section>
   </main>
@@ -672,6 +672,26 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
       ? ('צפוי משוער לפי דיוק הבוחן: ' + diag.expectedTotal + ' נקודות · אובדן משוער: ' + diag.lostTotal +
          '. זה מכפלה של דיוק × משקל בלוק — לא ציון מועד ולא מודל מכויל.')
       : 'עדיין אין תוצאות בוחן לקורס הזה. זו מפת מבנה בלבד.';
+    var pathHtml = '';
+    if (typeof pickSecurePath === 'function') {
+      var p55 = pickSecurePath(diag.blocks, 55);
+      var p60 = pickSecurePath(diag.blocks, 60);
+      var steps55 = p55.steps.map(function(st){
+        return '<li><span>' + esc(st.text) + '</span></li>';
+      }).join('');
+      var end55 = p55.reached
+        ? ('הגענו ל־' + p55.total + ' נקודות ב־~' + p55.effortHours + ' שעות מאמץ משוערות.')
+        : ('גם אחרי כל הבלוקים: ' + p55.total + ' — חסרות ' + p55.shortfall + ' ל־55.');
+      var end60 = p60.reached
+        ? ('ליעד 60 הרשמי: עוד מסלול מגיע ל־' + p60.total + ' ב־~' + p60.effortHours + ' שעות.')
+        : ('ליעד 60 הרשמי עדיין חסרות ' + p60.shortfall + ' נקודות גם אחרי כל הבלוקים שבמפה.');
+      pathHtml =
+        '<h3 style="margin-top:22px">מסלול 55 — אילו בלוקים לסגור במאמץ הנמוך</h3>' +
+        '<p class="muted">אלגוריתם חמדן: בכל צעד לוקחים את הבלוק עם הכי הרבה נקודות לשעת מאמץ (gain/effort). זה לא תיק אופטימלי וזה לא תחזית ציון. ציון עובר באפקה הוא 60; 55 הוא רצפת ביניים שמבקשים בפיצ׳ר.</p>' +
+        '<ul class="plan">' + steps55 + '</ul>' +
+        '<p><strong>' + esc(end55) + '</strong></p>' +
+        '<p class="muted">' + esc(end60) + '</p>';
+    }
 
     host.innerHTML =
       '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
@@ -687,6 +707,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
       '<p class="muted" style="margin:10px 0 0">' + sampleNote + '</p>' +
       '<h3 style="margin-top:22px">איפה הכי יקר לטעות</h3>' +
       '<ul class="weak-list">' + costly + '</ul>' +
+      pathHtml +
       '<h3 style="margin-top:22px">תוכנית ימים ממוקדת</h3>' +
       warn + '<ul class="plan">' + planHtml + '</ul>' +
       '<div class="diag-actions no-print">' +
@@ -712,6 +733,8 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
   if (struct) struct.onclick = function(){ openReport(false); };
   var report = document.getElementById('reportBtn');
   if (report) report.onclick = function(){ openReport(true); };
+  var pathBtn = document.getElementById('path55Btn');
+  if (pathBtn) pathBtn.onclick = function(){ openReport(true); };
   var restart = document.getElementById('restartBtn');
   if (restart){
     var prev = restart.onclick;
