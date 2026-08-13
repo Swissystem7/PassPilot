@@ -21,7 +21,7 @@
     @media print{
       body{background:#fff;color:#111}
       .shell{width:100%;max-width:none;margin:0;padding:0}
-      .brand,.no-print,#start,#quiz,#exam,#results,#PP-HISTORY,#PP-COURSE-ARCH{display:none!important}
+      .brand,.no-print,#start,#quiz,#exam,#results{display:none!important}
       #diagnosisSheet.hidden{display:none!important}
       #diagnosisSheet:not(.hidden){display:block!important;box-shadow:none;border:0;border-radius:0;padding:0}
     }
@@ -34,6 +34,7 @@
       <h1>לא רק ללמוד.<br>לדעת שתעבור.</h1>
       <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן.</p>
       <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. המוצר שמוצע לאגודה: תוספת 20–40 ₪ על כרטיס כניסה להדפסה.</div>
+      <div class="field"><span class="label">מקצוע</span><div id="courseButtons"></div><p id="courseNote" class="muted"></p></div>
       <div class="field"><span class="label">אילו נושאים לתרגל?</span><div id="topics" class="topics"></div></div>
       <div class="controls">
         <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
@@ -66,728 +67,476 @@
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
       </div>
+      <div id="historyBox" class="no-print" style="margin-top:22px"></div>
       <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="marathonCardBtn" class="ghost" type="button">כרטיס למרתון</button><button id="restartBtn" class="restart">בוחן חדש</button></div>
     </section>
     <section id="diagnosisSheet" class="card hidden" aria-label="דוח מרחק ממבנה המבחן"></section>
   </main>
-  <!-- לוגיקת הליבה, מכוסה בטסטים. אותו קובץ בדיוק רץ תחת node --test. -->
+
   <script src="src/lib/planner.js"></script>
+  <script src="src/lib/engine.js"></script>
   <script src="src/lib/examBlueprint.js"></script>
+  <script src="src/lib/banks.js"></script>
   <script>
-const questionBank = () => [
-  { id: 1, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor i in range(3):\n    print(i)", options: ["1 2 3", "0 1 2", "0 1 2 3", "1 2"], answerIdx: 1, explanation: "range(3) מייצר את המספרים 0, 1, 2; הגבול העליון אינו נכלל." },
-  { id: 2, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor i in range(1, 4):\n    print(i)", options: ["1 2 3", "1 2 3 4", "0 1 2 3", "2 3 4"], answerIdx: 0, explanation: "range(1, 4) מתחיל ב־1 ועוצר לפני 4." },
-  { id: 3, topic: "loops", difficulty: 2, question: "מה יודפס?\ns = 0\nfor i in range(1, 6):\n    s += i\nprint(s)", options: ["10", "21", "15", "5"], answerIdx: 2, explanation: "הסכום 1+2+3+4+5 הוא 15." },
-  { id: 4, topic: "loops", difficulty: 2, question: "מה יודפס?\nfor i in range(5, 0, -1):\n    print(i)", options: ["5 4 3 2 1", "5 4 3 2", "4 3 2 1 0", "5 4 3 2 1 0"], answerIdx: 0, explanation: "צעד של ‎-1 יורד מ־5, והלולאה נעצרת לפני 0." },
-  { id: 5, topic: "loops", difficulty: 3, question: "מה יודפס?\nx = 0\nfor i in range(3):\n    for j in range(2):\n        x += 1\nprint(x)", options: ["5", "3", "2", "6"], answerIdx: 3, explanation: "הלולאה הפנימית רצה פעמיים בכל אחת מ־3 האיטרציות: 3×2=6." },
-  { id: 6, topic: "functions", difficulty: 1, question: "מה יודפס?\ndef f():\n    return 5\nprint(f())", options: ["None", "5", "f", "שגיאה"], answerIdx: 1, explanation: "הקריאה f() מחזירה 5, ולכן print מדפיס 5." },
-  { id: 7, topic: "functions", difficulty: 1, question: "מה יודפס?\ndef add(a, b):\n    return a + b\nprint(add(3, 4))", options: ["34", "12", "7", "שגיאה"], answerIdx: 2, explanation: "הפונקציה מחברת מספרים: 3+4=7." },
-  { id: 8, topic: "functions", difficulty: 2, question: "מה יודפס?\ndef f(x=2):\n    return x * 2\nprint(f(3))", options: ["6", "4", "9", "שגיאה"], answerIdx: 0, explanation: "הארגומנט 3 מחליף את ברירת המחדל, ולכן 3×2=6." },
-  { id: 9, topic: "functions", difficulty: 2, question: "מה יודפס?\ndef f(a, b):\n    return a - b\nprint(f(b=1, a=5))", options: ["-4", "6", "שגיאה", "4"], answerIdx: 3, explanation: "בארגומנטים בשם הסדר אינו משנה: a=5 ו־b=1, ולכן התוצאה 4." },
-  { id: 10, topic: "functions", difficulty: 3, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return 1\n    return n * f(n - 1)\nprint(f(4))", options: ["10", "24", "4", "16"], answerIdx: 1, explanation: "זו עצרת: ‎4! = 4×3×2×1 = 24." },
-  { id: 11, topic: "strings", difficulty: 1, question: "מה יודפס?\ns = 'hello'\nprint(len(s))", options: ["4", "6", "5", "3"], answerIdx: 2, explanation: "במחרוזת 'hello' יש 5 תווים." },
-  { id: 12, topic: "strings", difficulty: 1, question: "מה יודפס?\ns = 'abc'\nprint(s[1])", options: ["b", "a", "c", "שגיאה"], answerIdx: 0, explanation: "האינדקסים מתחילים ב־0, ולכן אינדקס 1 מכיל b." },
-  { id: 13, topic: "strings", difficulty: 2, question: "מה יודפס?\ns = 'hello'\nprint(s[1:4])", options: ["hel", "llo", "hell", "ell"], answerIdx: 3, explanation: "החיתוך כולל אינדקסים 1, 2, 3, אך לא את 4: ell." },
-  { id: 14, topic: "strings", difficulty: 2, question: "מה יודפס?\ns = 'Python'\nprint(s[::-1])", options: ["Python", "nohtyP", "noth", "P"], answerIdx: 1, explanation: "צעד ‎-1 בחיתוך הופך את סדר התווים." },
-  { id: 15, topic: "strings", difficulty: 3, question: "מה יודפס?\ns = 'a b c'\nprint(s.split())", options: ["['a b c']", "['a', 'b', 'c']", "['abc']", "שגיאה"], answerIdx: 1, explanation: "split() ללא ארגומנט מפריד לפי רצפים של רווחים ומחזיר שלוש מחרוזות." },
-  { id: 16, topic: "lists", difficulty: 1, question: "מה יודפס?\nlst = [1, 2, 3]\nprint(len(lst))", options: ["2", "4", "1", "3"], answerIdx: 3, explanation: "ברשימה יש שלושה איברים." },
-  { id: 17, topic: "lists", difficulty: 1, question: "מה יודפס?\nlst = [10, 20, 30]\nprint(lst[1])", options: ["20", "10", "30", "שגיאה"], answerIdx: 0, explanation: "אינדקס 1 הוא האיבר השני: 20." },
-  { id: 18, topic: "lists", difficulty: 2, question: "מה יודפס?\nlst = [1, 2, 3]\nlst.append(4)\nprint(lst)", options: ["[4, 1, 2, 3]", "[1, 2, 3]", "[1, 2, 3, 4]", "שגיאה"], answerIdx: 2, explanation: "append מוסיף את 4 לסוף הרשימה." },
-  { id: 19, topic: "lists", difficulty: 2, question: "מה יודפס?\nlst = [3, 1, 2]\nlst.sort()\nprint(lst)", options: ["[3, 1, 2]", "[1, 2, 3]", "[1, 3, 2]", "שגיאה"], answerIdx: 1, explanation: "sort ממיין את הרשימה במקום בסדר עולה." },
-  { id: 20, topic: "lists", difficulty: 3, question: "מה יודפס?\nlst = [[1, 2], [3, 4]]\nprint(lst[1][0])", options: ["1", "4", "3", "2"], answerIdx: 2, explanation: "lst[1] היא [3, 4], והאיבר באינדקס 0 בה הוא 3." },
-  { id: 21, topic: "conditions", difficulty: 1, question: "מה יודפס?\nx = 5\nif x > 3:\n    print('גדול')", options: ["קטן", "גדול", "שווה", "כלום"], answerIdx: 1, explanation: "התנאי 5>3 אמת, ולכן יודפס 'גדול'." },
-  { id: 22, topic: "conditions", difficulty: 1, question: "מה יודפס?\nx = 2\nif x > 5:\n    print('א')\nelse:\n    print('ב')", options: ["א", "שגיאה", "ב", "כלום"], answerIdx: 2, explanation: "2 אינו גדול מ־5, ולכן מתבצע ענף else." },
-  { id: 23, topic: "conditions", difficulty: 2, question: "מה יודפס?\nx = 7\nif x % 2 == 0:\n    print('זוגי')\nelse:\n    print('אי-זוגי')", options: ["אי-זוגי", "זוגי", "שגיאה", "כלום"], answerIdx: 0, explanation: "השארית בחלוקת 7 ב־2 היא 1, ולכן המספר אי־זוגי." },
-  { id: 24, topic: "conditions", difficulty: 2, question: "מה יודפס?\nx = 10\ny = 5\nif x > y and x < 20:\n    print('כן')", options: ["לא", "שגיאה", "כלום", "כן"], answerIdx: 3, explanation: "שני התנאים אמת: 10>5 וגם 10<20." },
-  { id: 25, topic: "conditions", difficulty: 3, question: "מה יודפס?\nx = 15\nif x < 10:\n    print('א')\nelif x < 20:\n    print('ב')\nelse:\n    print('ג')", options: ["א", "ג", "שגיאה", "ב"], answerIdx: 3, explanation: "התנאי הראשון שקר, אך 15<20 אמת, ולכן נבחר ענף elif." },
-  { id: 26, topic: "recursion", difficulty: 2, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return 0\n    return n + f(n - 1)\nprint(f(3))", options: ["3", "0", "6", "9"], answerIdx: 2, explanation: "הקריאות מחברות 3+2+1+0=6." },
-  { id: 27, topic: "recursion", difficulty: 3, question: "מה יודפס?\ndef f(n):\n    if n <= 1:\n        return n\n    return f(n - 1) + f(n - 2)\nprint(f(5))", options: ["8", "3", "13", "5"], answerIdx: 3, explanation: "בסדרת פיבונאצ'י 0,1,1,2,3,5 הערך באינדקס 5 הוא 5." },
-  { id: 28, topic: "recursion", difficulty: 3, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return 1\n    return 2 * f(n - 1)\nprint(f(3))", options: ["6", "4", "8", "2"], answerIdx: 2, explanation: "כל קריאה מכפילה ב־2, ולכן f(3)=2³=8." },
-  { id: 29, topic: "loops", difficulty: 1, question: "מה יודפס?\nfor ch in 'ab':\n    print(ch)", options: ["ab בשורה אחת", "a ואז b בשורות נפרדות", "a בלבד", "b בלבד"], answerIdx: 1, explanation: "הלולאה עוברת על כל תו, ו־print מוסיף ירידת שורה בכל איטרציה." },
-  { id: 30, topic: "functions", difficulty: 2, question: "מה יודפס?\ndef f(lst):\n    return sum(lst)\nprint(f([1, 2, 3]))", options: ["3", "1", "שגיאה", "6"], answerIdx: 3, explanation: "sum מחבר את איברי הרשימה: 1+2+3=6." },
-  { id: 31, topic: "strings", difficulty: 2, question: "מה יודפס?\ns = 'hello'\nprint(s.upper())", options: ["hello", "Hello", "שגיאה", "HELLO"], answerIdx: 3, explanation: "upper מחזירה מחרוזת חדשה שבה האותיות באנגלית גדולות." },
-  { id: 32, topic: "lists", difficulty: 2, question: "מה יודפס?\nlst = [1, 2, 3]\nprint(lst.pop())", options: ["1", "3", "2", "[1, 2]"], answerIdx: 1, explanation: "pop() ללא אינדקס מסיר ומחזיר את האיבר האחרון, 3." },
-  { id: 33, topic: "conditions", difficulty: 1, question: "מה יודפס?\nx = 0\nif x:\n    print('אמת')\nelse:\n    print('שקר')", options: ["אמת", "שגיאה", "כלום", "שקר"], answerIdx: 3, explanation: "המספר 0 נחשב ערך שקרי (falsy), ולכן מתבצע else." },
-  { id: 34, topic: "recursion", difficulty: 1, question: "מה יודפס?\ndef f(n):\n    if n == 0:\n        return\n    print(n)\n    f(n - 1)\nf(3)", options: ["1 2 3", "3 2 1 0", "3 2 1", "0 1 2 3"], answerIdx: 2, explanation: "ההדפסה מתבצעת לפני הקריאה הרקורסיבית; ב־0 הפונקציה חוזרת בלי להדפיס." },
-  { id: 35, topic: "loops", difficulty: 3, question: "מה יודפס?\ns = 0\nfor i in range(1, 10, 2):\n    s += i\nprint(s)", options: ["20", "30", "25", "15"], answerIdx: 2, explanation: "range מייצר 1,3,5,7,9, שסכומם 25." },
-  { id: 36, topic: "functions", difficulty: 3, question: "מה יודפס?\ndef f(a, b=2, c=3):\n    return a + b + c\nprint(f(1, c=5))", options: ["6", "8", "9", "שגיאה"], answerIdx: 1, explanation: "a=1,‏ b נשאר 2, ו־c=5; הסכום הוא 8." },
-  { id: 37, topic: "strings", difficulty: 3, question: "מה יודפס?\ns = 'abc'\nprint(s.replace('b', 'z'))", options: ["abc", "abz", "שגיאה", "azc"], answerIdx: 3, explanation: "replace מחליפה את b ב־z ומחזירה azc." },
-  { id: 38, topic: "lists", difficulty: 3, question: "מה יודפס?\nlst = [1, 2, 3, 4]\nprint([x * 2 for x in lst if x % 2 == 0])", options: ["[2, 4, 6, 8]", "[4, 8]", "[2, 4]", "[4, 6]"], answerIdx: 1, explanation: "רק 2 ו־4 עוברים את התנאי, ואז כל אחד מוכפל ב־2." },
-  { id: 39, topic: "conditions", difficulty: 2, question: "מה יודפס?\nx = 3\ny = 3\nif x == y:\n    print('שווה')\nelse:\n    print('לא שווה')", options: ["לא שווה", "שגיאה", "שווה", "כלום"], answerIdx: 2, explanation: "3==3 הוא תנאי אמת." },
-  { id: 40, topic: "recursion", difficulty: 2, question: "מה יודפס?\ndef f(n):\n    if n < 2:\n        return n\n    return f(n - 1) + f(n - 2)\nprint(f(4))", options: ["4", "2", "5", "3"], answerIdx: 3, explanation: "ערכי פיבונאצ'י עד אינדקס 4 הם 0,1,1,2,3." },
-  { id: 41, topic: "loops", difficulty: 2, question: "מה יודפס?\nfor i in range(2, 5):\n    print(i)", options: ["2 3 4 5", "1 2 3 4", "2 3 4", "3 4 5"], answerIdx: 2, explanation: "range(2, 5) כולל את 2,3,4 ולא את 5." },
-  { id: 42, topic: "functions", difficulty: 1, question: "מה יודפס?\ndef f():\n    pass\nprint(f())", options: ["pass", "שגיאה", "None", "0"], answerIdx: 2, explanation: "פונקציה שמסתיימת בלי return מפורש מחזירה None." },
-  { id: 43, topic: "strings", difficulty: 1, question: "מה יודפס?\ns = 'shalom'\nprint(s[0])", options: ["h", "a", "s", "l"], answerIdx: 2, explanation: "האינדקס הראשון הוא 0, ובו התו s." },
-  { id: 44, topic: "lists", difficulty: 1, question: "מה יודפס?\nlst = [5]\nlst.append(10)\nprint(lst)", options: ["[10, 5]", "[5]", "שגיאה", "[5, 10]"], answerIdx: 3, explanation: "append מוסיף 10 לסוף הרשימה הקיימת." },
-  { id: 45, topic: "conditions", difficulty: 3, question: "מה יודפס?\nx = 8\nif x % 3 == 0:\n    print('א')\nelif x % 4 == 0:\n    print('ב')\nelse:\n    print('ג')", options: ["א", "ג", "ב", "שגיאה"], answerIdx: 2, explanation: "8 אינו מתחלק ב־3 אך מתחלק ב־4, ולכן נבחר ענף elif." }
-];
+const $ = function (id) { return document.getElementById(id); };
 
-const topicNames={loops:"לולאות",functions:"פונקציות",strings:"מחרוזות",lists:"רשימות",conditions:"תנאים",recursion:"רקורסיה"};
-
-const DEFAULT_HORIZON_DAYS = 5;
-const MAX_HORIZON_DAYS = 14;
-function formatLocalDate(date) {
-  return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
-}
-function startOfToday() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-function parseExamDate(value) {
-  if (value == null || String(value).trim() === "") {
-    return { status: "missing", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
-  }
-  const raw = String(value).trim();
-  const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (!match) {
-    return { status: "invalid", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
-  }
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const dayNum = Number(match[3]);
-  const exam = new Date(year, month - 1, dayNum);
-  exam.setHours(0, 0, 0, 0);
-  if (exam.getFullYear() !== year || exam.getMonth() !== month - 1 || exam.getDate() !== dayNum) {
-    return { status: "invalid", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
-  }
-  const today = startOfToday();
-  const diff = Math.round((exam.getTime() - today.getTime()) / 86400000);
-  if (diff < 0) {
-    return { status: "past", days: DEFAULT_HORIZON_DAYS, daysToExam: null };
-  }
-  return { status: "ok", days: diff, daysToExam: diff };
-}
-function futureSlots(horizonDays) {
-  const count = horizonDays === 0 ? 1 : Math.max(0, Number(horizonDays) || 0);
-  const slots = [];
-  for (let i = 0; i < count; i++) {
-    const d = startOfToday();
-    d.setDate(d.getDate() + i);
-    slots.push({ day: formatLocalDate(d), startHour: 18, endHour: 19 });
-  }
-  return slots;
-}
-const generateInitialStudyPlan = function (examDate, topics, slots) {
-  const parsed = parseExamDate(examDate);
-  const warnings = [];
-  const examStatus = parsed.status;
-  const daysToExam = parsed.daysToExam;
-  const list = Array.isArray(topics) ? topics : [];
-  const incoming = Array.isArray(slots) ? slots : [];
-  if (examStatus === "missing") warnings.push("לא צוין תאריך מבחן — נבנתה תוכנית ל־" + DEFAULT_HORIZON_DAYS + " ימים");
-  else if (examStatus === "invalid") warnings.push("תאריך המבחן אינו תקין — נבנתה תוכנית ל־" + DEFAULT_HORIZON_DAYS + " ימים");
-  else if (examStatus === "past") warnings.push("תאריך המבחן כבר עבר — נבנתה תוכנית ל־" + DEFAULT_HORIZON_DAYS + " ימים");
-  if (daysToExam != null && daysToExam > MAX_HORIZON_DAYS) {
-    warnings.push("האופק נחתך ל-14 ימים");
-  }
-  const usable = incoming.slice(0, MAX_HORIZON_DAYS);
-  const plan = [];
-  if (!list.length || !usable.length) {
-    warnings.push("No available study slots");
-    return { plan: plan, warnings: warnings, examStatus: examStatus, daysToExam: daysToExam };
-  }
-  const remaining = new Map(list.map(function (t) { return [t.name, Number(t.estimatedHoursTotal) || 0]; }));
-  const ordered = list.slice().sort(function (a, b) { return b.estimatedHoursTotal - a.estimatedHoursTotal; });
-  const totalNeeded = list.reduce(function (sum, t) { return sum + (Number(t.estimatedHoursTotal) || 0); }, 0);
-  const closeness = daysToExam == null ? DEFAULT_HORIZON_DAYS : daysToExam;
-  const hoursPerDay = closeness === 0 ? 2 : Math.min(3, 6 / Math.max(closeness, 1));
-  const reviewOnly = daysToExam != null && daysToExam <= 2;
-  let index = 0;
-  for (let s = 0; s < usable.length; s++) {
-    let topic = null;
-    for (let k = 0; k < ordered.length; k++) {
-      const cand = ordered[index % ordered.length];
-      index++;
-      if ((remaining.get(cand.name) || 0) > 0) { topic = cand; break; }
-    }
-    if (!topic) break;
-    const rem = remaining.get(topic.name);
-    const hours = Math.min(hoursPerDay, rem);
-    if (hours <= 0) break;
-    plan.push({
-      date: usable[s].day,
-      topic: topic.name,
-      hours: Math.round(hours * 1000) / 1000,
-      type: reviewOnly || s < 2 ? "review" : "practice"
-    });
-    remaining.set(topic.name, rem - hours);
-  }
-  const allocated = plan.reduce(function (sum, p) { return sum + p.hours; }, 0);
-  if (allocated + 0.01 < totalNeeded) {
-    warnings.push("נדרשות " + totalNeeded + " שעות, ונותרו רק " + (Math.round(allocated * 10) / 10) + " בלוח הזמנים");
-  }
-  return { plan: plan, warnings: warnings, examStatus: examStatus, daysToExam: daysToExam };
+const state = {
+  screen: "start",
+  courseId: "python",
+  kind: "quiz",
+  items: [],
+  index: 0,
+  answers: [],
+  startedAt: 0
 };
 
-const $=id=>document.getElementById(id);let quiz=[],at=0,answers=[],questionStarted=0,timerId;var currentCourseId="python";
-function renderTopics(){$("topics").innerHTML=Object.entries(topicNames).map(([key,name])=>`<label class="topic"><input type="checkbox" value="${key}" checked><span>${name}</span></label>`).join("")}
-function seededQuiz(pool,count){let seed=(Date.now()^performance.now()*1000)|0,r=[...pool];const rnd=()=>{seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^seed>>>15,1|seed);t=(t+Math.imul(t^t>>>7,61|t))^t;return((t^t>>>14)>>>0)/4294967296};for(let i=r.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r.slice(0,Math.min(count,r.length))}
-function startQuiz(){const topics=[...document.querySelectorAll("#topics input:checked")].map(x=>x.value);if(!topics.length){alert("בחר לפחות נושא אחד");return}const diff=$("difficulty").value;const pool=questionBank().filter(q=>topics.includes(q.topic)&&(!diff||q.difficulty===+diff));quiz=seededQuiz(pool,+$("count").value);if(!quiz.length){alert("אין שאלות בשילוב שבחרת");return}at=0;answers=[];$("start").classList.add("hidden");$("results").classList.add("hidden");$("quiz").classList.remove("hidden");showQuestion()}
-function showQuestion(){const q=quiz[at];questionStarted=Date.now();$("counter").textContent=`שאלה ${at+1} מתוך ${quiz.length}`;$("progress").style.width=`${at/quiz.length*100}%`;$("topicTag").textContent=topicNames[q.topic];$("levelTag").textContent=`רמה ${q.difficulty}`;const parts=q.question.split("\n");$("questionTitle").textContent=parts.shift();$("prompt").textContent=parts.join("\n");$("answers").innerHTML=q.options.map((o,i)=>`<button class="answer" data-index="${i}">${o}</button>`).join("");$("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>answerQuestion(+b.dataset.index));clearInterval(timerId);tick();timerId=setInterval(tick,1000)}
-function tick(){const sec=Math.floor((Date.now()-questionStarted)/1000);$("timer").textContent=`${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`}
-function answerQuestion(selected){clearInterval(timerId);const q=quiz[at],correct=selected===q.answerIdx,seconds=(Date.now()-questionStarted)/1000;answers.push({topic:q.topic,correct,secondsSpent:seconds});document.querySelectorAll(".answer").forEach((b,i)=>{b.disabled=true;if(i===q.answerIdx)b.classList.add("correct");else if(i===selected)b.classList.add("wrong")});$("feedback").innerHTML=`<strong>${correct?"✓ תשובה נכונה":"✗ כמעט — הנה הפתרון"}</strong>${q.explanation}`;$("feedback").classList.remove("hidden");$("nextBtn").textContent=at===quiz.length-1?"לתוצאות":"לשאלה הבאה";$("nextBtn").classList.remove("hidden")}
-function next(){at++;if(at<quiz.length)showQuestion();else showResults()}
-function readExamDate(){const el=document.getElementById("examDate");return el?el.value:null}
-function buildFocusPlan(focus){const examValue=readExamDate();const parsed=parseExamDate(examValue);return generateInitialStudyPlan(examValue,focus,futureSlots(parsed.days))}
-function renderStudyPlan(result){const warn=$("planWarnings");if(warn)warn.innerHTML=(result.warnings||[]).map(w=>`<p class="muted" style="margin:0 0 6px">${w}</p>`).join("");const plan=result.plan||[];$("studyPlan").innerHTML=plan.length?plan.map(p=>`<li><span>${new Date(p.date+"T00:00:00").toLocaleDateString("he-IL",{weekday:"short",day:"numeric",month:"numeric"})} · ${p.topic}</span><b>${p.hours} שעות · ${p.type==="review"?"חזרה":"תרגול"}</b></li>`).join(""):`<li>אין צורך בתוכנית חיזוק כרגע.</li>`}
-function showResults(){clearInterval(timerId);$("quiz").classList.add("hidden");$("results").classList.remove("hidden");const correct=answers.filter(a=>a.correct).length,pct=Math.round(correct/answers.length*100),ranked=weakTopicRanker(answers),weak=ranked.filter(r=>r.errorRate>0).slice(0,3);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent=pct>=70?"אתה בכיוון מצוין":pct>=50?"קרוב למעבר — ממשיכים לדייק":"מצאנו איפה לחזק";$("resultCopy").textContent=`ענית נכון על ${correct} מתוך ${answers.length}. ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.`;const midpoint=Math.max(1,Math.floor(answers.length/2)),first=answers.slice(0,midpoint).filter(a=>a.correct).length/midpoint,last=answers.slice(midpoint),second=last.length?last.filter(a=>a.correct).length/last.length:first;$("trend").textContent=second>first?"מגמה חיובית: השתפרת לאורך הבוחן.":second<first?"הדיוק ירד בחצי השני — כדאי לתרגל בקצב רגוע.":"הדיוק נשאר יציב לאורך הבוחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]}</span><b>${Math.round(r.errorRate*100)}% טעויות</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>`;const focus=(weak.length?weak:ranked.slice(0,2)).map((r,i)=>({name:topicNames[r.topic],difficulty:i?"medium":"hard",estimatedHoursTotal:2-i*.5}));renderStudyPlan(buildFocusPlan(focus))}
-$("startBtn").onclick=startQuiz;$("nextBtn").onclick=next;$("restartBtn").onclick=()=>{$("results").classList.add("hidden");$("start").classList.remove("hidden")};renderTopics();
-const examStructure10016=[{number:1,topic:"recursion",title:"שאלה 1 - רקורסיה",emphasis:"תנאי עצירה, צעד רקורסיבי ומחסנית קריאות"},{number:2,topic:"strings",title:"שאלה 2 - מחרוזות",emphasis:"כל פעולות המחרוזת: חיתוך, חיפוש, פיצול והחלפה"},{number:3,topic:"lists",title:"שאלה 3 - רשימות",emphasis:"מעבר, שינוי, חיתוך, מיון ו-list comprehensions"},{number:4,topic:"dictionaries",title:"שאלה 4 - מבני נתונים - מילונים",emphasis:"יצירה, עדכון, items וספירת מופעים"}];
-const examCodeBank=[
-{topic:"recursion",prompt:"כתבו פונקציה רקורסיבית sum_digits(n) שמחזירה את סכום הספרות.",referenceSolution:"def sum_digits(n):\n    if n < 10:\n        return n\n    return n % 10 + sum_digits(n // 10)",explanation:"תנאי העצירה הוא מספר חד-ספרתי."},{topic:"recursion",prompt:"כתבו count_char(s, ch) רקורסיבית שסופרת מופעים.",referenceSolution:"def count_char(s, ch):\n    if s == '':\n        return 0\n    return (1 if s[0] == ch else 0) + count_char(s[1:], ch)",explanation:"מטפלים בתו הראשון וממשיכים עם השאר."},{topic:"recursion",prompt:"כתבו is_palindrome(s) רקורסיבית.",referenceSolution:"def is_palindrome(s):\n    if len(s) <= 1:\n        return True\n    return s[0] == s[-1] and is_palindrome(s[1:-1])",explanation:"משווים קצוות וממשיכים פנימה."},
-{topic:"strings",prompt:"כתבו normalize_words(s): אותיות קטנות ורווח יחיד בין מילים.",referenceSolution:"def normalize_words(s):\n    return ' '.join(s.strip().lower().split())",explanation:"split מכווץ רווחים ו-join מחבר."},{topic:"strings",prompt:"כתבו initials(name) שמחזירה ראשי תיבות גדולים.",referenceSolution:"def initials(name):\n    return ''.join(word[0].upper() for word in name.split() if word)",explanation:"מחברים את האות הראשונה מכל מילה."},{topic:"strings",prompt:"כתבו longest_word(text); בשוויון החזירו את הראשונה.",referenceSolution:"def longest_word(text):\n    words = text.split()\n    return max(words, key=len) if words else ''",explanation:"max עם key=len שומר את הראשונה בשוויון."},
-{topic:"lists",prompt:"כתבו unique_in_order(items), ללא כפילויות ובסדר המקורי.",referenceSolution:"def unique_in_order(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return result",explanation:"מוסיפים רק איבר שטרם הופיע."},{topic:"lists",prompt:"כתבו rotate_left(items, k) ללא שינוי הרשימה המקורית.",referenceSolution:"def rotate_left(items, k):\n    if not items:\n        return []\n    k %= len(items)\n    return items[k:] + items[:k]",explanation:"מודולו ושני חיתוכים."},{topic:"lists",prompt:"כתבו flatten(matrix) שמחזירה רשימה שטוחה.",referenceSolution:"def flatten(matrix):\n    return [item for row in matrix for item in row]",explanation:"עוברים על שורות ואז על איברים."},
-{topic:"dictionaries",prompt:"כתבו char_frequency(s) שמחזירה מילון שכיחויות.",referenceSolution:"def char_frequency(s):\n    counts = {}\n    for ch in s:\n        counts[ch] = counts.get(ch, 0) + 1\n    return counts",explanation:"get מספק אפס למפתח חדש."},{topic:"dictionaries",prompt:"כתבו invert_unique(d); הניחו שהערכים ייחודיים.",referenceSolution:"def invert_unique(d):\n    return {value: key for key, value in d.items()}",explanation:"מחליפים מפתח וערך בכל זוג."},{topic:"dictionaries",prompt:"כתבו group_by_length(words) שמקבצת מילים לפי אורך.",referenceSolution:"def group_by_length(words):\n    groups = {}\n    for word in words:\n        groups.setdefault(len(word), []).append(word)\n    return groups",explanation:"setdefault יוצר רשימה לכל אורך."}];
-topicNames.dictionaries="מילונים";
-function buildExamSession10016(seed=10016){let s=seed|0;const rnd=()=>{s=(s+0x6D2B79F5)|0;let t=Math.imul(s^s>>>15,1|s);t=(t+Math.imul(t^t>>>7,61|t))^t;return((t^t>>>14)>>>0)/4294967296};return examStructure10016.map(b=>{const p=examCodeBank.filter(q=>q.topic===b.topic);return{...b,questions:[p[Math.floor(rnd()*p.length)]]}})}
-let examBlocks=[],examAt=0,examAnswers=[],examStarted=0;
-function startExam(){const seed=(Date.now()^(typeof performance!=="undefined"?performance.now()*1000:Math.random()*1e9))|0;examBlocks=buildExamSession10016(seed);examAt=0;examAnswers=[];$("start").classList.add("hidden");$("results").classList.add("hidden");$("exam").classList.remove("hidden");showExamBlock()}
-function showExamBlock(){const b=examBlocks[examAt],q=b.questions[0];examStarted=Date.now();$("blockOrder").innerHTML=examBlocks.map((x,i)=>`<span class="${i===examAt?'active':''}">${x.title}</span>`).join("");$("examCounter").textContent=`${examAt+1} מתוך 4`;$("examTitle").textContent=b.title;$("examEmphasis").textContent=b.emphasis;$("examPrompt").textContent=q.prompt;$("codeAnswer").value="";$("examSolution").classList.add("hidden");$("revealBtn").classList.remove("hidden");$("examCorrect").classList.add("hidden");$("examWrong").classList.add("hidden")}
-function revealExamSolution(){const q=examBlocks[examAt].questions[0];$("referenceCode").textContent=q.referenceSolution;$("solutionExplanation").textContent=q.explanation;$("examSolution").classList.remove("hidden");$("revealBtn").classList.add("hidden");$("examCorrect").classList.remove("hidden");$("examWrong").classList.remove("hidden")}
-function gradeExam(correct){if(correct&&!$("codeAnswer").value.trim()){alert("כדי לסמן «פתרתי נכון» צריך לכתוב פתרון בתיבה");return}examAnswers.push({topic:examBlocks[examAt].topic,correct,secondsSpent:(Date.now()-examStarted)/1000});if(++examAt<4)showExamBlock();else showExamResults()}
-function showExamResults(){$("exam").classList.add("hidden");$("results").classList.remove("hidden");const correct=examAnswers.filter(a=>a.correct).length,pct=correct*25,weak=weakTopicRanker(examAnswers).filter(r=>r.errorRate>0);$("scoreRing").style.setProperty("--score",`${pct*3.6}deg`);$("scoreText").textContent=`${pct}%`;$("resultTitle").textContent="סיכום מבחן אפקה 10016";$("resultCopy").textContent=`פתרת נכון ${correct} מתוך 4 שאלות כתיבת קוד.`;$("trend").textContent="הסיכום מבוסס על ארבעת בלוקי המבחן.";$("weakTopics").innerHTML=weak.length?weak.map(r=>`<li><span>${topicNames[r.topic]||r.topic}</span><b>דורש חיזוק</b></li>`).join(""):`<li><span>לא זוהתה חולשה בולטת</span><b>מצוין</b></li>`;const focus=(weak.length?weak:weakTopicRanker(examAnswers).slice(0,2)).map((r,i)=>({name:topicNames[r.topic]||r.topic,estimatedHoursTotal:weak.some(w=>w.topic===r.topic)?2:1.5}));renderStudyPlan(buildFocusPlan(focus.length?focus:examStructure10016.map((b,i)=>({name:b.title,estimatedHoursTotal:i?1.5:2}))))}
-$("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("examCorrect").onclick=()=>gradeExam(true);$("examWrong").onclick=()=>gradeExam(false);
+const HIST_KEY = "passpilot.history.v1";
+const HIST_MAX = 20;
+
+function course() {
+  return getCourse(state.courseId);
+}
+
+function labels() {
+  return course().labelTopics || {};
+}
+
+function go(screen) {
+  state.screen = screen;
+  ["start", "quiz", "exam", "results"].forEach(function (id) {
+    var el = $(id);
+    if (el) el.classList.toggle("hidden", id !== screen);
+  });
+  if (screen !== "results") {
+    var sheet = $("diagnosisSheet");
+    if (sheet) sheet.classList.add("hidden");
+  }
+}
+
+function setCourse(id) {
+  state.courseId = id;
+  var c = course();
+  var pill = document.querySelector(".brand .pill");
+  if (pill) pill.textContent = c.title;
+  document.title = "PassPilot | " + c.title;
+  var note = $("courseNote");
+  if (note) note.textContent = c.note || "";
+  var examBtn = $("examBtn");
+  if (examBtn) examBtn.style.display = c.hasExam ? "" : "none";
+  document.querySelectorAll(".pp-course").forEach(function (btn) {
+    btn.style.background = btn.getAttribute("data-c") === id ? "rgba(8,127,91,.12)" : "transparent";
+  });
+  renderTopics();
+}
+
+function renderTopics() {
+  var names = course().quizTopics;
+  $("topics").innerHTML = Object.keys(names).map(function (key) {
+    return '<label class="topic"><input type="checkbox" value="' + key + '" checked><span>' + names[key] + "</span></label>";
+  }).join("");
+}
+
+function renderCourseButtons() {
+  var host = $("courseButtons");
+  if (!host) return;
+  host.innerHTML = Object.keys(COURSES).map(function (id) {
+    return '<button type="button" data-c="' + id + '" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">' +
+      COURSES[id].title + "</button>";
+  }).join("");
+  host.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+  host.querySelectorAll(".pp-course").forEach(function (btn) {
+    btn.onclick = function () { setCourse(btn.getAttribute("data-c")); };
+  });
+}
+
+function seedNow() {
+  var t = Date.now();
+  if (typeof performance !== "undefined") t = t ^ (performance.now() * 1000);
+  return t | 0;
+}
+
+function startQuiz() {
+  var picked = [].slice.call(document.querySelectorAll("#topics input:checked")).map(function (x) { return x.value; });
+  if (!picked.length) { alert("בחר לפחות נושא אחד"); return; }
+  var items = pickQuiz(course().questions, picked, $("difficulty").value, +$("count").value, seedNow());
+  if (!items.length) { alert("אין שאלות בשילוב שבחרת"); return; }
+  state.kind = "quiz";
+  state.items = items;
+  state.index = 0;
+  state.answers = [];
+  go("quiz");
+  renderQuizItem();
+}
+
+function renderQuizItem() {
+  var q = state.items[state.index];
+  state.startedAt = Date.now();
+  $("counter").textContent = "שאלה " + (state.index + 1) + " מתוך " + state.items.length;
+  $("progress").style.width = (state.index / state.items.length * 100) + "%";
+  $("topicTag").textContent = labels()[q.topic] || q.topic;
+  $("levelTag").textContent = "רמה " + q.difficulty;
+  var parts = q.question.split("\n");
+  $("questionTitle").textContent = parts.shift();
+  $("prompt").textContent = parts.join("\n");
+  $("answers").innerHTML = q.options.map(function (o, i) {
+    return '<button class="answer" data-index="' + i + '">' + o + "</button>";
+  }).join("");
+  $("feedback").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+  document.querySelectorAll(".answer").forEach(function (b) {
+    b.onclick = function () { answerQuiz(+b.getAttribute("data-index")); };
+  });
+  clearInterval(state.timerId);
+  tick();
+  state.timerId = setInterval(tick, 1000);
+}
+
+function tick() {
+  var sec = Math.floor((Date.now() - state.startedAt) / 1000);
+  $("timer").textContent = String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
+}
+
+function answerQuiz(selected) {
+  clearInterval(state.timerId);
+  var q = state.items[state.index];
+  var correct = selected === q.answerIdx;
+  state.answers.push({ topic: q.topic, correct: correct, secondsSpent: (Date.now() - state.startedAt) / 1000 });
+  document.querySelectorAll(".answer").forEach(function (b, i) {
+    b.disabled = true;
+    if (i === q.answerIdx) b.classList.add("correct");
+    else if (i === selected) b.classList.add("wrong");
+  });
+  $("feedback").innerHTML = "<strong>" + (correct ? "✓ תשובה נכונה" : "✗ כמעט — הנה הפתרון") + "</strong>" + q.explanation;
+  $("feedback").classList.remove("hidden");
+  $("nextBtn").textContent = state.index === state.items.length - 1 ? "לתוצאות" : "לשאלה הבאה";
+  $("nextBtn").classList.remove("hidden");
+}
+
+function nextQuiz() {
+  state.index++;
+  if (state.index < state.items.length) renderQuizItem();
+  else finishSession();
+}
+
+function startExam() {
+  var c = course();
+  if (!c.hasExam) return;
+  var blocks = pickExamBlocks(c.examBlocks, c.examItems, seedNow());
+  state.kind = "exam";
+  state.items = blocks;
+  state.index = 0;
+  state.answers = [];
+  go("exam");
+  renderExamItem();
+}
+
+function renderExamItem() {
+  var b = state.items[state.index];
+  var q = b.item;
+  state.startedAt = Date.now();
+  $("blockOrder").innerHTML = state.items.map(function (x, i) {
+    return '<span class="' + (i === state.index ? "active" : "") + '">' + x.title + "</span>";
+  }).join("");
+  $("examCounter").textContent = (state.index + 1) + " מתוך " + state.items.length;
+  $("examTitle").textContent = b.title;
+  $("examEmphasis").textContent = b.emphasis;
+  $("examPrompt").textContent = q ? q.prompt : "";
+  $("codeAnswer").value = "";
+  $("examSolution").classList.add("hidden");
+  $("revealBtn").classList.remove("hidden");
+  $("examCorrect").classList.add("hidden");
+  $("examWrong").classList.add("hidden");
+}
+
+function revealExam() {
+  var q = state.items[state.index].item;
+  if (!q) return;
+  $("referenceCode").textContent = q.referenceSolution;
+  $("solutionExplanation").textContent = q.explanation;
+  $("examSolution").classList.remove("hidden");
+  $("revealBtn").classList.add("hidden");
+  $("examCorrect").classList.remove("hidden");
+  $("examWrong").classList.remove("hidden");
+}
+
+function gradeExam(correct) {
+  if (correct && !$("codeAnswer").value.trim()) {
+    alert("כדי לסמן «פתרתי נכון» צריך לכתוב פתרון בתיבה");
+    return;
+  }
+  state.answers.push({
+    topic: state.items[state.index].topic,
+    correct: correct,
+    secondsSpent: (Date.now() - state.startedAt) / 1000
+  });
+  state.index++;
+  if (state.index < state.items.length) renderExamItem();
+  else finishSession();
+}
+
+function trendText(rows) {
+  if (state.kind === "exam") return "הסיכום מבוסס על ארבעת בלוקי המבחן.";
+  var mid = Math.max(1, Math.floor(rows.length / 2));
+  var first = rows.slice(0, mid).filter(function (a) { return a.correct; }).length / mid;
+  var last = rows.slice(mid);
+  var second = last.length ? last.filter(function (a) { return a.correct; }).length / last.length : first;
+  if (second > first) return "מגמה חיובית: השתפרת לאורך הבוחן.";
+  if (second < first) return "הדיוק ירד בחצי השני — כדאי לתרגל בקצב רגוע.";
+  return "הדיוק נשאר יציב לאורך הבוחן.";
+}
+
+function finishSession() {
+  clearInterval(state.timerId);
+  var scored = scoreRows(state.answers);
+  var ranked = weakTopicRanker(state.answers);
+  var weak = ranked.filter(function (r) { return r.errorRate > 0; }).slice(0, 3);
+  var map = labels();
+  go("results");
+  $("scoreRing").style.setProperty("--score", (scored.pct * 3.6) + "deg");
+  $("scoreText").textContent = scored.pct + "%";
+  if (state.kind === "exam") {
+    $("resultTitle").textContent = "סיכום מבחן אפקה 10016";
+    $("resultCopy").textContent = "פתרת נכון " + scored.correct + " מתוך " + scored.total + " שאלות כתיבת קוד.";
+  } else {
+    $("resultTitle").textContent = scored.pct >= 70 ? "אתה בכיוון מצוין" : scored.pct >= 50 ? "קרוב למעבר — ממשיכים לדייק" : "מצאנו איפה לחזק";
+    $("resultCopy").textContent = "ענית נכון על " + scored.correct + " מתוך " + scored.total + ". ההמלצות למטה מבוססות על הדיוק וזמן המענה שלך.";
+  }
+  $("trend").textContent = trendText(state.answers);
+  $("weakTopics").innerHTML = weak.length
+    ? weak.map(function (r) {
+      return "<li><span>" + (map[r.topic] || r.topic) + "</span><b>" + Math.round(r.errorRate * 100) + "% טעויות</b></li>";
+    }).join("")
+    : "<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>";
+  var focus = focusFromRanked(ranked, map);
+  renderStudyPlan(planFromExamDate(readExamDate(), focus));
+  renderHistory(saveHistory(state.answers, state.kind));
+}
+
+function readExamDate() {
+  var el = $("examDate");
+  return el ? el.value : null;
+}
+
+function renderStudyPlan(result) {
+  var warn = $("planWarnings");
+  if (warn) warn.innerHTML = (result.warnings || []).map(function (w) {
+    return '<p class="muted" style="margin:0 0 6px">' + w + "</p>";
+  }).join("");
+  var plan = result.plan || [];
+  $("studyPlan").innerHTML = plan.length
+    ? plan.map(function (p) {
+      var ds = new Date(p.date + "T00:00:00").toLocaleDateString("he-IL", { weekday: "short", day: "numeric", month: "numeric" });
+      return "<li><span>" + ds + " · " + p.topic + "</span><b>" + p.hours + " שעות · " + (p.type === "review" ? "חזרה" : "תרגול") + "</b></li>";
+    }).join("")
+    : "<li>אין צורך בתוכנית חיזוק כרגע.</li>";
+}
+
+function readHistory() {
+  try {
+    var v = JSON.parse(localStorage.getItem(HIST_KEY));
+    return Array.isArray(v) ? v : [];
+  } catch (e) { return []; }
+}
+
+function writeHistory(list) {
+  try { localStorage.setItem(HIST_KEY, JSON.stringify(list.slice(-HIST_MAX))); return true; }
+  catch (e) { return false; }
+}
+
+function byTopic(rows) {
+  var acc = {};
+  rows.forEach(function (a) {
+    var t = acc[a.topic] || (acc[a.topic] = { n: 0, ok: 0 });
+    t.n++;
+    if (a.correct) t.ok++;
+  });
+  return acc;
+}
+
+function saveHistory(rows, kind) {
+  if (!rows || !rows.length) return { list: readHistory() };
+  var scored = scoreRows(rows);
+  var rec = {
+    ts: Date.now(),
+    courseId: state.courseId,
+    kind: kind || "quiz",
+    total: scored.total,
+    correct: scored.correct,
+    pct: scored.pct,
+    topics: byTopic(rows)
+  };
+  var list = readHistory();
+  list.push(rec);
+  writeHistory(list);
+  return { rec: rec, list: list };
+}
+
+function fmtTs(ts) {
+  var d = new Date(ts);
+  return String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") +
+    " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+
+function renderHistory(saved) {
+  var box = $("historyBox");
+  if (!box) return;
+  var list = (saved ? saved.list : readHistory()).filter(function (r) {
+    return (r.courseId || "python") === state.courseId;
+  });
+  if (!list.length) { box.innerHTML = ""; return; }
+  var best = list.reduce(function (m, r) { return r.pct > m ? r.pct : m; }, 0);
+  var delta = list.length > 1 ? list[list.length - 1].pct - list[0].pct : null;
+  var agg = {};
+  list.forEach(function (r) {
+    Object.keys(r.topics || {}).forEach(function (k) {
+      var a = agg[k] || (agg[k] = { n: 0, ok: 0 });
+      a.n += r.topics[k].n;
+      a.ok += r.topics[k].ok;
+    });
+  });
+  var map = labels();
+  var bars = Object.keys(agg).map(function (k) {
+    return { name: map[k] || k, rate: Math.round(agg[k].ok / agg[k].n * 100), n: agg[k].n };
+  }).sort(function (a, b) { return a.rate - b.rate; }).map(function (t) {
+    var col = t.rate >= 70 ? "#10b981" : t.rate >= 50 ? "#f59e0b" : "#ef4444";
+    return '<div style="margin-bottom:7px"><div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px"><span>' +
+      t.name + '</span><span style="opacity:.7">' + t.rate + "% · " + t.n + ' שאלות</span></div><div style="height:6px;border-radius:3px;background:var(--line)"><div style="height:6px;border-radius:3px;width:' +
+      t.rate + "%;background:" + col + '"></div></div></div>';
+  }).join("");
+  var recent = list.slice(-5).reverse().map(function (r) {
+    return '<li style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:.82rem"><span style="opacity:.65">' +
+      fmtTs(r.ts) + "</span><span><b>" + r.pct + "%</b> · " + r.correct + "/" + r.total + (r.kind === "exam" ? " · מבחן" : "") + "</span></li>";
+  }).join("");
+  box.innerHTML =
+    '<div style="font-weight:800;margin-bottom:4px">ההיסטוריה שלך בקורס זה</div>' +
+    '<div class="muted" style="margin-bottom:12px">' + list.length + " מפגשים · הציון הגבוה " + best + "%" +
+      (delta == null ? "" : " · שינוי מהמפגש הראשון " + (delta >= 0 ? "+" : "") + delta + " נקודות") + "</div>" +
+    '<div style="font-weight:700;font-size:.84rem;margin-bottom:6px">דיוק לפי נושא, מצטבר</div>' + bars +
+    '<div style="font-weight:700;font-size:.84rem;margin:12px 0 4px">מפגשים אחרונים</div>' +
+    '<ul class="plan">' + recent + "</ul>" +
+    '<button type="button" id="clearHistoryBtn" class="restart" style="margin-top:12px">מחיקת ההיסטוריה</button>' +
+    '<div class="muted" style="font-size:.68rem;margin-top:8px">נשמר בדפדפן הזה בלבד — בלי חשבון, בלי שרת, בלי העלאה.</div>';
+  var btn = $("clearHistoryBtn");
+  if (btn) btn.onclick = function () {
+    writeHistory(readHistory().filter(function (r) { return (r.courseId || "python") !== state.courseId; }));
+    box.innerHTML = "";
+  };
+}
+
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function sourceHe(src) {
+  if (src === "booklet") return "מתועד בחוברת";
+  if (src === "cluster-estimate") return "פירוק ליבת 55–60%";
+  if (src === "remainder-split") return "יתרה מפוצלת";
+  return "הנחה שווה";
+}
+
+function openReport(useAnswers, focusCard) {
+  var rows = useAnswers ? state.answers : [];
+  var diag = diagnoseCourse(state.courseId, rows);
+  var bp = diag.blueprint;
+  var when = new Date();
+  var whenStr = String(when.getDate()).padStart(2, "0") + "." + String(when.getMonth() + 1).padStart(2, "0") + "." + when.getFullYear();
+  var examStr = readExamDate() || "לא צוין";
+  var planned = planFromExamDate(readExamDate(), (diag.costliest || []).map(function (b, i) {
+    return { name: b.label, estimatedHoursTotal: i === 0 ? 2 : 1.5 };
+  }));
+  var table = diag.blocks.map(function (b) {
+    return "<tr><td>" + esc(b.label) + "</td><td>" + b.points + "</td><td>" + esc(sourceHe(b.source)) +
+      "</td><td>" + b.attempts + "</td><td>" + (b.accuracy == null ? "—" : Math.round(b.accuracy * 100) + "%") +
+      "</td><td>" + (b.expected == null ? "לא נבחן" : b.expected) +
+      "</td><td>" + (b.lost == null ? "לא נבחן" : b.lost) + "</td></tr>";
+  }).join("");
+  var costly = diag.costliest.map(function (b, i) {
+    var why = b.lost != null ? ("מאבד כ־" + b.lost + " נקודות על בלוק של " + b.points) : ("עדיין לא נבחן — " + b.points + " נקודות בסיכון");
+    return "<li><span>" + (i + 1) + ". " + esc(b.label) + "</span><b>" + why + "</b></li>";
+  }).join("");
+  var planHtml = (planned.plan || []).map(function (p) {
+    var ds = new Date(p.date + "T00:00:00").toLocaleDateString("he-IL", { weekday: "short", day: "numeric", month: "numeric" });
+    return "<li><span>" + ds + " · " + esc(p.topic) + "</span><b>" + p.hours + " שעות · " + (p.type === "review" ? "חזרה" : "תרגול") + "</b></li>";
+  }).join("") || "<li>אין תוכנית יומית — חסרה מפה או תאריך.</li>";
+  var warn = (planned.warnings || []).map(function (w) {
+    return '<p class="muted" style="margin:0 0 6px">' + esc(w) + "</p>";
+  }).join("");
+  var sampleNote = diag.hasAnswers
+    ? ("צפוי משוער לפי דיוק הבוחן: " + diag.expectedTotal + " נקודות · אובדן משוער: " + diag.lostTotal + ". זה מכפלה של דיוק × משקל בלוק — לא ציון מועד ולא מודל מכויל.")
+    : "עדיין אין תוצאות בוחן לקורס הזה. זו מפת מבנה בלבד.";
+  var p55 = pickSecurePath(diag.blocks, 55);
+  var p60 = pickSecurePath(diag.blocks, 60);
+  var steps55 = p55.steps.map(function (st) { return "<li><span>" + esc(st.text) + "</span></li>"; }).join("");
+  var end55 = p55.reached
+    ? ("הגענו ל־" + p55.total + " נקודות ב־~" + p55.effortHours + " שעות מאמץ משוערות.")
+    : ("גם אחרי כל הבלוקים: " + p55.total + " — חסרות " + p55.shortfall + " ל־55.");
+  var end60 = p60.reached
+    ? ("ליעד 60 הרשמי: עוד מסלול מגיע ל־" + p60.total + " ב־~" + p60.effortHours + " שעות.")
+    : ("ליעד 60 הרשמי עדיין חסרות " + p60.shortfall + " נקודות גם אחרי כל הבלוקים שבמפה.");
+  var hoursTotal = typeof MARATHON_HOURS === "number" ? MARATHON_HOURS : 16;
+  var split = allocateMarathonHours(diag.blocks, hoursTotal);
+  var splitRows = split.map(function (s) {
+    return "<li><span>" + esc(s.label) + " · " + s.points + " נק׳ במבנה</span><b>" + s.hours + " שעות מתוך " + hoursTotal + "</b></li>";
+  }).join("");
+  var qs = marathonPrompts(diag.costliest, diag.blocks).map(function (q, i) {
+    return "<li><span>" + (i + 1) + ". " + esc(q) + "</span></li>";
+  }).join("");
+  var host = $("diagnosisSheet");
+  host.innerHTML =
+    '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
+    "<h2 style=\"margin-bottom:6px\">דוח מרחק ממבנה המבחן</h2>" +
+    '<p class="muted" style="margin:0 0 14px">' + esc(bp.title) + " · " + esc(bp.examLabel) +
+      " · הופק " + whenStr + " · תאריך מבחן: " + esc(examStr) + "</p>" +
+    '<div class="caveat">ציון עובר רשמי באפקה הוא <strong>60</strong>, לא 55. המפה למטה אינה תחזית ציון. ' + esc(bp.pointMapNote) + "</div>" +
+    '<div id="marathonCard" style="border:2px solid var(--brand2);border-radius:16px;padding:16px;margin:0 0 22px">' +
+      "<h3 style=\"margin:0 0 8px\">כרטיס כניסה למרתון</h3>" +
+      '<p class="muted" style="margin:0 0 10px">דף למדריך ולסטודנט. מרתון אגודה טיפוסי = 16 שעות / 270 ₪. זו הצעת חלוקה לפי אובדן נקודות במפה — לא סילבוס המרתון.</p>' +
+      "<p><strong>" + esc(bp.title) + "</strong> · תאריך מבחן: " + esc(examStr) + "</p>" +
+      "<h4 style=\"margin:12px 0 6px\">איך לפצל 16 שעות מרתון</h4><ul class=\"plan\">" + splitRows + "</ul>" +
+      "<h4 style=\"margin:12px 0 6px\">שלוש שאלות לפתוח עם המרצה</h4><ul class=\"weak-list\">" + qs + "</ul>" +
+      '<p class="muted" style="margin:10px 0 0;font-size:.8rem">הסטודנט מביא את הדף. האגודה מוכרת את המרתון. PassPilot הוא התוספת, לא המתחרה.</p>' +
+    "</div>" +
+    "<h3>מפת מבנה: נושא × נקודות</h3>" +
+    '<table class="diag-table"><thead><tr><th>בלוק</th><th>נק׳</th><th>מקור המשקל</th><th>ניסיונות</th><th>דיוק</th><th>צפוי</th><th>אובדן</th></tr></thead><tbody>' +
+    table + "</tbody></table>" +
+    '<p class="muted" style="margin:10px 0 0">' + sampleNote + "</p>" +
+    "<h3 style=\"margin-top:22px\">איפה הכי יקר לטעות</h3><ul class=\"weak-list\">" + costly + "</ul>" +
+    "<h3 style=\"margin-top:22px\">מסלול 55 — אילו בלוקים לסגור במאמץ הנמוך</h3>" +
+    '<p class="muted">אלגוריתם חמדן: בכל צעד לוקחים את הבלוק עם הכי הרבה נקודות לשעת מאמץ (gain/effort). זה לא תיק אופטימלי וזה לא תחזית ציון. ציון עובר באפקה הוא 60; 55 הוא רצפת ביניים שמבקשים בפיצ׳ר.</p>' +
+    '<ul class="plan">' + steps55 + "</ul>" +
+    "<p><strong>" + esc(end55) + "</strong></p>" +
+    '<p class="muted">' + esc(end60) + "</p>" +
+    "<h3 style=\"margin-top:22px\">תוכנית ימים ממוקדת</h3>" + warn + '<ul class="plan">' + planHtml + "</ul>" +
+    '<div class="diag-actions no-print">' +
+      '<button type="button" class="primary" id="printReportBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
+      '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
+    "</div>" +
+    '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. נשמר בדפדפן בלבד.</p>';
+  host.classList.remove("hidden");
+  $("printReportBtn").onclick = function () { window.print(); };
+  $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
+  (focusCard && $("marathonCard") ? $("marathonCard") : host).scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function bind() {
+  $("startBtn").onclick = startQuiz;
+  $("nextBtn").onclick = nextQuiz;
+  $("examBtn").onclick = startExam;
+  $("revealBtn").onclick = revealExam;
+  $("examCorrect").onclick = function () { gradeExam(true); };
+  $("examWrong").onclick = function () { gradeExam(false); };
+  $("restartBtn").onclick = function () { go("start"); };
+  $("structureBtn").onclick = function () { openReport(false); };
+  $("reportBtn").onclick = function () { openReport(true); };
+  $("path55Btn").onclick = function () { openReport(true); };
+  $("marathonCardBtn").onclick = function () { openReport(true, true); };
+}
+
+renderCourseButtons();
+setCourse("python");
+bind();
+
   </script>
-<script>
-/* PP-HISTORY — keeps quiz sessions across reloads so progress is visible over time.
-   Browser-local only: nothing is uploaded, no account, no server. */
-(function(){
-  var KEY = 'passpilot.history.v1', MAX = 20;
-
-  function read(){
-    try { var v = JSON.parse(localStorage.getItem(KEY)); return Array.isArray(v) ? v : []; }
-    catch(e){ return []; }
-  }
-  function write(list){
-    try { localStorage.setItem(KEY, JSON.stringify(list.slice(-MAX))); return true; }
-    catch(e){ return false; }   // private mode / quota — the quiz itself must still work
-  }
-  function byTopic(list){
-    var acc = {};
-    list.forEach(function(a){
-      var t = acc[a.topic] || (acc[a.topic] = {n:0, ok:0});
-      t.n++; if (a.correct) t.ok++;
-    });
-    return acc;
-  }
-
-  function currentCourse(){
-    return (typeof currentCourseId === 'string' && currentCourseId) || 'python';
-  }
-  function forCourse(list){
-    var id = currentCourse();
-    return list.filter(function(r){ return (r.courseId || 'python') === id; });
-  }
-  function save(rows, kind){
-    if (!rows || !rows.length) return null;
-    var correct = rows.filter(function(a){return a.correct}).length;
-    var rec = {
-      ts: Date.now(),
-      courseId: currentCourse(),
-      kind: kind || 'quiz',
-      total: rows.length,
-      correct: correct,
-      pct: Math.round(correct / rows.length * 100),
-      topics: byTopic(rows)
-    };
-    var list = read(); list.push(rec); write(list);
-    return { rec: rec, list: list };
-  }
-
-  function fmt(ts){
-    var d = new Date(ts);
-    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') +
-           ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-  }
-
-  function render(saved){
-    var host = document.getElementById('results');
-    if (!host) return;
-    var box = document.getElementById('PP-HISTORY');
-    if (!box){
-      box = document.createElement('div');
-      box.id = 'PP-HISTORY';
-      box.style.cssText = 'margin-top:22px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.03);direction:rtl;text-align:right';
-      host.appendChild(box);
-    }
-    var list = forCourse(saved ? saved.list : read());
-    if (!list.length){ box.innerHTML = ''; return; }
-
-    var best = list.reduce(function(m,r){ return r.pct > m ? r.pct : m; }, 0);
-    var first = list[0].pct, last = list[list.length-1].pct;
-    var delta = list.length > 1 ? last - first : null;
-
-    // per-topic accuracy across every stored session — this is the actual gap map
-    var agg = {};
-    list.forEach(function(r){
-      Object.keys(r.topics || {}).forEach(function(k){
-        var a = agg[k] || (agg[k] = {n:0, ok:0});
-        a.n += r.topics[k].n; a.ok += r.topics[k].ok;
-      });
-    });
-    var names = (typeof topicNames === 'object' && topicNames) || {};
-    var rows = Object.keys(agg).map(function(k){
-      var a = agg[k], rate = Math.round(a.ok / a.n * 100);
-      return { name: names[k] || k, rate: rate, n: a.n };
-    }).sort(function(x,y){ return x.rate - y.rate; });
-
-    var recent = list.slice(-5).reverse().map(function(r){
-      return '<li style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:.82rem">' +
-             '<span style="opacity:.65">' + fmt(r.ts) + '</span>' +
-             '<span><b>' + r.pct + '%</b> · ' + r.correct + '/' + r.total + (r.kind === 'exam' ? ' · מבחן' : '') + '</span></li>';
-    }).join('');
-
-    var bars = rows.map(function(t){
-      var col = t.rate >= 70 ? '#10b981' : t.rate >= 50 ? '#f59e0b' : '#ef4444';
-      return '<div style="margin-bottom:7px">' +
-        '<div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px">' +
-        '<span>' + t.name + '</span><span style="opacity:.7">' + t.rate + '% · ' + t.n + ' שאלות</span></div>' +
-        '<div style="height:6px;border-radius:3px;background:rgba(255,255,255,.08)">' +
-        '<div style="height:6px;border-radius:3px;width:' + t.rate + '%;background:' + col + '"></div></div></div>';
-    }).join('');
-
-    box.innerHTML =
-      '<div style="font-weight:800;margin-bottom:4px">📈 ההיסטוריה שלך בקורס זה</div>' +
-      '<div style="font-size:.8rem;opacity:.7;margin-bottom:12px">' + list.length + ' מפגשים · הציון הגבוה ' + best + '%' +
-        (delta === null ? '' : ' · שינוי מהמפגש הראשון ' + (delta >= 0 ? '+' : '') + delta + ' נקודות') +
-      '</div>' +
-      '<div style="font-weight:700;font-size:.84rem;margin-bottom:6px">דיוק לפי נושא, מצטבר</div>' + bars +
-      '<div style="font-weight:700;font-size:.84rem;margin:12px 0 4px">מפגשים אחרונים</div>' +
-      '<ul style="list-style:none;padding:0;margin:0">' + recent + '</ul>' +
-      '<button id="PP-CLEAR" style="margin-top:12px;font:600 .76rem system-ui;background:transparent;border:1px solid rgba(255,255,255,.18);color:inherit;border-radius:8px;padding:5px 12px;cursor:pointer">מחיקת ההיסטוריה</button>' +
-      '<div style="font-size:.68rem;opacity:.5;margin-top:8px">נשמר בדפדפן הזה בלבד — בלי חשבון, בלי שרת, בלי העלאה.</div>';
-
-    var btn = document.getElementById('PP-CLEAR');
-    if (btn) btn.onclick = function(){
-      var id = currentCourse();
-      write(read().filter(function(r){ return (r.courseId || 'python') !== id; }));
-      box.innerHTML = '';
-    };
-  }
-
-  function wrap(name, rowsFn, kind){
-    if (typeof window[name] !== 'function') return;
-    var orig = window[name];
-    window[name] = function(){
-      var out = orig.apply(this, arguments);
-      try { render(save(rowsFn(), kind)); } catch(e){}
-      return out;
-    };
-  }
-  wrap('showResults', function(){ return answers; }, 'quiz');
-  wrap('showExamResults', function(){ return examAnswers; }, 'exam');
-})();
-</script>
-<script>
-/* PP-COURSE-ARCH — second course: ארגון המחשב ושפת סף (10145).
-   Content and exam weighting taken from Aviran's own consolidated booklet
-   ("חוברת לימוד מרוכזת", Drive, 12/07/2026): the exam is 18.8, single sitting,
-   and 55-60% of it is MIPS datapath/pipeline + cache, with question 11 alone
-   worth 44 points. The bank is weighted to match that, not spread evenly. */
-(function(){
-  var ARCH_NAMES = {
-    datapath:  "Datapath חד-מחזורי",
-    pipeline:  "Pipeline והשהיות",
-    cache:     "זיכרון מטמון",
-    formats:   "פורמטי פקודות ורגיסטרים",
-    memory:    "זיכרון, יישור וסדר בתים",
-    numbers:   "ייצוג מספרים ומשלים ל-2"
-  };
-
-  var ARCH = [
-    // ── datapath / pipeline / cache: the 44-point core ──
-    {topic:"datapath",difficulty:2,question:"באיזה שלב ב-datapath החד-מחזורי נקבע ערך ה-PC הבא עבור beq?",options:["בשלב ה-Fetch, לפני פענוח","אחרי ה-ALU, כשידוע אם הרגיסטרים שווים","בשלב הכתיבה לרגיסטר","בשלב הגישה לזיכרון"],answerIdx:1,explanation:"ה-ALU מחשב את ההפרש כדי לקבוע Zero; רק אז ידוע אם לקחת PC+4 או את יעד הקפיצה."},
-    {topic:"datapath",difficulty:2,question:"מה תפקיד אות הבקרה ALUSrc?",options:["בוחר אם הכניסה השנייה ל-ALU היא רגיסטר או הערך המיידי","בוחר אם לכתוב לזיכרון","בוחר את יעד הכתיבה ברגיסטר","קובע את פעולת ה-ALU"],answerIdx:0,explanation:"ב-R-type הכניסה השנייה היא rt; ב-lw/sw/addi היא ה-immediate אחרי הרחבת סימן."},
-    {topic:"datapath",difficulty:3,question:"בפקודת sw, אילו אותות בקרה פעילים?",options:["RegWrite=1, MemWrite=0","RegWrite=0, MemWrite=1, ALUSrc=1","MemRead=1, RegWrite=1","Branch=1, MemWrite=1"],answerIdx:1,explanation:"sw לא כותבת לרגיסטר כלל, כותבת לזיכרון, והכתובת מחושבת עם ההיסט המיידי."},
-    {topic:"datapath",difficulty:3,question:"מדוע במחזור יחיד זמן המחזור נקבע לפי lw?",options:["כי היא הפקודה השכיחה ביותר","כי היא עוברת את כל חמשת השלבים ולכן המסלול שלה הארוך ביותר","כי היא ניגשת לשני רגיסטרים","כי היא דורשת הרחבת סימן"],answerIdx:1,explanation:"lw עוברת Fetch, Decode, ALU, Memory ו-WriteBack; במחזור יחיד כל הפקודות משלמות את זמן הארוכה ביותר."},
-    {topic:"pipeline",difficulty:2,question:"מהו data hazard?",options:["פקודה זקוקה לתוצאה של פקודה קודמת שטרם נכתבה","שתי פקודות ניגשות לאותו רגיסטר לקריאה","הקפיצה נלקחה בטעות","המטמון החטיא"],answerIdx:0,explanation:"התלות היא בנתון: התוצאה עדיין בצנרת ולא הגיעה לשלב הכתיבה."},
-    {topic:"pipeline",difficulty:2,question:"מה פותר forwarding (bypassing)?",options:["הוא מונע control hazards","הוא מעביר תוצאה ישירות משלב EX/MEM לכניסת ה-ALU בלי להמתין ל-WriteBack","הוא מגדיל את המטמון","הוא מבטל את הצורך ב-branch prediction"],answerIdx:1,explanation:"התוצאה קיימת פיזית בצנרת; forwarding מנתב אותה קדימה במקום לעצור."},
-    {topic:"pipeline",difficulty:3,question:"איזה מקרה forwarding לבדו לא פותר?",options:["add אחרי add","lw ואחריה מיד פקודה שמשתמשת בערך שנטען","sub אחרי or","and אחרי add"],answerIdx:1,explanation:"load-use hazard: הנתון מגיע רק בסוף שלב MEM, ולכן נדרש stall אחד גם עם forwarding."},
-    {topic:"pipeline",difficulty:3,question:"בצנרת 5 שלבים, כמה מחזורים ייקחו 3 פקודות ללא תלויות?",options:["3","5","7","15"],answerIdx:2,explanation:"5 מחזורים לראשונה, ואז אחת נוספת לכל פקודה: 5 + (3-1) = 7."},
-    {topic:"pipeline",difficulty:3,question:"מהו control hazard?",options:["תלות בנתון בין פקודות","אי ודאות איזו פקודה תיטען אחרי branch לפני שידוע אם הקפיצה נלקחת","שתי פקודות כותבות לאותו רגיסטר","גישה לזיכרון לא מיושרת"],answerIdx:1,explanation:"הצנרת כבר שולפת פקודות בעוד תוצאת ה-branch לא ידועה."},
-    {topic:"cache",difficulty:2,question:"מה ההבדל בין temporal ל-spatial locality?",options:["temporal = אותה כתובת שוב בקרוב; spatial = כתובות סמוכות בקרוב","temporal = כתובות סמוכות; spatial = אותה כתובת","שניהם מתייחסים לגודל הבלוק","שניהם מתייחסים למדיניות הכתיבה"],answerIdx:0,explanation:"לולאה ממחישה את שניהם: המשתנה חוזר (temporal) והמערך נסרק ברצף (spatial)."},
-    {topic:"cache",difficulty:3,question:"מטמון direct-mapped עם 64 בלוקים ובלוק של 16 בתים. לאיזה אינדקס תמופה כתובת 1200?",options:["4","11","12","75"],answerIdx:1,explanation:"מספר הבלוק = 1200/16 = 75; האינדקס = 75 mod 64 = 11."},
-    {topic:"cache",difficulty:3,question:"מדוע הגדלת גודל הבלוק מקטינה miss rate רק עד גבול מסוים?",options:["כי ה-tag גדל","כי פחות בלוקים נכנסים למטמון ועולה תחרות, וגם עונש ה-miss גדל","כי ה-ALU מאט","כי ה-TLB מתמלא"],answerIdx:1,explanation:"מנצלים spatial locality, אבל מאבדים מספר בלוקים ומשלמים יותר על כל החטאה."},
-    {topic:"cache",difficulty:2,question:"מה ההבדל בין write-through ל-write-back?",options:["write-through כותב למטמון ולזיכרון יחד; write-back כותב לזיכרון רק בפינוי הבלוק","הפוך","שניהם זהים","write-back מהיר בקריאה"],answerIdx:0,explanation:"write-back דורש dirty bit ומפחית תעבורה לזיכרון."},
-
-    // ── instruction formats & registers ──
-    {topic:"formats",difficulty:1,question:"מהם שלושת פורמטי הפקודה ב-MIPS?",options:["R, I, J","A, B, C","load, store, branch","fixed, variable, hybrid"],answerIdx:0,explanation:"עיקרון \"Good design demands compromises\" — שלושה פורמטים בלבד."},
-    {topic:"formats",difficulty:2,question:"מהו מבנה השדות ב-R-type?",options:["op(6) rs(5) rt(5) immediate(16)","op(6) rs(5) rt(5) rd(5) shamt(5) funct(6)","op(6) address(26)","op(8) rs(4) rt(4) rd(4)"],answerIdx:1,explanation:"ב-R-type ה-op תמיד 0 והפקודה נקבעת ב-funct."},
-    {topic:"formats",difficulty:2,question:"למה משמש רגיסטר $zero?",options:["לשמירת כתובת חזרה","קבוע 0 בחומרה — לאתחול, להעברה בין רגיסטרים ולמימוש not דרך nor","למצביע מחסנית","לערך מיידי"],answerIdx:1,explanation:"כתיבה אליו לא משנה דבר ולמעשה שקולה ל-nop."},
-    {topic:"formats",difficulty:2,question:"מדוע אין פקודת subi ב-MIPS?",options:["כי היא לא נחוצה — addi עם ערך שלילי עושה את אותו דבר","כי אין מספיק opcodes","כי היא גורמת ל-overflow","כי היא לא נתמכת ב-RISC"],answerIdx:0,explanation:"הערך המיידי במשלים ל-2, ולכן חיסור מתקבל מחיבור של שלילי."},
-    {topic:"formats",difficulty:2,question:"לאילו פקודות מכונה מתורגמת הפסאודו-פקודה blt $s0,$s1,L?",options:["slt $at,$s0,$s1 ואז bne $at,$zero,L","beq בלבד","sub ואז j","addi ואז beq"],answerIdx:0,explanation:"האסמבלר משתמש ב-$at כרגיסטר עזר, ולכן הוא שמור."},
-    {topic:"formats",difficulty:3,question:"מה ההבדל העיקרי בין RISC ל-CISC לפי הגישה של MIPS?",options:["MIPS משתמש בפקודות באורך משתנה","MIPS = סט קטן של פקודות פשוטות באורך קבוע 32 סיביות; 8086 = אורך משתנה 1-17 בתים","CISC מהיר תמיד","ל-RISC יש יותר פורמטים"],answerIdx:1,explanation:"\"פחות זה יותר\": חומרה פשוטה מאפשרת תדר גבוה ושטח סיליקון קטן."},
-
-    // ── memory ──
-    {topic:"memory",difficulty:2,question:"מהי דרישת היישור (alignment) ל-lw ו-sw?",options:["הכתובת חייבת להתחלק ב-2","הכתובת חייבת להתחלק ב-4","אין דרישה","הכתובת חייבת להיות זוגית בלבד"],answerIdx:1,explanation:"מילה היא 4 בתים; זו הטעות הקלאסית בתרגילים."},
-    {topic:"memory",difficulty:3,question:"MIPS הוא Big Endian — מה זה אומר, ומה עושה סימולטור MARS?",options:["הבית הגבוה בכתובת הנמוכה; MARS דווקא Little Endian","הבית הנמוך בכתובת הנמוכה; MARS זהה","אין הבדל","MARS לא תומך בסדר בתים"],answerIdx:0,explanation:"פער שמפיל בתרגילים: התיאוריה Big Endian אבל הסימולטור מציג Little Endian."},
-    {topic:"memory",difficulty:2,question:"מה מבצעת lw $t0, -8($s1)?",options:["טוענת מהכתובת $s1 בלבד","טוענת מהכתובת $s1 מינוס 8","זו שגיאת תחביר — היסט חייב להיות חיובי","כותבת לזיכרון"],answerIdx:1,explanation:"ההיסט במשלים ל-2 ולכן יכול להיות שלילי."},
-
-    // ── number representation ──
-    {topic:"numbers",difficulty:2,question:"באילו פקודות באה לידי ביטוי תמיכה במשלים ל-2?",options:["xor, sll, sltiu","sub, addi, mult, sra, slt","and, or, nor","lw, sw, j"],answerIdx:1,explanation:"מהשאלות הקצרות החוזרות: sra משכפל סיבית סימן, slt בוחן overflow xor sign; ב-xor, sll ו-sltiu אין ביטוי לסימן."},
-    {topic:"numbers",difficulty:2,question:"מה ידוע כבר בזמן קומפילציה?",options:["ערכי האוגרים","כתובות המשתנים","גודל סגמנט הקוד בלבד","מצביע המחסנית"],answerIdx:2,explanation:"כל השאר נקבע בזמן ריצה — שאלה קצרה שחוזרת."},
-    {topic:"numbers",difficulty:3,question:"מה עושה sra לעומת srl על מספר שלילי?",options:["שתיהן מכניסות אפסים","sra משכפלת את סיבית הסימן ולכן שקולה לחלוקה בחזקת 2; srl מכניסה אפסים ומשבשת את הסימן","sra מכניסה אפסים","אין הבדל"],answerIdx:1,explanation:"זו הסיבה שחלוקה במשלים ל-2 נעשית ב-sra."},
-    {topic:"numbers",difficulty:2,question:"איך טוענים קבוע של 32 סיביות לרגיסטר?",options:["addi בלבד","lui לחלק העליון ואז ori לחלק התחתון","li בלבד תמיד מספיק","lw מהזיכרון בהכרח"],answerIdx:1,explanation:"הערך המיידי הוא 16 סיביות בלבד, ולכן נדרשות שתי פקודות."}
-  ];
-
-  ARCH.forEach(function(q,i){ q.id = 1000 + i; });
-
-
-  /* PP-SPLIT — חדו"א 1 ו-2 הם שני קורסים נפרדים, ולכן שני מאגרים נפרדים. */
-  var H1_NAMES = {
-    limits:    "גבולות ורציפות",
-    deriv:     "נגזרות וכללי גזירה",
-    analysis:  "חקירת פונקציה",
-    integrals: "אינטגרלים ושיטות"
-  };
-  var H2_NAMES = {
-    improper:  "אינטגרלים לא אמיתיים",
-    series:    "טורים והתכנסות",
-    multivar:  "פונקציות רב-משתניות",
-    complex:   "מספרים מרוכבים"
-  };
-
-  /* PP-HEDVA — חדו"א 1+2, מועד ב' 05/08/2026.
-     Aimed at the pass threshold: the mechanical, high-frequency moves that carry
-     most of the points, not proofs. */
-  var HEDVA = [
-    // גבולות ורציפות
-    {topic:"limits",difficulty:1,question:"מה הגבול של (sin 3x)/x כאשר x שואף ל-0?",options:["0","1","3","לא קיים"],answerIdx:2,explanation:"מרחיבים: (sin3x)/(3x)·3 → 1·3 = 3."},
-    {topic:"limits",difficulty:2,question:"מתי מותר להשתמש בכלל לופיטל?",options:["תמיד כשיש שבר","רק בצורות לא מוגדרות 0/0 או ∞/∞","רק בגבול באינסוף","רק כשהמונה גזיר"],answerIdx:1,explanation:"צורות כמו 0·∞ או ∞−∞ יש להביא קודם לצורת שבר."},
-    {topic:"limits",difficulty:2,question:"מה הגבול של (1+1/x)^x כאשר x שואף לאינסוף?",options:["1","e","∞","0"],answerIdx:1,explanation:"זו ההגדרה הקלאסית של e — מופיע כמעט בכל מבחן."},
-    {topic:"limits",difficulty:3,question:"פונקציה f רציפה בקטע סגור [a,b] ומקיימת f(a)·f(b)<0. מה מובטח?",options:["f מונוטונית","קיימת נקודה c בקטע שבה f(c)=0","f גזירה","f חסומה בלבד"],answerIdx:1,explanation:"משפט ערך הביניים — שאלה חוזרת על קיום שורש."},
-    {topic:"limits",difficulty:2,question:"מה תנאי הרציפות של f בנקודה x₀?",options:["f מוגדרת ב-x₀ בלבד","הגבול קיים בלבד","f(x₀) מוגדרת, הגבול קיים, והם שווים","f גזירה ב-x₀"],answerIdx:2,explanation:"שלושת התנאים יחד; גזירות גוררת רציפות אך לא להפך."},
-
-    // נגזרות
-    {topic:"deriv",difficulty:1,question:"מהי הנגזרת של x·ln x?",options:["ln x","1/x","ln x + 1","x/ln x"],answerIdx:2,explanation:"כלל המכפלה: 1·ln x + x·(1/x)."},
-    {topic:"deriv",difficulty:2,question:"מהי הנגזרת של e^(x²)?",options:["e^(x²)","2x·e^(x²)","x²·e^(x²)","2x"],answerIdx:1,explanation:"כלל השרשרת: הנגזרת החיצונית כפול הפנימית."},
-    {topic:"deriv",difficulty:2,question:"בגזירה סתומה של x²+y²=25, מהו dy/dx?",options:["−x/y","x/y","−y/x","2x+2y"],answerIdx:0,explanation:"גוזרים לפי x: 2x+2y·y'=0 ולכן y' = −x/y."},
-    {topic:"deriv",difficulty:3,question:"אם f גזירה ו-f'(x₀)=0, מה בהכרח נכון?",options:["x₀ נקודת מקסימום","x₀ נקודת מינימום","x₀ נקודה חשודה לקיצון בלבד","f אינה רציפה"],answerIdx:2,explanation:"נדרשת בדיקת סימן הנגזרת או הנגזרת השנייה; ייתכן גם פיתול."},
-    {topic:"deriv",difficulty:2,question:"מהי הנגזרת של arctan x?",options:["1/(1+x²)","1/√(1−x²)","−1/(1+x²)","1/x"],answerIdx:0,explanation:"מדף הנוסחאות — מופיע גם באינטגרלים."},
-
-    // חקירת פונקציה
-    {topic:"analysis",difficulty:2,question:"איך מוצאים אסימפטוטה אנכית?",options:["גבול באינסוף","נקודות שבהן המכנה מתאפס והגבול שואף לאינסוף","נגזרת שנייה אפס","חיתוך עם הצירים"],answerIdx:1,explanation:"יש לוודא שהמונה אינו מתאפס באותה נקודה, אחרת זו נקודת אי-רציפות סליקה."},
-    {topic:"analysis",difficulty:2,question:"מה קובעת הנגזרת השנייה?",options:["מונוטוניות","קמירות וקעירות ונקודות פיתול","אסימפטוטות","תחום הגדרה"],answerIdx:1,explanation:"f''>0 קמורה כלפי מעלה, f''<0 קעורה; שינוי סימן = פיתול."},
-    {topic:"analysis",difficulty:3,question:"איך מוצאים אסימפטוטה משופעת y=mx+n?",options:["m = גבול f(x)/x ו-n = גבול (f(x)−mx)","m = f'(x) ו-n = f(0)","רק כשיש אסימפטוטה אנכית","אין דרך כללית"],answerIdx:0,explanation:"שני גבולות באינסוף; אם אחד לא קיים אין אסימפטוטה משופעת."},
-    {topic:"analysis",difficulty:2,question:"מה מבטיח משפט לגראנז' לפונקציה רציפה ב-[a,b] וגזירה ב-(a,b)?",options:["קיים c שבו f'(c) = (f(b)−f(a))/(b−a)","f מונוטונית","f'(c)=0 תמיד","f קמורה"],answerIdx:0,explanation:"רול הוא המקרה הפרטי שבו f(a)=f(b)."},
-
-    // אינטגרלים
-    {topic:"integrals",difficulty:1,question:"מהו האינטגרל של 1/x?",options:["ln x + C","ln|x| + C","−1/x² + C","x·ln x + C"],answerIdx:1,explanation:"הערך המוחלט הכרחי — שגיאה שחוזרת בבדיקות."},
-    {topic:"integrals",difficulty:2,question:"איזו שיטה מתאימה לאינטגרל של x·e^x?",options:["הצבה","אינטגרציה בחלקים","שברים חלקיים","זהות טריגונומטרית"],answerIdx:1,explanation:"בוחרים u=x כי הנגזרת שלו מפשטת, ו-dv=e^x dx."},
-    {topic:"integrals",difficulty:2,question:"איזו שיטה מתאימה ל-∫ 1/(x²−1) dx?",options:["בחלקים","שברים חלקיים","הצבה טריגונומטרית","גזירה"],answerIdx:1,explanation:"מפרקים ל-A/(x−1)+B/(x+1)."},
-    {topic:"integrals",difficulty:3,question:"מה נותן המשפט היסודי של החדו\"א?",options:["הנגזרת של אינטגרל מסוים עם גבול עליון x היא f(x)","כל פונקציה רציפה גזירה","האינטגרל תמיד חיובי","גבול של סכום רימן אינו קיים"],answerIdx:0,explanation:"הקשר בין גזירה לאינטגרציה — בסיס לחישוב אינטגרלים מסוימים."},
-    {topic:"integrals",difficulty:3,question:"איך מחשבים שטח בין שתי פונקציות f מעל g בקטע [a,b]?",options:["∫(f+g)","∫(f−g)","∫f · ∫g","∫|f|"],answerIdx:1,explanation:"חובה לבדוק נקודות חיתוך; אם הסדר מתחלף מפצלים לקטעים."},
-    {topic:"improper",difficulty:3,question:"מתי אינטגרל לא אמיתי ∫₁^∞ 1/x^p dx מתכנס?",options:["p>1","p<1","p=1","תמיד"],answerIdx:0,explanation:"עבור p≤1 הוא מתבדר — קריטריון בסיסי שגם משמש למבחן ההשוואה בטורים."},
-
-    // טורים
-    {topic:"series",difficulty:2,question:"מתי הטור הגיאומטרי Σq^n מתכנס?",options:["|q|<1","|q|>1","q>0","תמיד"],answerIdx:0,explanation:"והסכום הוא 1/(1−q) עבור טור המתחיל ב-n=0."},
-    {topic:"series",difficulty:2,question:"מה אומר מבחן ההכרח (תנאי הכרחי להתכנסות)?",options:["אם האיבר הכללי לא שואף ל-0 הטור מתבדר","אם האיבר שואף ל-0 הטור מתכנס","הטור תמיד מתכנס","אין קשר"],answerIdx:0,explanation:"הכיוון ההפוך אינו נכון — הטור ההרמוני מתבדר למרות ש-1/n→0."},
-    {topic:"series",difficulty:3,question:"מה קובע מבחן המנה (דלאמבר) כאשר הגבול L<1?",options:["הטור מתכנס בהחלט","הטור מתבדר","אין מסקנה","הטור מתכנס בתנאי"],answerIdx:0,explanation:"L>1 מתבדר; L=1 המבחן אינו מכריע וצריך כלי אחר."},
-    {topic:"series",difficulty:3,question:"מהו רדיוס ההתכנסות של טור חזקות Σaₙ(x−x₀)ⁿ?",options:["R = lim |aₙ/aₙ₊₁|","R = lim aₙ","R = x₀","תמיד 1"],answerIdx:0,explanation:"בקצוות הקטע יש לבדוק התכנסות בנפרד."},
-    {topic:"series",difficulty:2,question:"מהו פיתוח טיילור של e^x סביב 0?",options:["Σ xⁿ","Σ xⁿ/n!","Σ (−1)ⁿxⁿ","Σ n·xⁿ"],answerIdx:1,explanation:"מתכנס לכל x; ממנו גוזרים גם את פיתוחי sin ו-cos."},
-
-    // רב-משתני
-    {topic:"multivar",difficulty:2,question:"מהי הנגזרת החלקית ∂/∂x של f(x,y)=x²y+y³?",options:["2xy","x²+3y²","2xy+3y²","2x"],answerIdx:0,explanation:"גוזרים לפי x ומתייחסים ל-y כקבוע, לכן y³ מתאפס."},
-    {topic:"multivar",difficulty:3,question:"מה תנאי הכרחי לנקודת קיצון פנימית של f(x,y)?",options:["שתי הנגזרות החלקיות מתאפסות","רק ∂f/∂x מתאפסת","הפונקציה רציפה","הדטרמיננטה חיובית"],answerIdx:0,explanation:"נקודה קריטית; הסיווג נעשה במבחן ההסיאן."},
-    {topic:"multivar",difficulty:3,question:"במבחן ההסיאן, אם D>0 ו-fxx>0 — מהי הנקודה?",options:["מקסימום מקומי","מינימום מקומי","אוכף","לא ניתן לקבוע"],answerIdx:1,explanation:"D>0 ו-fxx<0 מקסימום; D<0 אוכף; D=0 לא מכריע."},
-    {topic:"multivar",difficulty:3,question:"למה משמשת שיטת כופלי לגראנז'?",options:["לקיצון תחת אילוץ","לחישוב אינטגרל כפול","למציאת אסימפטוטות","לפיתוח לטור"],answerIdx:0,explanation:"פותרים ∇f = λ∇g יחד עם משוואת האילוץ."},
-    {topic:"multivar",difficulty:2,question:"מה מתאר הגרדיאנט ∇f בנקודה?",options:["כיוון העלייה התלולה ביותר","כיוון הירידה","הערך המקסימלי","שטח מתחת לפונקציה"],answerIdx:0,explanation:"וגודלו הוא קצב השינוי המרבי; הוא ניצב לקווי הגובה."}
-  ];
-  HEDVA.push(
-    {topic:"improper",difficulty:2,question:"איך מטפלים באינטגרל ∫₀¹ 1/√x dx?",options:["הוא לא מוגדר","כגבול כאשר הגבול התחתון שואף ל-0 מימין","גוזרים תחילה","מציבים x=1"],answerIdx:1,explanation:"אי-רציפות בקצה: מחשבים lim(t→0⁺) ∫ₜ¹ ומקבלים 2 — מתכנס."},
-    {topic:"improper",difficulty:3,question:"מה אומר מבחן ההשוואה לאינטגרלים לא אמיתיים?",options:["אם 0≤f≤g ו-∫g מתכנס אז ∫f מתכנס","אם f≤g אז שניהם מתבדרים","רק לפונקציות שליליות","אין מבחן כזה"],answerIdx:0,explanation:"ובכיוון ההפוך: אם ∫f מתבדר אז גם ∫g. משווים בדרך כלל ל-1/x^p."},
-    {topic:"improper",difficulty:2,question:"מתי ∫₀¹ 1/x^p dx מתכנס?",options:["p<1","p>1","p=1","תמיד"],answerIdx:0,explanation:"שים לב שזה הפוך מהמקרה של ∫₁^∞ — מלכודת נפוצה."},
-    {topic:"complex",difficulty:1,question:"מהי הצורה הפולרית של מספר מרוכב z?",options:["z = a+bi","z = r(cos θ + i·sin θ)","z = r·θ","z = a·bi"],answerIdx:1,explanation:"r=|z| ו-θ הארגומנט; שקול ל-re^(iθ) לפי אוילר."},
-    {topic:"complex",difficulty:2,question:"לפי נוסחת דה-מואבר, מהו z^n בצורה פולרית?",options:["rⁿ(cos nθ + i·sin nθ)","r(cos nθ + i·sin nθ)","rⁿ(cos θ + i·sin θ)","nr(cos θ + i·sin θ)"],answerIdx:0,explanation:"הרדיוס בחזקה, הזווית מוכפלת — הבסיס לחישוב שורשים."},
-    {topic:"complex",difficulty:3,question:"כמה שורשים מסדר n יש למספר מרוכב שאינו אפס?",options:["1","2","n שורשים שונים","אינסוף"],answerIdx:2,explanation:"מפוזרים באופן שווה על מעגל ברדיוס r^(1/n), בהפרשי זווית 2π/n."},
-    {topic:"complex",difficulty:2,question:"מהו הצמוד של z=a+bi ומה z·z̄?",options:["a−bi, והמכפלה a²+b²","a+bi, והמכפלה a²−b²","−a−bi, והמכפלה 0","b+ai, והמכפלה 2ab"],answerIdx:0,explanation:"המכפלה היא |z|² ולכן ממשית — כך מחלקים מרוכבים."}
-  );
-  HEDVA.forEach(function(q,i){ q.id = 2000 + i; });
-
-  var pyBank = window.questionBank;
-  var pyNames = {
-    loops: "לולאות",
-    functions: "פונקציות",
-    strings: "מחרוזות",
-    lists: "רשימות",
-    conditions: "תנאים",
-    recursion: "רקורסיה"
-  };
-  var COURSE_TITLES = {
-    python: "פייתון 10016",
-    arch: "ארגון המחשב 10145",
-    hedva1: "חדו״א 1 · 90901",
-    hedva2: "חדו״א 2 · 90902"
-  };
-
-  var ARCH_MODE = false;
-  var CUSTOM_BANK = null;   // null = the built-in Python bank
-
-  // startQuiz reads a const questionBank, so the pool is swapped at the button
-  // instead of at the function: the original handler still serves Python.
-  (function(){
-    var btn = document.getElementById('startBtn');
-    if (!btn || btn.dataset.ppArchStart) return;
-    var orig = btn.onclick;
-    btn.dataset.ppArchStart = '1';
-    btn.id = 'startBtn';
-    btn.onclick = function(){
-      if (!CUSTOM_BANK) return orig && orig.apply(this, arguments);   // PP-ARCH-START
-      var picked = [].slice.call(document.querySelectorAll('#topics input:checked')).map(function(x){ return x.value; });
-      if (!picked.length){ alert('בחר לפחות נושא אחד'); return; }
-      var diff = document.getElementById('difficulty').value;
-      var pool = CUSTOM_BANK.filter(function(q){ return picked.indexOf(q.topic) > -1 && (!diff || q.difficulty === +diff); });
-      if (!pool.length){ alert('אין שאלות בשילוב שבחרת'); return; }
-      quiz = seededQuiz(pool, +document.getElementById('count').value);
-      at = 0; answers = [];
-      document.getElementById('start').classList.add('hidden');
-      document.getElementById('results').classList.add('hidden');
-      document.getElementById('quiz').classList.remove('hidden');
-      showQuestion();
-    };
-  })();
-
-  function setCourse(c){
-    currentCourseId = c;
-    ARCH_MODE = (c === 'arch');
-    var names = null;
-    if (c === 'arch'){ CUSTOM_BANK = ARCH; names = ARCH_NAMES; }
-    else if (c === 'hedva1' || c === 'hedva2'){
-      var set = (c === 'hedva1') ? H1_NAMES : H2_NAMES;
-      CUSTOM_BANK = HEDVA.filter(function(q){ return set.hasOwnProperty(q.topic); });
-      names = set;
-    }
-    else CUSTOM_BANK = null;
-    if (names){
-      Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
-      Object.keys(names).forEach(function(k){ topicNames[k] = names[k]; });
-    } else {
-      Object.keys(topicNames).forEach(function(k){ delete topicNames[k]; });
-      Object.keys(pyNames || {}).forEach(function(k){ topicNames[k] = pyNames[k]; });
-    }
-    if (typeof renderTopics === 'function') renderTopics();
-    var pill = document.querySelector('.brand .pill');
-    if (pill) pill.textContent = COURSE_TITLES[c] || c;
-    document.title = 'PassPilot | ' + (COURSE_TITLES[c] || c);
-    var b = document.getElementById('PP-EXAMBTN');
-    if (b) b.style.display = (c === 'python') ? '' : 'none';
-  }
-
-  var host = document.getElementById('start');
-  if (host){
-    var sel = document.createElement('div');
-    sel.id = 'PP-COURSE-ARCH';
-    sel.style.cssText = 'margin:0 0 16px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.03);direction:rtl;text-align:right';
-    sel.innerHTML =
-      '<div style="font-weight:700;font-size:.86rem;margin-bottom:8px">מקצוע</div>' +
-      '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
-      '<button data-c="python" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:inherit;font:700 .82rem system-ui;cursor:pointer">פייתון 10016</button>' +
-      '<button data-c="arch" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">ארגון המחשב 10145</button>' +
-      '<button data-c="hedva1" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">חדו״א 1 · 90901</button>' +
-      '<button data-c="hedva2" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">חדו״א 2 · 90902</button>' +
-      '</div>' +
-      '<div id="PP-COURSE-NOTE" style="font-size:.72rem;opacity:.65;margin-top:8px"></div>';
-    host.insertBefore(sel, host.firstChild);
-
-    var note = document.getElementById('PP-COURSE-NOTE');
-    sel.querySelectorAll('.pp-course').forEach(function(btn){
-      btn.onclick = function(){
-        sel.querySelectorAll('.pp-course').forEach(function(b){ b.style.background = 'transparent'; });
-        btn.style.background = 'rgba(255,255,255,.10)';
-        setCourse(btn.dataset.c);
-        note.textContent = btn.dataset.c === 'arch'
-          ? 'מבחן 18.8, מועד יחיד. 55-60% מהמבחן הוא datapath, pipeline ומטמון — שאלה 11 לבדה 44 נקודות, ולכן רוב המאגר שם.'
-          : btn.dataset.c === 'hedva1'
-          ? 'מועד ב\' 5.8. גבולות ורציפות, כללי גזירה, חקירת פונקציה ואינטגרלים — המהלכים המכניים שנושאים את רוב הנקודות, לא הוכחות.'
-          : btn.dataset.c === 'hedva2'
-          ? 'מועד ב\' 5.8. אינטגרלים לא אמיתיים, טורים והתכנסות, פונקציות רב-משתניות ומספרים מרוכבים.'
-          : '';
-      };
-    });
-
-    // the MIPS bank has no code-writing exam session, so hide that button while it is selected
-    var eb = document.getElementById('examBtn');
-    if (eb) eb.id = 'PP-EXAMBTN';
-  }
-})();
-</script>
-<script>
-/* PP-DIAGNOSIS — one-page exam-structure distance report. Printable, no server. */
-(function(){
-  var lastRows = [];
-
-  function esc(s){
-    return String(s == null ? '' : s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  function pct(x){ return x == null ? '—' : Math.round(x * 100) + '%'; }
-  function pts(x){ return x == null ? 'לא נבחן' : x; }
-  function sourceHe(src){
-    if (src === 'booklet') return 'מתועד בחוברת';
-    if (src === 'cluster-estimate') return 'פירוק ליבת 55–60%';
-    if (src === 'remainder-split') return 'יתרה מפוצלת';
-    return 'הנחה שווה';
-  }
-  function courseId(){
-    return (typeof currentCourseId === 'string' && currentCourseId) || 'python';
-  }
-  function dayPlan(diag){
-    if (typeof buildFocusPlan !== 'function') return { plan: [], warnings: [] };
-    var focus = (diag.costliest || []).map(function(b, i){
-      return { name: b.label, estimatedHoursTotal: i === 0 ? 2 : 1.5 };
-    });
-    return buildFocusPlan(focus);
-  }
-  function renderSheet(diag, focusCard){
-    var host = document.getElementById('diagnosisSheet');
-    if (!host || typeof diagnoseCourse !== 'function') return;
-    var bp = diag.blueprint;
-    var when = new Date();
-    var whenStr = String(when.getDate()).padStart(2,'0') + '.' +
-      String(when.getMonth()+1).padStart(2,'0') + '.' + when.getFullYear();
-    var examVal = typeof readExamDate === 'function' ? readExamDate() : '';
-    var examStr = examVal || 'לא צוין';
-    var planned = dayPlan(diag);
-    var rows = diag.blocks.map(function(b){
-      return '<tr><td>' + esc(b.label) + '</td><td>' + b.points +
-        '</td><td>' + esc(sourceHe(b.source)) + '</td><td>' + b.attempts +
-        '</td><td>' + pct(b.accuracy) + '</td><td>' + pts(b.expected) +
-        '</td><td>' + pts(b.lost) + '</td></tr>';
-    }).join('');
-    var costly = diag.costliest.map(function(b, i){
-      var why = b.lost != null
-        ? ('מאבד כ־' + b.lost + ' נקודות על בלוק של ' + b.points)
-        : ('עדיין לא נבחן — ' + b.points + ' נקודות בסיכון');
-      return '<li><span>' + (i+1) + '. ' + esc(b.label) + '</span><b>' + why + '</b></li>';
-    }).join('');
-    var planHtml = (planned.plan || []).map(function(p){
-      var d = new Date(p.date + 'T00:00:00');
-      var ds = d.toLocaleDateString('he-IL', { weekday:'short', day:'numeric', month:'numeric' });
-      return '<li><span>' + ds + ' · ' + esc(p.topic) + '</span><b>' + p.hours + ' שעות · ' +
-        (p.type === 'review' ? 'חזרה' : 'תרגול') + '</b></li>';
-    }).join('') || '<li>אין תוכנית יומית — חסרה מפה או תאריך.</li>';
-    var warn = (planned.warnings || []).map(function(w){
-      return '<p class="muted" style="margin:0 0 6px">' + esc(w) + '</p>';
-    }).join('');
-    var sampleNote = diag.hasAnswers
-      ? ('צפוי משוער לפי דיוק הבוחן: ' + diag.expectedTotal + ' נקודות · אובדן משוער: ' + diag.lostTotal +
-         '. זה מכפלה של דיוק × משקל בלוק — לא ציון מועד ולא מודל מכויל.')
-      : 'עדיין אין תוצאות בוחן לקורס הזה. זו מפת מבנה בלבד.';
-    var pathHtml = '';
-    if (typeof pickSecurePath === 'function') {
-      var p55 = pickSecurePath(diag.blocks, 55);
-      var p60 = pickSecurePath(diag.blocks, 60);
-      var steps55 = p55.steps.map(function(st){
-        return '<li><span>' + esc(st.text) + '</span></li>';
-      }).join('');
-      var end55 = p55.reached
-        ? ('הגענו ל־' + p55.total + ' נקודות ב־~' + p55.effortHours + ' שעות מאמץ משוערות.')
-        : ('גם אחרי כל הבלוקים: ' + p55.total + ' — חסרות ' + p55.shortfall + ' ל־55.');
-      var end60 = p60.reached
-        ? ('ליעד 60 הרשמי: עוד מסלול מגיע ל־' + p60.total + ' ב־~' + p60.effortHours + ' שעות.')
-        : ('ליעד 60 הרשמי עדיין חסרות ' + p60.shortfall + ' נקודות גם אחרי כל הבלוקים שבמפה.');
-      pathHtml =
-        '<h3 style="margin-top:22px">מסלול 55 — אילו בלוקים לסגור במאמץ הנמוך</h3>' +
-        '<p class="muted">אלגוריתם חמדן: בכל צעד לוקחים את הבלוק עם הכי הרבה נקודות לשעת מאמץ (gain/effort). זה לא תיק אופטימלי וזה לא תחזית ציון. ציון עובר באפקה הוא 60; 55 הוא רצפת ביניים שמבקשים בפיצ׳ר.</p>' +
-        '<ul class="plan">' + steps55 + '</ul>' +
-        '<p><strong>' + esc(end55) + '</strong></p>' +
-        '<p class="muted">' + esc(end60) + '</p>';
-    }
-    var cardHtml = '';
-    if (typeof allocateMarathonHours === 'function' && typeof marathonPrompts === 'function') {
-      var hoursTotal = typeof MARATHON_HOURS === 'number' ? MARATHON_HOURS : 16;
-      var split = allocateMarathonHours(diag.blocks, hoursTotal);
-      var splitRows = split.map(function(s){
-        return '<li><span>' + esc(s.label) + ' · ' + s.points + ' נק׳ במבנה</span><b>' + s.hours + ' שעות מתוך ' + hoursTotal + '</b></li>';
-      }).join('');
-      var qs = marathonPrompts(diag.costliest, diag.blocks).map(function(q, i){
-        return '<li><span>' + (i+1) + '. ' + esc(q) + '</span></li>';
-      }).join('') || '<li>אין בלוק יקר מספיק — פתחו את בלוק הנקודות הגבוה במבנה.</li>';
-      cardHtml =
-        '<div id="marathonCard" style="border:2px solid var(--brand2);border-radius:16px;padding:16px;margin:22px 0">' +
-          '<h3 style="margin:0 0 8px">כרטיס כניסה למרתון</h3>' +
-          '<p class="muted" style="margin:0 0 10px">דף למדריך ולסטודנט. מרתון אגודה טיפוסי = 16 שעות / 270 ₪. זו הצעת חלוקה לפי אובדן נקודות במפה — לא סילבוס המרתון.</p>' +
-          '<p><strong>' + esc(bp.title) + '</strong> · תאריך מבחן: ' + esc(examStr) + '</p>' +
-          '<h4 style="margin:12px 0 6px">איך לפצל 16 שעות מרתון</h4>' +
-          '<ul class="plan">' + splitRows + '</ul>' +
-          '<h4 style="margin:12px 0 6px">שלוש שאלות לפתוח עם המרצה</h4>' +
-          '<ul class="weak-list">' + qs + '</ul>' +
-          '<p class="muted" style="margin:10px 0 0;font-size:.8rem">הסטודנט מביא את הדף. האגודה מוכרת את המרתון. PassPilot הוא התוספת, לא המתחרה.</p>' +
-        '</div>';
-    }
-
-    host.innerHTML =
-      '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
-      '<h2 style="margin-bottom:6px">דוח מרחק ממבנה המבחן</h2>' +
-      '<p class="muted" style="margin:0 0 14px">' + esc(bp.title) + ' · ' + esc(bp.examLabel) +
-        ' · הופק ' + whenStr + ' · תאריך מבחן: ' + esc(examStr) + '</p>' +
-      '<div class="caveat">ציון עובר רשמי באפקה הוא <strong>60</strong>, לא 55. ' +
-        'המפה למטה אינה תחזית ציון. ' + esc(bp.pointMapNote) + '</div>' +
-      cardHtml +
-      '<h3>מפת מבנה: נושא × נקודות</h3>' +
-      '<table class="diag-table"><thead><tr>' +
-        '<th>בלוק</th><th>נק׳</th><th>מקור המשקל</th><th>ניסיונות</th><th>דיוק</th><th>צפוי</th><th>אובדן</th>' +
-      '</tr></thead><tbody>' + rows + '</tbody></table>' +
-      '<p class="muted" style="margin:10px 0 0">' + sampleNote + '</p>' +
-      '<h3 style="margin-top:22px">איפה הכי יקר לטעות</h3>' +
-      '<ul class="weak-list">' + costly + '</ul>' +
-      pathHtml +
-      '<h3 style="margin-top:22px">תוכנית ימים ממוקדת</h3>' +
-      warn + '<ul class="plan">' + planHtml + '</ul>' +
-      '<div class="diag-actions no-print">' +
-        '<button type="button" class="primary" id="printReportBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
-        '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
-      '</div>' +
-      '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. נשמר בדפדפן בלבד.</p>';
-
-    host.classList.remove('hidden');
-    var printBtn = document.getElementById('printReportBtn');
-    if (printBtn) printBtn.onclick = function(){ window.print(); };
-    var closeBtn = document.getElementById('closeReportBtn');
-    if (closeBtn) closeBtn.onclick = function(){ host.classList.add('hidden'); };
-    host.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    if (focusCard) {
-      var card = document.getElementById('marathonCard');
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-  function openReport(useAnswers, focusCard){
-    if (typeof diagnoseCourse !== 'function') return;
-    var rows = useAnswers ? lastRows : [];
-    renderSheet(diagnoseCourse(courseId(), rows), focusCard);
-  }
-
-  var struct = document.getElementById('structureBtn');
-  if (struct) struct.onclick = function(){ openReport(false); };
-  var report = document.getElementById('reportBtn');
-  if (report) report.onclick = function(){ openReport(true); };
-  var pathBtn = document.getElementById('path55Btn');
-  if (pathBtn) pathBtn.onclick = function(){ openReport(true); };
-  var marathonBtn = document.getElementById('marathonCardBtn');
-  if (marathonBtn) marathonBtn.onclick = function(){ openReport(true, true); };
-  var restart = document.getElementById('restartBtn');
-  if (restart){
-    var prev = restart.onclick;
-    restart.onclick = function(){
-      var sheet = document.getElementById('diagnosisSheet');
-      if (sheet) sheet.classList.add('hidden');
-      if (typeof prev === 'function') prev.apply(this, arguments);
-    };
-  }
-
-  function wrap(name, pick){
-    if (typeof window[name] !== 'function') return;
-    var orig = window[name];
-    window[name] = function(){
-      var out = orig.apply(this, arguments);
-      try { lastRows = pick() || []; } catch (e) { lastRows = []; }
-      return out;
-    };
-  }
-  wrap('showResults', function(){ return answers; });
-  wrap('showExamResults', function(){ return examAnswers; });
-})();
-</script>
 </body>
 </html>

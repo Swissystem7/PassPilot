@@ -28,7 +28,7 @@
 - **בלי מספר «סיכוי מעבר».** הנוסחה הישנה הוסרה.
 - **תאריכי תוכנית לפי שעון מקומי.** היסטוריה לפי קורס, כולל מצב מבחן. מעבר קורס לא מחזיר «מילונים» לבוחן הפייתון.
 
-`src/lib/planner.js` מחזיק את פונקציות הדירוג לטסטים. תוכנית הימים בדף מגיעה מבלוק `DEFAULT_HORIZON_DAYS` ב-`index.html`. מפת המבנה ב-`src/lib/examBlueprint.js`.
+ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה.
 
 ## מה זה *לא*
 
