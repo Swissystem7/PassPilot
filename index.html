@@ -30,6 +30,15 @@
     .addon-box .code-input{min-height:88px;margin:8px 0}
     .share-out{min-height:72px;word-break:break-all}
     .bp-status{font-size:.82rem;margin:8px 0 0}
+    .map-row{display:grid;grid-template-columns:1fr 88px 40px;gap:8px;align-items:center;margin:6px 0}
+    .map-row input[type=number],.map-row select{width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink)}
+    .total-ok{color:var(--good)}
+    .total-off{color:var(--bad)}
+    .tonight-card{border:2px solid var(--brand2);border-radius:16px;padding:16px}
+    .status-flash{min-height:1.4em;margin:8px 0 0}
+    .drill-btn{font-size:.82rem}
+    .cohort-table{width:100%;border-collapse:collapse;font-size:.86rem}
+    .cohort-table th,.cohort-table td{border-top:1px solid var(--line);padding:6px 4px;text-align:right}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
     @media print{
       body{background:#fff;color:#111}
@@ -54,7 +63,7 @@
         <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
         <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
       </div>
-      <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל.</p></div>
+      <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל. אם המבחן היום או מחר — אחרי הבוחן תופיע תוכנית ל־90 דקות.</p></div>
       <div id="srsBox" class="addon-box hidden" aria-live="polite">
         <h2 class="label" style="font-size:1rem;margin:0 0 6px">תור חזרה להיום</h2>
         <p class="muted" id="srsHint" style="margin:0 0 8px">נושאים שפספסת ומועד החזרה שלהם הגיע. המרווח גדל אחרי סשן נקי (1→3→7→14 יום). זה לא Anki ולא FSRS.</p>
@@ -63,24 +72,44 @@
       </div>
       <details class="addon-box">
         <summary>קוד אבחון מהאגודה / מהסטודנט</summary>
-        <p class="muted">הדביקו קוד שמתחיל ב־PP1. הקוד מכיל דיוק לפי נושא, תאריך מבחן ומפה אופציונלית — בלי שם, בלי תשובות מלאות, בלי שרת.</p>
+        <p class="muted">הדביקו קוד שמתחיל ב־PP1. הקוד מכיל דיוק לפי נושא, תאריך מבחן ומפה אופציונלית — בלי שם, בלי תשובות מלאות, בלי שרת. אפשר גם לפתוח קישור עם ‎#PP1…</p>
         <label class="label" for="shareIn">קוד אבחון</label>
         <textarea id="shareIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="shareInMsg"></textarea>
         <button id="shareLoadBtn" class="ghost" type="button">טעינת האבחון</button>
         <p id="shareInMsg" class="muted" role="status"></p>
       </details>
       <details class="addon-box">
-        <summary>רכז קורס: הדבקת מבנה מבחן (JSON)</summary>
-        <p class="muted">המפה המובנית היא הנחה או פירוק שקוף. רכז יכול להדביק מפת נושא×נקודות אמיתית. זו לא חתימה של אפקה — זה מה שהודבק בדפדפן הזה.</p>
-        <label class="label" for="bpJson">JSON מבנה</label>
-        <textarea id="bpJson" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="bpMsg" placeholder='{"courseId":"python","title":"פייתון 10016","examLabel":"מועד מותאם","blocks":[{"id":"q1","topic":"recursion","label":"רקורסיה","points":40},{"id":"q2","topic":"strings","label":"מחרוזות","points":30},{"id":"q3","topic":"lists","label":"רשימות","points":30}]}'></textarea>
+        <summary>מדריך מרתון: תדריך כיתה</summary>
+        <p class="muted">הדביקו כמה קודי PP1 מהוואטסאפ של הקבוצה. בלי שמות. מתקבלת מפת חום לחדר — באיזה בלוק הכיתה מאבדת נקודות — כדי לפתוח את המרתון שם.</p>
+        <button id="inviteCopyBtn" class="ghost" type="button">העתקת הודעה לקבוצת הוואטסאפ</button>
+        <p id="inviteMsg" class="muted status-flash" role="status"></p>
+        <label class="label" for="cohortIn">קודי אבחון של הכיתה</label>
+        <textarea id="cohortIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="cohortMsg" placeholder="PP1....abcd&#10;PP1....ef01"></textarea>
+        <button id="cohortBtn" class="ghost" type="button">בניית תדריך הכיתה</button>
+        <p id="cohortMsg" class="muted status-flash" role="status"></p>
+      </details>
+      <details class="addon-box">
+        <summary>רכז קורס: מפת מבנה המבחן</summary>
+        <p class="muted">המפה המובנית היא הנחה או פירוק שקוף. עדכנו נקודות לכל בלוק בטופס — בלי JSON. זו לא חתימה של אפקה, אלא מה שנשמר בדפדפן הזה לקורס הנוכחי.</p>
+        <div id="mapBuilder"></div>
+        <p id="mapTotal" class="bp-status" role="status"></p>
         <div class="diag-actions">
-          <button id="bpApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת המפה</button>
-          <button id="bpExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
+          <button id="mapApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת המפה</button>
+          <button id="mapExportBtn" class="ghost" type="button" style="width:auto;margin:0">ייצוא JSON</button>
           <button id="bpResetBtn" class="restart" type="button" style="margin:0">חזרה למפה המובנית</button>
         </div>
+        <details style="margin-top:12px">
+          <summary>JSON (מתקדם)</summary>
+          <label class="label" for="bpJson">JSON מבנה</label>
+          <textarea id="bpJson" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="bpMsg" placeholder='{"courseId":"python","title":"פייתון 10016","examLabel":"מועד מותאם","blocks":[{"id":"q1","topic":"recursion","label":"רקורסיה","points":40},{"id":"q2","topic":"strings","label":"מחרוזות","points":30},{"id":"q3","topic":"lists","label":"רשימות","points":30}]}'></textarea>
+          <div class="diag-actions">
+            <button id="bpApplyBtn" class="ghost" type="button" style="width:auto;margin:0">החלת JSON</button>
+            <button id="bpExampleBtn" class="ghost" type="button" style="width:auto;margin:0">מילוי דוגמה</button>
+          </div>
+        </details>
         <p id="bpMsg" class="muted bp-status" role="status"></p>
       </details>
+      <p id="startStatus" class="muted status-flash" role="status" tabindex="-1"></p>
       <button id="startBtn" class="primary" type="button">מתחילים בבוחן</button>
       <button id="examBtn" class="exam-button" type="button">מצב מבחן אפקה 10016</button>
       <button id="structureBtn" class="ghost" type="button">מפת מבנה המבחן</button>
@@ -99,11 +128,19 @@
       <label class="label" for="codeAnswer">הפתרון שלכם</label>
       <textarea id="codeAnswer" class="code-input" spellcheck="false" placeholder="# כתבו כאן את הפתרון שלכם" aria-describedby="examPrompt"></textarea>
       <div id="examSolution" class="feedback hidden" aria-live="polite"><strong>פתרון ייחוס</strong><pre id="referenceCode" class="solution"></pre><p id="solutionExplanation"></p></div>
+      <p id="examStatus" class="muted status-flash" role="status"></p>
       <div class="exam-actions"><button id="revealBtn" class="next" type="button">הצגת פתרון</button><button id="examCorrect" class="next hidden" type="button">פתרתי נכון</button><button id="examWrong" class="restart hidden" type="button">צריך חיזוק</button></div>
     </section>
     <section id="results" class="card hidden" aria-labelledby="resultTitle">
       <div class="center"><div id="scoreRing" class="score-ring" aria-hidden="true"><b id="scoreText"></b></div><h2 id="resultTitle" tabindex="-1"></h2><p id="resultCopy" class="lead" style="margin-inline:auto"></p></div>
       <div class="insights">
+        <article class="insight wide tonight-card no-print hidden" id="tonightBox">
+          <h3 id="tonightHeading">הלילה — 90 דקות ואז עוצרים</h3>
+          <p class="muted" id="tonightCaveat"></p>
+          <ul class="plan" id="tonightActions"></ul>
+          <p id="tonightStop"></p>
+          <p id="tonightMsg" class="muted status-flash" role="status"></p>
+        </article>
         <article class="insight"><h3>מגמה בבוחן</h3><p id="trend" class="muted"></p></article>
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
@@ -112,7 +149,10 @@
           <p class="muted">העתיקו והעבירו למדריך או לאגודה. בלי שם ובלי שרת. מי שמדביק את הקוד רואה את אותה מפת אובדן נקודות.</p>
           <label class="label" for="shareOut">קוד לשיתוף</label>
           <textarea id="shareOut" class="code-input share-out" readonly dir="ltr" spellcheck="false"></textarea>
-          <button id="shareCopyBtn" class="ghost" type="button">העתקת הקוד</button>
+          <div class="diag-actions">
+            <button id="shareCopyBtn" class="ghost" type="button" style="width:auto;margin:0">העתקת הקוד</button>
+            <button id="shareLinkBtn" class="ghost" type="button" style="width:auto;margin:0">העתקת קישור</button>
+          </div>
           <p id="shareOutMsg" class="muted" role="status"></p>
         </article>
       </div>
@@ -129,10 +169,12 @@
   <script src="src/lib/history.js"></script>
   <script src="src/lib/shareCode.js"></script>
   <script src="src/lib/srsQueue.js"></script>
+  <script src="src/lib/tonight.js"></script>
+  <script src="src/lib/cohort.js"></script>
+  <script src="src/lib/blueprintStore.js"></script>
   <script>
 const $ = function (id) { return document.getElementById(id); };
 
-const BP_STORE = "passpilot.blueprint.v1";
 const EXAMPLE_BLUEPRINT = {
   courseId: "python",
   title: "פייתון 10016 · מועד מותאם",
@@ -152,7 +194,8 @@ const state = {
   index: 0,
   answers: [],
   startedAt: 0,
-  overlay: null,
+  overlays: {},
+  mapDrafts: {},
   imported: false
 };
 
@@ -179,7 +222,11 @@ function go(screen) {
     var sheet = $("diagnosisSheet");
     if (sheet) sheet.classList.add("hidden");
   }
-  if (screen === "start") renderSrsBox();
+  if (screen === "start") {
+    renderSrsBox();
+    renderMapBuilder();
+    renderExamHint();
+  }
 }
 
 function setCourse(id) {
@@ -198,7 +245,9 @@ function setCourse(id) {
   });
   renderTopics();
   renderSrsBox();
+  renderMapBuilder();
   renderBlueprintStatus();
+  renderExamHint();
 }
 
 function renderTopics() {
@@ -229,9 +278,10 @@ function seedNow() {
 
 function startQuiz() {
   var picked = [].slice.call(document.querySelectorAll("#topics input:checked")).map(function (x) { return x.value; });
-  if (!picked.length) { alert("בחר לפחות נושא אחד"); return; }
+  if (!picked.length) { setStatus("startStatus", "בחרו לפחות נושא אחד"); return; }
   var items = pickQuiz(course().questions, picked, $("difficulty").value, +$("count").value, seedNow());
-  if (!items.length) { alert("אין שאלות בשילוב שבחרת"); return; }
+  if (!items.length) { setStatus("startStatus", "אין שאלות בשילוב שבחרת"); return; }
+  setStatus("startStatus", "");
   state.kind = "quiz";
   state.items = items;
   state.index = 0;
@@ -345,9 +395,10 @@ function revealExam() {
 
 function gradeExam(correct) {
   if (correct && !$("codeAnswer").value.trim()) {
-    alert("כדי לסמן «פתרתי נכון» צריך לכתוב פתרון בתיבה");
+    setStatus("examStatus", "כדי לסמן «פתרתי נכון» צריך לכתוב פתרון בתיבה");
     return;
   }
+  setStatus("examStatus", "");
   state.answers.push({
     topic: state.items[state.index].topic,
     correct: correct,
@@ -399,11 +450,19 @@ function renderResults(rows, opts) {
   $("trend").textContent = options.imported ? "יובא מקוד אבחון — אין מגמת זמן בדפדפן הזה." : trendText(rows);
   $("weakTopics").innerHTML = weak.length
     ? weak.map(function (r) {
-      return "<li><span>" + (map[r.topic] || r.topic) + "</span><b>" + Math.round(r.errorRate * 100) + "% טעויות</b></li>";
+      return "<li><span>" + (map[r.topic] || r.topic) + "</span><span><b>" + Math.round(r.errorRate * 100) +
+        '% טעויות</b> <button type="button" class="ghost drill-btn" data-topic="' + esc(r.topic) +
+        '" style="width:auto;margin:0;padding:4px 8px">תרגול</button></span></li>';
     }).join("")
     : "<li><span>לא זוהתה חולשה בולטת</span><b>כל הכבוד</b></li>";
-  var focus = focusFromRanked(ranked, map);
+  $("weakTopics").querySelectorAll(".drill-btn").forEach(function (btn) {
+    btn.onclick = function () { startTopicDrill(btn.getAttribute("data-topic")); };
+  });
+  var diag = currentDiagnosis(rows);
+  var focus = focusFromDiagnosis(diag);
+  if (!focus.length) focus = focusFromRanked(ranked, map);
   renderStudyPlan(planFromExamDate(readExamDate(), focus));
+  renderTonightCard(rows);
   if (options.save) renderHistory(saveHistory(rows, state.kind));
   else renderHistory({ list: readHistory() });
   fillShareCode(rows);
@@ -505,11 +564,39 @@ function sourceHe(src) {
   return "הנחה שווה";
 }
 
-function activeBlueprint() {
-  if (state.overlay && (!state.overlay.courseId || state.overlay.courseId === state.courseId)) {
-    return state.overlay;
+function setStatus(id, text) {
+  var el = $(id);
+  if (!el) return;
+  el.textContent = text || "";
+}
+
+function copyText(value, msgEl, okText) {
+  var done = function () { if (msgEl) msgEl.textContent = okText; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(value).then(done).catch(function () {
+      fallbackCopy(value);
+      done();
+    });
+  } else {
+    fallbackCopy(value);
+    done();
   }
-  return null;
+}
+
+function fallbackCopy(value) {
+  var ta = document.createElement("textarea");
+  ta.value = value;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.insetInlineStart = "-9999px";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+}
+
+function activeBlueprint() {
+  return getOverlay(state.overlays, state.courseId);
 }
 
 function currentDiagnosis(rows) {
@@ -543,7 +630,7 @@ function renderSrsBox() {
 
 function startSrsQuiz() {
   var due = dueTopics(readSrs(), Date.now(), state.courseId);
-  if (!due.length) { alert("אין נושאים בתוקף היום"); return; }
+  if (!due.length) { setStatus("startStatus", "אין נושאים בתוקף היום"); return; }
   document.querySelectorAll("#topics input").forEach(function (box) {
     box.checked = due.indexOf(box.value) > -1;
   });
@@ -570,20 +657,7 @@ function copyShareCode() {
   var out = $("shareOut");
   var msg = $("shareOutMsg");
   if (!out || !out.value) return;
-  var done = function () {
-    if (msg) msg.textContent = "הועתק. אפשר לשלוח בוואטסאפ למדריך.";
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(out.value).then(done).catch(function () {
-      out.select();
-      document.execCommand("copy");
-      done();
-    });
-  } else {
-    out.select();
-    document.execCommand("copy");
-    done();
-  }
+  copyText(out.value, msg, "הועתק. אפשר לשלוח בוואטסאפ למדריך.");
 }
 
 function loadShareCode() {
@@ -598,8 +672,9 @@ function loadShareCode() {
   if (p.blueprint) {
     var expanded = expandBlueprint(p.blueprint, p.courseId);
     if (expanded) {
-      state.overlay = expanded;
-      persistOverlay(expanded);
+      state.overlays = putOverlay(state.overlays, p.courseId, expanded);
+      state.mapDrafts[p.courseId] = builtinAsEdits(expanded);
+      persistOverlays();
     }
   }
   setCourse(p.courseId);
@@ -611,24 +686,13 @@ function loadShareCode() {
   renderResults(state.answers, { save: false, imported: true });
 }
 
-function persistOverlay(bp) {
-  try {
-    if (!bp) localStorage.removeItem(BP_STORE);
-    else localStorage.setItem(BP_STORE, JSON.stringify(bp));
-  } catch (e) {}
+function persistOverlays() {
+  try { saveOverlays(localStorage, state.overlays); } catch (e) {}
 }
 
 function loadStoredOverlay() {
-  try {
-    var raw = localStorage.getItem(BP_STORE);
-    if (!raw) return;
-    var parsed = parseCoordinatorBlueprint(raw);
-    if (parsed.ok) state.overlay = parsed.blueprint;
-    else {
-      var obj = JSON.parse(raw);
-      if (obj && obj.blocks) state.overlay = obj;
-    }
-  } catch (e) {}
+  try { state.overlays = loadOverlays(localStorage); }
+  catch (e) { state.overlays = {}; }
 }
 
 function renderBlueprintStatus() {
@@ -650,11 +714,13 @@ function applyBlueprintJson() {
     if (msg) msg.textContent = parsed.errors.join(" · ");
     return;
   }
-  state.overlay = parsed.blueprint;
-  persistOverlay(parsed.blueprint);
+  state.overlays = putOverlay(state.overlays, parsed.blueprint.courseId, parsed.blueprint);
+  persistOverlays();
+  state.mapDrafts[parsed.blueprint.courseId] = builtinAsEdits(parsed.blueprint);
   if (parsed.blueprint.courseId && parsed.blueprint.courseId !== state.courseId) {
     setCourse(parsed.blueprint.courseId);
   } else {
+    renderMapBuilder();
     renderBlueprintStatus();
   }
   if (msg) {
@@ -664,15 +730,243 @@ function applyBlueprintJson() {
 }
 
 function resetBlueprint() {
-  state.overlay = null;
-  persistOverlay(null);
+  state.overlays = dropOverlay(state.overlays, state.courseId);
+  persistOverlays();
+  delete state.mapDrafts[state.courseId];
   if ($("bpJson")) $("bpJson").value = "";
+  renderMapBuilder();
   renderBlueprintStatus();
 }
 
 function fillExampleBlueprint() {
   if ($("bpJson")) $("bpJson").value = JSON.stringify(EXAMPLE_BLUEPRINT, null, 2);
-  if ($("bpMsg")) $("bpMsg").textContent = "זו דוגמה בלבד — לחצו «החלת המפה» כדי להפעיל אותה.";
+  if ($("bpMsg")) $("bpMsg").textContent = "זו דוגמה בלבד — לחצו «החלת JSON» כדי להפעיל אותה.";
+}
+
+function renderExamHint() {
+  var hint = $("examDateHint");
+  if (!hint) return;
+  var parsed = parseExamDate(readExamDate());
+  if (parsed.status === "ok" && parsed.daysToExam === 0) {
+    hint.textContent = "המבחן היום. אחרי הבוחן תופיע תוכנית ל־90 דקות — ואז עוצרים.";
+  } else if (parsed.status === "ok" && parsed.daysToExam === 1) {
+    hint.textContent = "המבחן מחר. הלילה מיועד לסגירת הבלוקים היקרים, לא לכיסוי חומר חדש.";
+  } else if (parsed.status === "past") {
+    hint.textContent = "התאריך כבר עבר. תיבנה תוכנית אופק ברירת מחדל, עם אזהרה.";
+  } else {
+    hint.textContent = "התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל. אם המבחן היום או מחר — אחרי הבוחן תופיע תוכנית ל־90 דקות.";
+  }
+}
+
+function draftRows() {
+  if (state.mapDrafts[state.courseId] && state.mapDrafts[state.courseId].length) {
+    return state.mapDrafts[state.courseId];
+  }
+  var bp = activeBlueprint() || BLUEPRINTS[state.courseId] || BLUEPRINTS.python;
+  return builtinAsEdits(bp);
+}
+
+function renderMapBuilder() {
+  var host = $("mapBuilder");
+  if (!host) return;
+  var rows = draftRows();
+  state.mapDrafts[state.courseId] = rows;
+  var used = {};
+  rows.forEach(function (r) { used[r.topic] = true; });
+  var names = course().quizTopics || {};
+  var addable = Object.keys(names).filter(function (k) { return !used[k]; });
+  host.innerHTML = rows.map(function (r, i) {
+    return '<div class="map-row">' +
+      '<span id="mapLbl' + i + '">' + esc(r.label || r.topic) + "</span>" +
+      '<input id="mapPts' + i + '" type="number" min="1" step="1" value="' + (Number(r.points) || 1) +
+        '" data-i="' + i + '" aria-labelledby="mapLbl' + i + '">' +
+      '<button type="button" class="ghost map-del" data-i="' + i + '" aria-label="הסרת ' +
+        esc(r.label || r.topic) + '" style="width:auto;margin:0;padding:8px">×</button></div>';
+  }).join("") + (addable.length
+    ? '<div class="map-row"><label class="sr-only" for="mapAdd">הוספת נושא</label>' +
+      '<select id="mapAdd">' + addable.map(function (k) {
+        return '<option value="' + k + '">' + esc(names[k]) + "</option>";
+      }).join("") + "</select>" +
+      '<button type="button" id="mapAddBtn" class="ghost" style="width:auto;margin:0;grid-column:2/-1">הוספה</button></div>'
+    : "");
+  host.querySelectorAll("input[type=number]").forEach(function (inp) {
+    inp.addEventListener("input", function () {
+      var i = +inp.getAttribute("data-i");
+      state.mapDrafts[state.courseId][i].points = Number(inp.value);
+      renderMapTotal();
+    });
+  });
+  host.querySelectorAll(".map-del").forEach(function (btn) {
+    btn.onclick = function () {
+      var i = +btn.getAttribute("data-i");
+      state.mapDrafts[state.courseId].splice(i, 1);
+      renderMapBuilder();
+    };
+  });
+  if ($("mapAddBtn")) $("mapAddBtn").onclick = function () {
+    var sel = $("mapAdd");
+    if (!sel || !sel.value) return;
+    state.mapDrafts[state.courseId].push({
+      id: sel.value,
+      topic: sel.value,
+      label: names[sel.value] || sel.value,
+      points: 10,
+      source: "coordinator"
+    });
+    renderMapBuilder();
+  };
+  renderMapTotal();
+}
+
+function renderMapTotal() {
+  var el = $("mapTotal");
+  if (!el) return;
+  var total = pointsTotal(state.mapDrafts[state.courseId] || []);
+  el.className = "bp-status " + (Math.abs(total - 100) < 0.05 ? "total-ok" : "total-off");
+  el.textContent = "סכום: " + total + " נק׳" +
+    (Math.abs(total - 100) < 0.05 ? " · 100 בדיוק." : " · לא 100 — המפה תישמר כמו שהיא, עם אזהרה.");
+}
+
+function applyMapBuilder() {
+  var rows = state.mapDrafts[state.courseId] || [];
+  var parsed = editsToBlueprint(state.courseId, course().title + " · מפת רכז", "מפה שנבנתה בטופס הרכז", rows);
+  var msg = $("bpMsg");
+  if (!parsed.ok) {
+    if (msg) msg.textContent = parsed.errors.join(" · ");
+    return;
+  }
+  state.overlays = putOverlay(state.overlays, state.courseId, parsed.blueprint);
+  persistOverlays();
+  renderBlueprintStatus();
+  if (msg) {
+    msg.textContent = (parsed.warnings.length ? parsed.warnings.join(" · ") + " · " : "") +
+      "המפה הוחלה על " + parsed.blueprint.title + ".";
+  }
+}
+
+function exportMapJson() {
+  var rows = state.mapDrafts[state.courseId] || draftRows();
+  var parsed = editsToBlueprint(state.courseId, course().title + " · מפת רכז", "מפה שנבנתה בטופס הרכז", rows);
+  if ($("bpJson")) $("bpJson").value = JSON.stringify(parsed.ok ? parsed.blueprint : { courseId: state.courseId, blocks: rows }, null, 2);
+  if ($("bpMsg")) $("bpMsg").textContent = "JSON עודכן למטה. אפשר להעתיק לרכז אחר.";
+}
+
+function startTopicDrill(topic) {
+  var items = pickQuiz(course().questions, [topic], "", 5, seedNow());
+  var msg = $("tonightMsg") || $("startStatus");
+  if (!items.length) {
+    if (msg) msg.textContent = "אין שאלות רב-ברירה לנושא «" + (labels()[topic] || topic) +
+      "» בדמו. לנושא מילונים בפייתון — מצב מבחן.";
+    return;
+  }
+  state.kind = "quiz";
+  state.items = items;
+  state.index = 0;
+  state.answers = [];
+  go("quiz");
+  renderQuizItem();
+}
+
+function renderTonightCard(rows) {
+  var box = $("tonightBox");
+  if (!box) return;
+  var parsed = parseExamDate(readExamDate());
+  var plan = planTonight(currentDiagnosis(rows).blocks, {
+    hours: typeof TONIGHT_HOURS === "number" ? TONIGHT_HOURS : 1.5,
+    daysToExam: parsed.status === "ok" ? parsed.daysToExam : null
+  });
+  box.classList.remove("hidden");
+  $("tonightHeading").textContent = plan.heading;
+  $("tonightCaveat").textContent = (plan.warnings.length ? plan.warnings.join(" ") + " " : "") + plan.caveat;
+  $("tonightActions").innerHTML = plan.actions.map(function (a) {
+    return "<li><span>" + esc(a.label) + " · " + a.minutes + " דק׳" +
+      (a.sample === "thin" ? " · מדגם דק" : "") +
+      (a.partial ? " · חלקי" : "") +
+      '</span><button type="button" class="ghost drill-btn" data-topic="' + esc(a.topic) +
+      '" style="width:auto;margin:0;padding:6px 10px">תרגול עכשיו</button></li>' +
+      '<li class="muted" style="border:0;padding:0 0 8px">' + esc(a.why) + "</li>";
+  }).join("");
+  $("tonightStop").innerHTML = "<strong>" + esc(plan.stop) + "</strong>";
+  if ($("tonightMsg")) $("tonightMsg").textContent = "";
+  box.querySelectorAll(".drill-btn").forEach(function (btn) {
+    btn.onclick = function () { startTopicDrill(btn.getAttribute("data-topic")); };
+  });
+}
+
+function copyInvite() {
+  copyText(marathonInvite(course().title), $("inviteMsg"), "הועתק. הדביקו בקבוצת הוואטסאפ של המרתון.");
+}
+
+function copyShareLink() {
+  var out = $("shareOut");
+  var msg = $("shareOutMsg");
+  if (!out || !out.value) return;
+  copyText(shareLink(out.value), msg, "הועתק קישור. מי שפותח אותו רואה את אותו אבחון.");
+}
+
+function bootFromHash() {
+  var raw = "";
+  try { raw = decodeURIComponent(String(location.hash || "").replace(/^#/, "")); }
+  catch (e) { raw = String(location.hash || "").replace(/^#/, ""); }
+  if (raw.indexOf("PP1") === -1) return;
+  if ($("shareIn")) $("shareIn").value = raw;
+  loadShareCode();
+}
+
+function openCohortSheet() {
+  var raw = $("cohortIn") ? $("cohortIn").value : "";
+  var titles = {};
+  Object.keys(COURSES).forEach(function (id) { titles[id] = COURSES[id].title; });
+  var cohort = buildCohort(raw, { overlays: state.overlays, titles: titles });
+  var msg = $("cohortMsg");
+  if (!cohort.ok) {
+    if (msg) msg.textContent = cohort.error;
+    return;
+  }
+  if (msg) {
+    msg.textContent = cohort.nStudents + " קודים תקינים" +
+      (cohort.errors.length ? " · " + cohort.errors.length + " נדחו" : "") + ".";
+  }
+  var when = new Date();
+  var whenStr = String(when.getDate()).padStart(2, "0") + "." + String(when.getMonth() + 1).padStart(2, "0") + "." + when.getFullYear();
+  var coursesHtml = cohort.courses.map(function (c) {
+    var table = c.blocks.map(function (b) {
+      return "<tr><td>" + esc(b.label) + "</td><td>" + b.points + "</td><td>" + b.nMissed + "/" + c.n +
+        "</td><td>" + (b.avgAccuracy == null ? "—" : b.avgAccuracy + "%") +
+        "</td><td>" + b.sumLost + "</td><td>" + (b.nThin ? b.nThin + " מדגם דק" : (b.nUntested ? b.nUntested + " לא נבחנו" : "—")) +
+        "</td></tr>";
+    }).join("");
+    var openers = c.openers.map(function (b, i) {
+      return "<li><span>" + (i + 1) + ". " + esc(b.label) + "</span><b>" + b.nMissed + " פספסו · " + b.points + " נק׳</b></li>";
+    }).join("") || "<li>אין בלוק עם אובדן בחדר.</li>";
+    return "<h3 style=\"margin-top:22px\">" + esc(c.title) + " · " + c.n + " קודים</h3>" +
+      '<p class="caveat">' + esc(c.briefing) + "</p>" +
+      "<h4>איפה הכיתה מאבדת נקודות</h4><ul class=\"weak-list\">" + openers + "</ul>" +
+      '<table class="cohort-table"><thead><tr><th>בלוק</th><th>נק׳</th><th>פספסו</th><th>דיוק ממוצע</th><th>אובדן</th><th>הערה</th></tr></thead><tbody>' +
+      table + "</tbody></table>" +
+      '<p class="muted" style="margin:8px 0 0">מקור המפה: ' +
+        (c.mapSource === "instructor" ? "המפה שהדביק הרכז בחדר הזה" : c.mapSource === "codes" ? "מפה שהגיעה עם הקודים" : "המפה המובנית") +
+        (c.mixedMaps ? " · בקודים היו מפות שונות" : "") + ".</p>";
+  }).join("");
+  var host = $("diagnosisSheet");
+  host.innerHTML =
+    '<p class="muted no-print" style="margin:0 0 8px">תדריך כיתה להדפסה · בלי שמות</p>' +
+    "<h2 id=\"cohortTitle\" tabindex=\"-1\" style=\"margin-bottom:6px\">תדריך כיתה למרתון</h2>" +
+    '<p class="muted" style="margin:0 0 14px">הופק ' + whenStr + " · " + cohort.nStudents + " קודים תקינים" +
+      (cohort.mixedCourses ? " · יותר מקורס אחד בהדבקה" : "") + "</p>" +
+    '<div class="caveat">' + esc(cohort.caveat) + (cohort.errors.length ? " · " + cohort.errors.join(" · ") : "") + "</div>" +
+    coursesHtml +
+    '<div class="diag-actions no-print">' +
+      '<button type="button" class="primary" id="printReportBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
+      '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
+    "</div>" +
+    '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. בלי שרת ובלי שמות.</p>';
+  host.classList.remove("hidden");
+  $("printReportBtn").onclick = function () { window.print(); };
+  $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
+  var title = $("cohortTitle");
+  if (title) title.focus();
+  host.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function openReport(useAnswers, focusCard) {
@@ -687,8 +981,10 @@ function openReport(useAnswers, focusCard) {
     return { name: b.label, estimatedHoursTotal: i === 0 ? 2 : 1.5 };
   }));
   var table = diag.blocks.map(function (b) {
+    var sampleHe = b.sample === "thin" ? "מדגם דק" : b.sample === "solid" ? "יציב" : b.sample === "ok" ? "סביר" : "לא נבחן";
     return "<tr><td>" + esc(b.label) + "</td><td>" + b.points + "</td><td>" + esc(sourceHe(b.source)) +
-      "</td><td>" + b.attempts + "</td><td>" + (b.accuracy == null ? "—" : Math.round(b.accuracy * 100) + "%") +
+      "</td><td>" + b.attempts + "</td><td>" + esc(sampleHe) +
+      "</td><td>" + (b.accuracy == null ? "—" : Math.round(b.accuracy * 100) + "%") +
       "</td><td>" + (b.expected == null ? "לא נבחן" : b.expected) +
       "</td><td>" + (b.lost == null ? "לא נבחן" : b.lost) + "</td></tr>";
   }).join("");
@@ -723,6 +1019,14 @@ function openReport(useAnswers, focusCard) {
   var qs = marathonPrompts(diag.costliest, diag.blocks).map(function (q, i) {
     return "<li><span>" + (i + 1) + ". " + esc(q) + "</span></li>";
   }).join("");
+  var examHorizon = parseExamDate(readExamDate());
+  var tonight = planTonight(diag.blocks, {
+    hours: typeof TONIGHT_HOURS === "number" ? TONIGHT_HOURS : 1.5,
+    daysToExam: examHorizon.status === "ok" ? examHorizon.daysToExam : null
+  });
+  var tonightRows = tonight.actions.map(function (a) {
+    return "<li><span>" + esc(a.label) + " · " + a.minutes + " דק׳</span><b>" + esc(a.why) + "</b></li>";
+  }).join("");
   var host = $("diagnosisSheet");
   host.innerHTML =
     '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
@@ -740,15 +1044,21 @@ function openReport(useAnswers, focusCard) {
       '<p class="muted" style="margin:10px 0 0;font-size:.8rem">הסטודנט מביא את הדף. האגודה מוכרת את המרתון. PassPilot הוא התוספת, לא המתחרה.</p>' +
     "</div>" +
     "<h3>מפת מבנה: נושא × נקודות</h3>" +
-    '<table class="diag-table"><thead><tr><th>בלוק</th><th>נק׳</th><th>מקור המשקל</th><th>ניסיונות</th><th>דיוק</th><th>צפוי</th><th>אובדן</th></tr></thead><tbody>' +
+    '<table class="diag-table"><thead><tr><th>בלוק</th><th>נק׳</th><th>מקור המשקל</th><th>ניסיונות</th><th>מדגם</th><th>דיוק</th><th>צפוי</th><th>אובדן</th></tr></thead><tbody>' +
     table + "</tbody></table>" +
-    '<p class="muted" style="margin:10px 0 0">' + sampleNote + "</p>" +
+    '<p class="muted" style="margin:10px 0 0">' + sampleNote +
+      (diag.thinCount ? " · " + diag.thinCount + " בלוקים עם מדגם דק (ניסיון אחד)." : "") + "</p>" +
     "<h3 style=\"margin-top:22px\">איפה הכי יקר לטעות</h3><ul class=\"weak-list\">" + costly + "</ul>" +
     "<h3 style=\"margin-top:22px\">מסלול 55 — אילו בלוקים לסגור במאמץ הנמוך</h3>" +
     '<p class="muted">אלגוריתם חמדן: בכל צעד לוקחים את הבלוק עם הכי הרבה נקודות לשעת מאמץ (gain/effort). זה לא תיק אופטימלי וזה לא תחזית ציון. ציון עובר באפקה הוא 60; 55 הוא רצפת ביניים שמבקשים בפיצ׳ר.</p>' +
     '<ul class="plan">' + steps55 + "</ul>" +
     "<p><strong>" + esc(end55) + "</strong></p>" +
     '<p class="muted">' + esc(end60) + "</p>" +
+    "<h3 style=\"margin-top:22px\">" + esc(tonight.heading) + "</h3>" +
+    '<p class="muted">' + esc(tonight.caveat) + "</p>" +
+    (tonight.warnings.length ? '<p class="muted">' + tonight.warnings.map(esc).join("<br>") + "</p>" : "") +
+    '<ul class="plan">' + tonightRows + "</ul>" +
+    "<p><strong>" + esc(tonight.stop) + "</strong></p>" +
     "<h3 style=\"margin-top:22px\">תוכנית ימים ממוקדת</h3>" + warn + '<ul class="plan">' + planHtml + "</ul>" +
     '<div class="diag-actions no-print">' +
       '<button type="button" class="primary" id="printReportBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
@@ -774,11 +1084,17 @@ function bind() {
   $("path55Btn").onclick = function () { openReport(true); };
   $("marathonCardBtn").onclick = function () { openReport(true, true); };
   if ($("shareCopyBtn")) $("shareCopyBtn").onclick = copyShareCode;
+  if ($("shareLinkBtn")) $("shareLinkBtn").onclick = copyShareLink;
   if ($("shareLoadBtn")) $("shareLoadBtn").onclick = loadShareCode;
   if ($("bpApplyBtn")) $("bpApplyBtn").onclick = applyBlueprintJson;
   if ($("bpResetBtn")) $("bpResetBtn").onclick = resetBlueprint;
   if ($("bpExampleBtn")) $("bpExampleBtn").onclick = fillExampleBlueprint;
+  if ($("mapApplyBtn")) $("mapApplyBtn").onclick = applyMapBuilder;
+  if ($("mapExportBtn")) $("mapExportBtn").onclick = exportMapJson;
   if ($("srsStartBtn")) $("srsStartBtn").onclick = startSrsQuiz;
+  if ($("inviteCopyBtn")) $("inviteCopyBtn").onclick = copyInvite;
+  if ($("cohortBtn")) $("cohortBtn").onclick = openCohortSheet;
+  if ($("examDate")) $("examDate").addEventListener("change", renderExamHint);
   document.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") {
       var sheet = $("diagnosisSheet");
@@ -802,7 +1118,10 @@ renderCourseButtons();
 setCourse("python");
 bind();
 renderSrsBox();
+renderMapBuilder();
 renderBlueprintStatus();
+renderExamHint();
+bootFromHash();
 
   </script>
 </body>
