@@ -55,6 +55,13 @@ test("a 60-day horizon is cut to 14 days and reported", () => {
   assert.ok(long.warnings.some((w) => w.includes("14")));
 });
 
+test("an empty slot list warns in Hebrew, not English", () => {
+  const r = generateInitialStudyPlan(day(10), topics, []);
+  assert.equal(r.plan.length, 0);
+  assert.ok(r.warnings.some((w) => /עברית|משבצות|ריקה/.test(w) || /[\u0590-\u05FF]/.test(w)));
+  assert.equal(r.warnings.some((w) => /No available/.test(w)), false);
+});
+
 test("exam today yields a single local-date session", () => {
   const today = build(day(0));
   assert.equal(today.daysToExam, 0);

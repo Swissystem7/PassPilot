@@ -70,13 +70,18 @@
     return m ? m[0] : "";
   }
 
+  function normalizeKind(k) {
+    if (k === "exam" || k === "marathon") return k;
+    return "quiz";
+  }
+
   function encodeDiagnosis(input) {
     const src = input || {};
     const payload = {
       v: 1,
       c: src.courseId || src.c || "python",
       d: src.examDate || src.d || "",
-      k: src.kind || src.k || "quiz",
+      k: normalizeKind(src.kind || src.k),
       t: Array.isArray(src.t) ? src.t : rowsToTriples(src.rows || src.answers || []),
     };
     if (src.b) payload.b = src.b;
@@ -118,7 +123,7 @@
       v: 1,
       courseId: data.c.trim(),
       examDate: typeof data.d === "string" ? data.d : "",
-      kind: data.k === "exam" ? "exam" : "quiz",
+      kind: normalizeKind(data.k),
       triples: Array.isArray(data.t) ? data.t : [],
       rows: triplesToRows(data.t),
       blueprint: data.b || null,
@@ -128,6 +133,7 @@
 
   return {
     PREFIX: PREFIX,
+    normalizeKind: normalizeKind,
     rowsToTriples: rowsToTriples,
     triplesToRows: triplesToRows,
     checksum4: checksum4,

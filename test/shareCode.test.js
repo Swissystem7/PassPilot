@@ -65,6 +65,22 @@ test("empty or garbage paste does not throw and does not invent a course", () =>
   assert.equal(decodeDiagnosis(null).ok, false);
 });
 
+test("a marathon session stays a marathon after a WhatsApp round-trip", () => {
+  const code = encodeDiagnosis({
+    courseId: "python",
+    kind: "marathon",
+    rows: [{ topic: "recursion", correct: false }],
+  });
+  const decoded = decodeDiagnosis(code);
+  assert.equal(decoded.ok, true);
+  assert.equal(decoded.payload.kind, "marathon");
+});
+
+test("unknown kinds collapse to quiz instead of inventing a session type", () => {
+  const code = encodeDiagnosis({ courseId: "arch", kind: "imported", rows: [] });
+  assert.equal(decodeDiagnosis(code).payload.kind, "quiz");
+});
+
 test("custom blueprint travels with the code so the union sees the same map", () => {
   const code = encodeDiagnosis({
     courseId: "python",

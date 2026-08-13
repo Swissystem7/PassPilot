@@ -70,7 +70,7 @@
     const usable = incoming.slice(0, MAX_HORIZON_DAYS);
     const plan = [];
     if (!list.length || !usable.length) {
-      warnings.push("No available study slots");
+      warnings.push("אין משבצות פנויות בלוח — נבנתה תוכנית ריקה");
       return { plan: plan, warnings: warnings, examStatus: examStatus, daysToExam: daysToExam };
     }
     const remaining = new Map(list.map(function (t) { return [t.name, Number(t.estimatedHoursTotal) || 0]; }));

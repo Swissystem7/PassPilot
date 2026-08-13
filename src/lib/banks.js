@@ -289,7 +289,7 @@
     python: {
       id: "python",
       title: "פייתון 10016",
-      note: "",
+      note: "בלוקי המועד (כתיבת קוד): רקורסיה, מחרוזות, רשימות, מילונים. הבוחן האמריקאי בודק גם לולאות, פונקציות ותנאים — בלי מילונים.",
       quizTopics: PY_QUIZ_NAMES,
       labelTopics: PY_EXAM_NAMES,
       questions: PYTHON_MCQ,
@@ -300,7 +300,7 @@
     arch: {
       id: "arch",
       title: "ארגון המחשב 10145",
-      note: "מבחן 18.8, מועד יחיד. 55-60% מהמבחן הוא datapath, pipeline ומטמון — שאלה 11 לבדה 44 נקודות, ולכן רוב המאגר שם.",
+      note: "מועד יחיד 18.8.2026. 55–60% מהמבחן הוא datapath, pipeline ומטמון — שאלה 11 לבדה 44 נקודות, ולכן רוב המאגר שם.",
       quizTopics: ARCH_NAMES,
       labelTopics: ARCH_NAMES,
       questions: ARCH_MCQ,
@@ -311,7 +311,7 @@
     hedva1: {
       id: "hedva1",
       title: "חדו״א 1 · 90901",
-      note: "מועד ב' 5.8. גבולות ורציפות, כללי גזירה, חקירת פונקציה ואינטגרלים — המהלכים המכניים שנושאים את רוב הנקודות, לא הוכחות.",
+      note: "גבולות ורציפות, כללי גזירה, חקירת פונקציה ואינטגרלים — המהלכים המכניים שנושאים נקודות, לא הוכחות. תאריך המועד לפי מערכת אפקה, לא כאן.",
       quizTopics: H1_NAMES,
       labelTopics: H1_NAMES,
       questions: HEDVA_MCQ.filter(function (q) { return Object.prototype.hasOwnProperty.call(H1_NAMES, q.topic); }),
@@ -322,7 +322,7 @@
     hedva2: {
       id: "hedva2",
       title: "חדו״א 2 · 90902",
-      note: "מועד ב' 5.8. אינטגרלים לא אמיתיים, טורים והתכנסות, פונקציות רב-משתניות ומספרים מרוכבים.",
+      note: "אינטגרלים לא אמיתיים, טורים והתכנסות, פונקציות רב-משתניות ומספרים מרוכבים. תאריך המועד לפי מערכת אפקה, לא כאן.",
       quizTopics: H2_NAMES,
       labelTopics: H2_NAMES,
       questions: HEDVA_MCQ.filter(function (q) { return Object.prototype.hasOwnProperty.call(H2_NAMES, q.topic); }),

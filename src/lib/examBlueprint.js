@@ -26,7 +26,7 @@
     arch: {
       courseId: "arch",
       title: "ארגון המחשב 10145",
-      examLabel: "מועד יחיד · מבחן 18.8",
+      examLabel: "מועד יחיד · מבחן 18.8.2026",
       totalPoints: 100,
       passOfficial: AFEKA_PASS,
       pointMapNote:
