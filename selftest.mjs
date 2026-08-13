@@ -80,6 +80,8 @@ const honestyFiles = [
   ["src/lib/marathon.js", readFileSync(new URL("./src/lib/marathon.js", import.meta.url), "utf8")],
   ["src/lib/coursePack.js", readFileSync(new URL("./src/lib/coursePack.js", import.meta.url), "utf8")],
   ["src/lib/analytics.js", readFileSync(new URL("./src/lib/analytics.js", import.meta.url), "utf8")],
+  ["src/lib/access.js", readFileSync(new URL("./src/lib/access.js", import.meta.url), "utf8")],
+  ["src/lib/offer.js", readFileSync(new URL("./src/lib/offer.js", import.meta.url), "utf8")],
 ];
 const offences = [];
 honestyFiles.forEach(([name, text]) => {
@@ -99,6 +101,9 @@ for (const token of [
   'id="coursePackIn"',
   'id="topicExplain"',
   'id="startAnalytics"',
+  'id="offerSheet"',
+  'id="unionSheet"',
+  'id="redeemIn"',
   "src/lib/tonight.js",
   "src/lib/cohort.js",
   "src/lib/blueprintStore.js",
@@ -106,6 +111,8 @@ for (const token of [
   "src/lib/marathon.js",
   "src/lib/coursePack.js",
   "src/lib/analytics.js",
+  "src/lib/access.js",
+  "src/lib/offer.js",
 ]) {
   assert.ok(html.includes(token), "חסר בדף: " + token);
 }

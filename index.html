@@ -43,24 +43,48 @@
     .marathon-clock.warn{color:var(--bad)}
     .topic-note{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px;background:var(--panel)}
     .topic-note h3{margin:0 0 6px;font-size:1rem}
+    .brand-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .locked-note{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;font-size:.88rem}
+    .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+    @media(max-width:620px){.price-grid{grid-template-columns:1fr}.brand{flex-wrap:wrap;gap:10px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
     @media print{
       body{background:#fff;color:#111}
       .shell{width:100%;max-width:none;margin:0;padding:0}
       .brand,.no-print,#start,#quiz,#exam,#results{display:none!important}
-      #diagnosisSheet.hidden{display:none!important}
-      #diagnosisSheet:not(.hidden){display:block!important;box-shadow:none;border:0;border-radius:0;padding:0}
+      #diagnosisSheet.hidden,#offerSheet.hidden,#unionSheet.hidden{display:none!important}
+      #diagnosisSheet:not(.hidden),#offerSheet:not(.hidden),#unionSheet:not(.hidden){display:block!important;box-shadow:none;border:0;border-radius:0;padding:0}
     }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main">דלג לתוכן</a>
   <main class="shell" id="main" tabindex="-1">
-    <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill" id="coursePill">פייתון 10016</div></header>
+    <header class="brand">
+      <div class="logo">Pass<span>Pilot</span> 🎯</div>
+      <nav class="brand-nav no-print" aria-label="מחיר והצעה לאגודה">
+        <button id="offerNavBtn" class="ghost" type="button" style="width:auto;margin:0;padding:8px 12px">מחיר</button>
+        <button id="unionNavBtn" class="ghost" type="button" style="width:auto;margin:0;padding:8px 12px">הצעה לאגודה</button>
+        <div class="pill" id="accessPill" title="סטטוס מימוש בדפדפן הזה">חינם · עד 5 שאלות</div>
+      </nav>
+      <div class="pill" id="coursePill">פייתון 10016</div>
+    </header>
     <section id="start" class="card">
       <h1>לא רק ללמוד.<br>לדעת איפה אתה מאבד נקודות.</h1>
       <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן. זה אבחון מבנה, לא תחזית ציון.</p>
-      <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. המוצר שמוצע לאגודה: תוספת 20–40 ₪ על כרטיס כניסה להדפסה + קוד אבחון שאפשר להעביר למדריך.</div>
+      <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. מחיר הניסוי: תוספת 20–40 ₪ שהאגודה גובה ב־PayPal שלה. אין משתמשים משלמים היום ואין הבטחת ציון.</div>
+      <p id="accessStatus" class="muted" role="status"></p>
+      <details class="addon-box" id="redeemBox">
+        <summary>קוד מימוש מהאגודה (PPU1)</summary>
+        <p class="muted">אחרי תשלום במרתון האגודה מדביקים כאן קוד שמתחיל ב־PPU1. בלי שרת זה אינו הוכחת תשלום — הגבול נאכף בדפדפן הזה בלבד.</p>
+        <label class="label" for="redeemIn">קוד מימוש</label>
+        <textarea id="redeemIn" class="code-input" dir="ltr" spellcheck="false" autocomplete="off" aria-describedby="redeemMsg" placeholder="PPU1...."></textarea>
+        <div class="diag-actions">
+          <button id="redeemBtn" class="ghost" type="button" style="width:auto;margin:0">מימוש הקוד</button>
+          <button id="redeemClearBtn" class="restart" type="button" style="margin:0">הסרת המימוש מהדפדפן</button>
+        </div>
+        <p id="redeemMsg" class="muted status-flash" role="status"></p>
+      </details>
       <div class="field"><span class="label" id="courseLabel">מקצוע</span><div id="courseButtons" role="group" aria-labelledby="courseLabel"></div><p id="courseNote" class="muted"></p></div>
       <fieldset class="field" style="border:0;padding:0;margin:24px 0"><legend class="label">אילו נושאים לתרגל?</legend><div id="topics" class="topics"></div></fieldset>
       <div class="controls">
@@ -177,6 +201,14 @@
           <div id="topicExplain"></div>
         </article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
+        <article class="insight wide no-print hidden" id="paidLockBox">
+          <h3>האבחון המלא נעול</h3>
+          <p class="muted" id="paidLockCopy">דוח המבנה, כרטיס המרתון, מסלול 55, כרטיס הלילה וקוד השיתוף נפתחים עם קוד מימוש שהאגודה מפיצה אחרי תשלום התוספת. הבוחן הקצר והציון נשארים חינם.</p>
+          <div class="diag-actions">
+            <button id="paidLockOfferBtn" class="ghost" type="button" style="width:auto;margin:0">מה כלול במחיר</button>
+            <button id="paidLockRedeemBtn" class="ghost" type="button" style="width:auto;margin:0">יש לי קוד PPU1</button>
+          </div>
+        </article>
         <article class="insight wide no-print" id="shareBox">
           <h3>קוד אבחון למרתון</h3>
           <p class="muted">העתיקו והעבירו למדריך או לאגודה. בלי שם ובלי שרת. מי שמדביק את הקוד רואה את אותה מפת אובדן נקודות.</p>
@@ -193,6 +225,8 @@
       <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="marathonCardBtn" class="ghost" type="button">כרטיס למרתון</button><button id="restartBtn" class="restart" type="button">בוחן חדש</button></div>
     </section>
     <section id="diagnosisSheet" class="card hidden" aria-label="דוח מרחק ממבנה המבחן"></section>
+    <section id="offerSheet" class="card hidden" aria-label="מחיר והצעה"></section>
+    <section id="unionSheet" class="card hidden" aria-label="הצעה לאגודת הסטודנטים"></section>
   </main>
 
   <script src="src/lib/planner.js"></script>
@@ -209,6 +243,8 @@
   <script src="src/lib/marathon.js"></script>
   <script src="src/lib/coursePack.js"></script>
   <script src="src/lib/analytics.js"></script>
+  <script src="src/lib/access.js"></script>
+  <script src="src/lib/offer.js"></script>
   <script>
 const $ = function (id) { return document.getElementById(id); };
 
@@ -266,6 +302,31 @@ function labels() {
   return course().labelTopics || {};
 }
 
+function hidePrintSheets() {
+  ["diagnosisSheet", "offerSheet", "unionSheet"].forEach(function (id) {
+    var el = $(id);
+    if (el) el.classList.add("hidden");
+  });
+}
+
+function unlockStore() {
+  try { return localStorage; } catch (e) { return null; }
+}
+
+function currentUnlock() {
+  return readUnlock(unlockStore());
+}
+
+function paidNow() {
+  return hasPaidAccess(currentUnlock(), state.courseId);
+}
+
+function demandUnlock(feature) {
+  var why = lockReason(feature);
+  setStatus("startStatus", why);
+  openOfferSheet(why);
+}
+
 function go(screen) {
   state.screen = screen;
   ["start", "quiz", "exam", "results"].forEach(function (id) {
@@ -275,10 +336,7 @@ function go(screen) {
     el.classList.toggle("hidden", !on);
     el.setAttribute("aria-hidden", on ? "false" : "true");
   });
-  if (screen !== "results") {
-    var sheet = $("diagnosisSheet");
-    if (sheet) sheet.classList.add("hidden");
-  }
+  if (screen !== "results") hidePrintSheets();
   if (screen === "start") {
     clearMarathonClock();
     state.marathon = null;
@@ -289,6 +347,7 @@ function go(screen) {
     renderMapBuilder();
     renderExamHint();
     renderStartAnalytics();
+    renderAccess();
   }
 }
 
@@ -312,6 +371,7 @@ function setCourse(id) {
   renderBlueprintStatus();
   renderExamHint();
   renderStartAnalytics();
+  renderAccess();
 }
 
 function renderTopics() {
@@ -346,7 +406,10 @@ function startQuiz() {
   clearMarathonRun();
   var picked = [].slice.call(document.querySelectorAll("#topics input:checked")).map(function (x) { return x.value; });
   if (!picked.length) { setStatus("startStatus", "בחרו לפחות נושא אחד"); return; }
-  var items = pickQuiz(course().questions, picked, $("difficulty").value, +$("count").value, seedNow());
+  var want = $("count") ? +$("count").value : FREE_QUIZ_MAX;
+  var count = clampQuizCount(want, currentUnlock(), state.courseId);
+  if (count < want) setStatus("startStatus", lockReason("quizOverFree") + " רצים על " + count + " שאלות.");
+  var items = pickQuiz(course().questions, picked, $("difficulty").value, count, seedNow());
   if (!items.length) { setStatus("startStatus", "אין שאלות בשילוב שבחרת"); return; }
   setStatus("startStatus", "");
   state.kind = "quiz";
@@ -435,6 +498,7 @@ function nextQuiz() {
 }
 
 function startExam() {
+  if (!canUse("exam", currentUnlock(), state.courseId)) { demandUnlock("exam"); return; }
   clearMarathonRun();
   var c = course();
   if (!c.hasExam) return;
@@ -564,11 +628,28 @@ function renderResults(rows, opts) {
   var focus = focusFromDiagnosis(diag);
   if (!focus.length) focus = focusFromRanked(ranked, map);
   renderStudyPlan(planFromExamDate(readExamDate(), focus));
-  renderTonightCard(rows);
+  var unlocked = paidNow();
+  if (unlocked) {
+    renderTonightCard(rows);
+    if ($("tonightBox")) $("tonightBox").classList.remove("hidden");
+    if ($("shareBox")) $("shareBox").classList.remove("hidden");
+    if ($("paidLockBox")) $("paidLockBox").classList.add("hidden");
+    fillShareCode(rows);
+  } else {
+    if ($("tonightBox")) $("tonightBox").classList.add("hidden");
+    if ($("shareBox")) $("shareBox").classList.add("hidden");
+    if ($("paidLockBox")) $("paidLockBox").classList.remove("hidden");
+    if ($("shareOut")) $("shareOut").value = "";
+  }
   renderTopicExplain(rows);
   if (options.save) renderHistory(saveHistory(rows, state.kind));
   else renderHistory({ list: readHistory() });
-  fillShareCode(rows);
+  ["reportBtn", "path55Btn", "marathonCardBtn"].forEach(function (id) {
+    var btn = $(id);
+    if (!btn) return;
+    btn.setAttribute("aria-disabled", unlocked ? "false" : "true");
+    btn.title = unlocked ? "" : lockReason(id === "path55Btn" ? "path55" : id === "marathonCardBtn" ? "marathonCard" : "report");
+  });
   if ($("resultTitle")) $("resultTitle").focus();
 }
 
@@ -1029,6 +1110,7 @@ function updateExamBanner(isMarathon) {
 }
 
 function startMarathon() {
+  if (!canUse("marathon", currentUnlock(), state.courseId)) { demandUnlock("marathon"); return; }
   var minutes = $("marathonMinutes") ? +$("marathonMinutes").value : 0;
   var built = buildMarathon({
     course: course(),
@@ -1222,12 +1304,18 @@ function bootFromHash() {
   var raw = "";
   try { raw = decodeURIComponent(String(location.hash || "").replace(/^#/, "")); }
   catch (e) { raw = String(location.hash || "").replace(/^#/, ""); }
+  if (raw.indexOf("PPU1") !== -1) {
+    if ($("redeemIn")) $("redeemIn").value = raw;
+    applyRedeem();
+    return;
+  }
   if (raw.indexOf("PP1") === -1) return;
   if ($("shareIn")) $("shareIn").value = raw;
   loadShareCode();
 }
 
 function openCohortSheet() {
+  if (!canUse("cohort", currentUnlock(), state.courseId)) { demandUnlock("cohort"); return; }
   var raw = $("cohortIn") ? $("cohortIn").value : "";
   var titles = {};
   var catalog = allCourses();
@@ -1284,9 +1372,16 @@ function openCohortSheet() {
   host.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function openReport(useAnswers, focusCard) {
+function openReport(useAnswers, focusCard, extras) {
+  var wantPaid = extras !== false;
+  if (wantPaid && useAnswers && !canUse("report", currentUnlock(), state.courseId)) {
+    demandUnlock("report");
+    return;
+  }
   var rows = useAnswers ? state.answers : [];
-  fillShareCode(useAnswers ? state.answers : (state.answers || []));
+  if (wantPaid && canUse("shareOut", currentUnlock(), state.courseId)) {
+    fillShareCode(useAnswers ? state.answers : (state.answers || []));
+  }
   var diag = currentDiagnosis(rows);
   var bp = diag.blueprint;
   var when = new Date();
@@ -1342,7 +1437,30 @@ function openReport(useAnswers, focusCard) {
   var tonightRows = tonight.actions.map(function (a) {
     return "<li><span>" + esc(a.label) + " · " + a.minutes + " דק׳</span><b>" + esc(a.why) + "</b></li>";
   }).join("");
+  var slim = !wantPaid;
   var host = $("diagnosisSheet");
+  if (slim) {
+    host.innerHTML =
+      '<p class="muted no-print" style="margin:0 0 8px">מפת מבנה · חינם</p>' +
+      "<h2 style=\"margin-bottom:6px\">מפת מבנה המבחן</h2>" +
+      '<p class="muted" style="margin:0 0 14px">' + esc(bp.title) + " · " + esc(bp.examLabel) +
+        " · הופק " + whenStr + "</p>" +
+      '<div class="caveat">ציון עובר רשמי באפקה הוא <strong>60</strong>. זו מפת משקל, לא אבחון אישי ולא תחזית ציון. ' + esc(bp.pointMapNote) + "</div>" +
+      "<h3>מפת מבנה: נושא × נקודות</h3>" +
+      '<table class="diag-table"><thead><tr><th>בלוק</th><th>נק׳</th><th>מקור המשקל</th><th>ניסיונות</th><th>מדגם</th><th>דיוק</th><th>צפוי</th><th>אובדן</th></tr></thead><tbody>' +
+      table + "</tbody></table>" +
+      '<p class="locked-note no-print">הדוח האישי, כרטיס המרתון ומסלול 55 נפתחים עם קוד מימוש מהאגודה (20–40 ₪ ניסוי מעל המרתון).</p>' +
+      '<div class="diag-actions no-print">' +
+        '<button type="button" class="primary" id="printReportBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
+        '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
+      "</div>";
+    hidePrintSheets();
+    host.classList.remove("hidden");
+    $("printReportBtn").onclick = function () { window.print(); };
+    $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
+    host.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
   host.innerHTML =
     '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
     "<h2 style=\"margin-bottom:6px\">דוח מרחק ממבנה המבחן</h2>" +
@@ -1380,10 +1498,208 @@ function openReport(useAnswers, focusCard) {
       '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
     "</div>" +
     '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. נשמר בדפדפן בלבד.</p>';
+  hidePrintSheets();
   host.classList.remove("hidden");
   $("printReportBtn").onclick = function () { window.print(); };
   $("closeReportBtn").onclick = function () { host.classList.add("hidden"); };
   (focusCard && $("marathonCard") ? $("marathonCard") : host).scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderAccess() {
+  var rec = currentUnlock();
+  var on = hasPaidAccess(rec, state.courseId);
+  var pill = $("accessPill");
+  if (pill) {
+    if (on) {
+      var kind = rec.entitlement && rec.entitlement.kind === "staff" ? "מדריך" : "תוספת אגודה";
+      pill.textContent = "פתוח · " + kind;
+    } else {
+      pill.textContent = "חינם · עד " + FREE_QUIZ_MAX + " שאלות";
+    }
+  }
+  var status = $("accessStatus");
+  if (status) {
+    status.textContent = on
+      ? ("קוד מימוש פעיל" + (rec.entitlement && rec.entitlement.term ? " · " + rec.entitlement.term : "") +
+        (rec.redeemedAt ? " · נפדה " + rec.redeemedAt : "") + ". בלי שרת זה עדיין לא הוכחת תשלום.")
+      : "בלי קוד מימוש: בוחן קצר, ציון ונושאים חלשים. הדוח, המרתון והשיתוף נפתחים אחרי תשלום התוספת באגודה.";
+  }
+  var count = $("count");
+  if (count) {
+    [].slice.call(count.options).forEach(function (opt) {
+      var n = +opt.value;
+      opt.disabled = !on && n > FREE_QUIZ_MAX;
+    });
+    if (!on && +count.value > FREE_QUIZ_MAX) count.value = String(FREE_QUIZ_MAX);
+  }
+  var examBtn = $("examBtn");
+  if (examBtn && course().hasExam) {
+    examBtn.setAttribute("aria-disabled", on ? "false" : "true");
+    examBtn.title = on ? "" : lockReason("exam");
+  }
+  var marathonBtn = $("marathonBtn");
+  if (marathonBtn) {
+    marathonBtn.setAttribute("aria-disabled", on ? "false" : "true");
+    marathonBtn.title = on ? "" : lockReason("marathon");
+  }
+  var cohortBtn = $("cohortBtn");
+  if (cohortBtn) {
+    cohortBtn.setAttribute("aria-disabled", on ? "false" : "true");
+    cohortBtn.title = on ? "" : lockReason("cohort");
+  }
+}
+
+function applyRedeem() {
+  var raw = $("redeemIn") ? $("redeemIn").value : "";
+  var out = redeemUnlock(raw, unlockStore());
+  var msg = $("redeemMsg");
+  if (!out.ok) {
+    if (msg) msg.textContent = out.error;
+    renderAccess();
+    return;
+  }
+  if (msg) msg.textContent = "הקוד נפדה בדפדפן הזה. הדוח, המרתון והשיתוף פתוחים לקורס המתאים.";
+  renderAccess();
+}
+
+function clearRedeem() {
+  clearUnlock(unlockStore());
+  if ($("redeemMsg")) $("redeemMsg").textContent = "המימוש הוסר מהדפדפן הזה.";
+  renderAccess();
+}
+
+function openOfferSheet(reason) {
+  hidePrintSheets();
+  var host = $("offerSheet");
+  if (!host) return;
+  var copy = offerCopy();
+  var market = observedMarket();
+  var row = bundleRow({ marathonPrice: market.afekaMarathonTypical, addonPrice: copy.recommended, seats: 20 });
+  var paid = copy.whatPaid.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+  var free = copy.whatFree.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+  var nots = copy.notClaimed.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+  host.innerHTML =
+    '<p class="muted no-print" style="margin:0 0 8px">הצעת מחיר כנה · נבדק ' + esc(market.checkedAt) + "</p>" +
+    "<h2 id=\"offerTitle\" tabindex=\"-1\" style=\"margin-bottom:6px\">" + esc(copy.title) + "</h2>" +
+    '<p class="lead">' + esc(copy.priceLine) + "</p>" +
+    (reason ? '<p class="locked-note">' + esc(reason) + "</p>" : "") +
+    '<div class="caveat">אין משתמשים משלמים היום. 20–40 ₪ הוא מחיר ניסוי מ־<span dir="ltr">MONETIZATION.md</span>, לא סקר קונים ולא מנוי חודשי. ציון עובר באפקה הוא 60 — אין כאן תחזית מעבר.</div>' +
+    '<div class="price-grid">' +
+      '<article class="insight"><h3>חינם בדפדפן</h3><ul class="plan">' + free + "</ul></article>" +
+      '<article class="insight"><h3>נפתח בקוד מהאגודה</h3><ul class="plan">' + paid + "</ul></article>" +
+    "</div>" +
+    "<h3>איפה זה יושב מול מה שכבר משלמים</h3>" +
+    '<table class="diag-table"><thead><tr><th>פריט</th><th>מחיר שנצפה</th></tr></thead><tbody>' +
+      "<tr><td>מרתון אגודת אפקה, 16 שעות</td><td>" + market.afekaMarathonTypical + " ₪</td></tr>" +
+      "<tr><td>תוספת אבחון מומלצת לניסוי</td><td>" + copy.recommended + " ₪</td></tr>" +
+      "<tr><td>כרטיס משולב (חשבון, לא מחירון חי)</td><td>" + row.ticket + " ₪</td></tr>" +
+      "<tr><td>וידאו אלון באומן לקורס אפקה</td><td>" + market.alonVideoCourse + " ₪</td></tr>" +
+      "<tr><td>מנוי סמסטר דני באומן (עמוד אפקה)</td><td>" + market.dannySemester + " ₪</td></tr>" +
+      "<tr><td>מבצע אגודה GOOL לסמסטר</td><td>" + market.goolSemesterLow + "–" + market.goolSemesterHigh + " ₪</td></tr>" +
+      "<tr><td>שכ״ל שנתי באפקה (40 נ״ז)</td><td>" + market.tuitionYearIls.toLocaleString("he-IL") + " ₪</td></tr>" +
+    "</tbody></table>" +
+    '<p class="muted">' + esc(market.note) + "</p>" +
+    "<h3>מה אנחנו לא טוענים</h3><ul class=\"plan\">" + nots + "</ul>" +
+    '<p class="muted">מקורות מלאים: <span dir="ltr">MONETIZATION.md</span> · <span dir="ltr">RESEARCH.md</span>.</p>' +
+    '<div class="diag-actions no-print">' +
+      '<button type="button" class="primary" id="printOfferBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
+      '<button type="button" class="ghost" id="toUnionFromOffer" style="width:auto;margin:0">הצעה לאגודה</button>' +
+      '<button type="button" class="restart" id="closeOfferBtn" style="margin:0">סגירה</button>' +
+    "</div>";
+  host.classList.remove("hidden");
+  $("printOfferBtn").onclick = function () { window.print(); };
+  $("closeOfferBtn").onclick = function () { host.classList.add("hidden"); };
+  $("toUnionFromOffer").onclick = function () { openUnionSheet(); };
+  var title = $("offerTitle");
+  if (title) title.focus();
+  host.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function openUnionSheet() {
+  hidePrintSheets();
+  var host = $("unionSheet");
+  if (!host) return;
+  var market = observedMarket();
+  var addon = $("unionAddon") ? clampAddon($("unionAddon").value) : ADDON_MID;
+  var seats = $("unionSeats") ? clampSeats($("unionSeats").value) : 20;
+  var row = bundleRow({ marathonPrice: market.afekaMarathonTypical, addonPrice: addon, seats: seats });
+  var low = bundleRow({ marathonPrice: market.afekaMarathonLow, addonPrice: addon, seats: seats });
+  var splits = hypotheticalSplits(row.addonGross);
+  var splitRows = splits.map(function (s) {
+    return "<tr><td>" + esc(s.label) + "</td><td>" + s.unionIls + " ₪</td><td>" + s.vendorIls + " ₪</td></tr>";
+  }).join("");
+  host.innerHTML =
+    '<p class="muted no-print" style="margin:0 0 8px">הצעה לאגודת הסטודנטים אפקה · להדפסה · נבדק ' + esc(market.checkedAt) + "</p>" +
+    "<h2 id=\"unionTitle\" tabindex=\"-1\" style=\"margin-bottom:6px\">הצעה לאגודה: נספח אבחון למרתון</h2>" +
+    '<p class="lead">הסטודנט כבר משלם 220–270 ₪ על מרתון. PassPilot הוא שכבת אבחון מעל הכרטיס הזה — לא קורס וידאו מתחרה.</p>' +
+    '<div class="caveat">אין משתמשים משלמים. אין מדידת שיעור מעבר. 20–40 ₪ הוא מחיר ניסוי. אחוז חלוקת הכנסות פומבי עם ספק חיצוני: <strong>לא נמצא מקור</strong>. הטבלה למטה היא תרחיש, לא חוזה.</div>' +
+    '<div class="no-print field">' +
+      '<label for="unionAddon"><span class="label">מחיר תוספת לניסוי (20–40 ₪)</span></label>' +
+      '<select id="unionAddon" aria-describedby="unionHint">' +
+        '<option value="20"' + (addon === 20 ? " selected" : "") + ">20 ₪</option>" +
+        '<option value="30"' + (addon === 30 ? " selected" : "") + ">30 ₪</option>" +
+        '<option value="40"' + (addon === 40 ? " selected" : "") + ">40 ₪</option>" +
+      "</select>" +
+      '<label for="unionSeats" style="display:block;margin-top:12px"><span class="label">מספר נרשמים לחישוב (הנחה, לא נתון אגודה)</span></label>' +
+      '<input id="unionSeats" type="number" min="1" max="200" value="' + seats + '" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)">' +
+      '<p id="unionHint" class="muted">20 הוא מספר עגול לחישוב. מספר נרשמים אמיתי למרתון: לא נמצא מקור פומבי.</p>' +
+    "</div>" +
+    "<h3>כלכלת החבילה</h3>" +
+    '<table class="diag-table"><thead><tr><th>סעיף</th><th>₪</th></tr></thead><tbody>' +
+      "<tr><td>כרטיס מרתון טיפוסי (16 שעות, סמסטר ב׳ 2026)</td><td>" + row.marathonPrice + "</td></tr>" +
+      "<tr><td>תוספת אבחון</td><td>" + row.addonPrice + "</td></tr>" +
+      "<tr><td>כרטיס משולב לסטודנט</td><td><strong>" + row.ticket + "</strong></td></tr>" +
+      "<tr><td>חלק התוספת מהמרתון</td><td>" + row.addonShareOfMarathonPct + "%</td></tr>" +
+      "<tr><td>הכנסה גולמית לתוספת × " + row.seats + " נרשמים (הנחה)</td><td>" + row.addonGross + "</td></tr>" +
+      "<tr><td>אותה תוספת על מרתון 12 שעות ב־" + market.afekaMarathonLow + " ₪</td><td>כרטיס " + low.ticket + " · גולמי " + low.addonGross + "</td></tr>" +
+    "</tbody></table>" +
+    "<h3>תרחישי חלוקה — לא חוזה</h3>" +
+    '<table class="diag-table"><thead><tr><th>תרחיש</th><th>לאגודה</th><th>לספק</th></tr></thead><tbody>' +
+    splitRows + "</tbody></table>" +
+    '<p class="muted">ב־2024 הכנסות האגודה היו ' + market.unionRevenue2024.toLocaleString("he-IL") +
+      " ₪, מתוכן " + market.unionOtherIncome2024.toLocaleString("he-IL") +
+      " ₪ «מקורות אחרים» — בלי פירוט למרתונים. מקור: גיידסטאר 580320968.</p>" +
+    "<h3>איך זה נכנס לקופה שכבר קיימת</h3>" +
+    "<ol>" +
+      "<li>האגודה מוסיפה " + row.addonPrice + " ₪ למחיר המרתון באותו PayPal.</li>" +
+      "<li>במייל האישור שכבר נשלח אחרי התשלום — קוד <span dir=\"ltr\">PPU1</span> אחד לכל נרשם.</li>" +
+      "<li>הסטודנט פודה בדמו. המדריך מדביק קודי <span dir=\"ltr\">PP1</span> לתדריך כיתה.</li>" +
+    "</ol>" +
+    "<h3>וואטסאפ מחלקת אקדמיה (מפורסם בדף המרתון)</h3>" +
+    "<p>רמ״ד תוכנה ומדמ״ח: <span dir=\"ltr\">054-955-0467</span></p>" +
+    '<p class="muted">מקור: aguda-afeka.org.il/marathon · לא פנייה בשם האגודה.</p>' +
+    '<div class="no-print addon-box" style="margin-top:18px">' +
+      "<h3 class=\"label\" style=\"font-size:1rem\">הפקת קודי מימוש להפצה</h3>" +
+      '<p class="muted">האגודה מעתיקה את הרשימה לוואטסאפ או למייל האישור. בלי שרת הקוד אינו הוכחת תשלום.</p>' +
+      '<label class="label" for="mintCount">כמה קודי סטודנט</label>' +
+      '<input id="mintCount" type="number" min="1" max="80" value="' + seats + '" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)">' +
+      '<button id="mintBtn" class="ghost" type="button">הפקת קודים לקורס הנוכחי</button>' +
+      '<label class="label" for="mintOut">קודים להעתקה</label>' +
+      '<textarea id="mintOut" class="code-input" readonly dir="ltr" spellcheck="false"></textarea>' +
+      '<p id="mintMsg" class="muted status-flash" role="status"></p>' +
+    "</div>" +
+    '<div class="diag-actions no-print">' +
+      '<button type="button" class="primary" id="printUnionBtn" style="width:auto;margin:0">הדפסה / שמירה ל-PDF</button>' +
+      '<button type="button" class="restart" id="closeUnionBtn" style="margin:0">סגירה</button>' +
+    "</div>" +
+    '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. מקורות: MONETIZATION.md, נבדק ' + esc(market.checkedAt) + ".</p>";
+  host.classList.remove("hidden");
+  $("printUnionBtn").onclick = function () { window.print(); };
+  $("closeUnionBtn").onclick = function () { host.classList.add("hidden"); };
+  $("unionAddon").onchange = function () { openUnionSheet(); };
+  $("unionSeats").onchange = function () { openUnionSheet(); };
+  $("mintBtn").onclick = function () {
+    var n = $("mintCount") ? +$("mintCount").value : seats;
+    var batch = mintBatch({ count: n, term: "2026b", courseId: state.courseId, union: "afeka" });
+    var lines = ["# מדריך", batch.staff.code, "", "# סטודנטים"];
+    batch.students.forEach(function (s) { lines.push(s.serial + " " + s.code); });
+    lines.push("", batch.caveat);
+    if ($("mintOut")) $("mintOut").value = lines.join("\n");
+    if ($("mintMsg")) $("mintMsg").textContent = batch.students.length + " קודי סטודנט + קוד מדריך אחד. " + batch.caveat;
+  };
+  var title = $("unionTitle");
+  if (title) title.focus();
+  host.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function bind() {
@@ -1398,10 +1714,21 @@ function bind() {
   $("examCorrect").onclick = function () { gradeExam(true); };
   $("examWrong").onclick = function () { gradeExam(false); };
   $("restartBtn").onclick = function () { go("start"); $("startBtn").focus(); };
-  $("structureBtn").onclick = function () { openReport(false); };
+  $("structureBtn").onclick = function () { openReport(false, false, false); };
   $("reportBtn").onclick = function () { openReport(true); };
   $("path55Btn").onclick = function () { openReport(true); };
   $("marathonCardBtn").onclick = function () { openReport(true, true); };
+  if ($("offerNavBtn")) $("offerNavBtn").onclick = function () { openOfferSheet(); };
+  if ($("unionNavBtn")) $("unionNavBtn").onclick = function () { openUnionSheet(); };
+  if ($("redeemBtn")) $("redeemBtn").onclick = applyRedeem;
+  if ($("redeemClearBtn")) $("redeemClearBtn").onclick = clearRedeem;
+  if ($("paidLockOfferBtn")) $("paidLockOfferBtn").onclick = function () { openOfferSheet(); };
+  if ($("paidLockRedeemBtn")) $("paidLockRedeemBtn").onclick = function () {
+    go("start");
+    var box = $("redeemBox");
+    if (box) box.open = true;
+    if ($("redeemIn")) $("redeemIn").focus();
+  };
   if ($("shareCopyBtn")) $("shareCopyBtn").onclick = copyShareCode;
   if ($("shareLinkBtn")) $("shareLinkBtn").onclick = copyShareLink;
   if ($("shareLoadBtn")) $("shareLoadBtn").onclick = loadShareCode;
@@ -1416,8 +1743,10 @@ function bind() {
   if ($("examDate")) $("examDate").addEventListener("change", renderExamHint);
   document.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") {
-      var sheet = $("diagnosisSheet");
-      if (sheet && !sheet.classList.contains("hidden")) {
+      var sheet = ["diagnosisSheet", "offerSheet", "unionSheet"].map($).filter(function (el) {
+        return el && !el.classList.contains("hidden");
+      })[0];
+      if (sheet) {
         sheet.classList.add("hidden");
         ev.preventDefault();
         return;
@@ -1442,6 +1771,7 @@ renderMapBuilder();
 renderBlueprintStatus();
 renderExamHint();
 renderStartAnalytics();
+renderAccess();
 bootFromHash();
 
   </script>

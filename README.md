@@ -2,11 +2,11 @@
 
 דמו דפדפן עובד: בוחן + אבחון לפי מבנה מבחן, ומתכנן תרגול לפי תאריך מבחן אמיתי — לא לוח «מרחק מציון עובר» ולא מודל הסתברות מכויל.
 
-> **[דמו חי](https://swissystem7.github.io/PassPilot/)** · בלי שרת, בלי הרשמה, בלי תשלום.
+> **[דמו חי](https://swissystem7.github.io/PassPilot/)** · בלי שרת, בלי הרשמה. הגבייה המיועדת היא תוספת 20–40 ₪ בקופת אגודת אפקה — אין משתמשים משלמים היום.
 
 ## What / For whom / How
 
-**What:** A Hebrew RTL browser demo (`index.html` + `selftest.mjs`) for four Afeka courses, plus any course an instructor pastes as JSON. After a short quiz it ranks weak topics, explains *why that topic fell*, builds a **date-aware** practice plan, a **90-minute tonight card**, and a printable exam-structure report. **מצב מרתון** is a timed walk through every exam-structure block. The union instructor pastes many `PP1` codes into a **classroom briefing**. A coordinator edits the topic×points map in a form, or authors a new course from a paste. Course 10016 also has a four-block code exam in real exam order. It is not a paid product and not a calibrated pass predictor.
+**What:** A Hebrew RTL browser demo (`index.html` + `selftest.mjs`) for four Afeka courses, plus any course an instructor pastes as JSON. After a short quiz it ranks weak topics, explains *why that topic fell*, builds a **date-aware** practice plan, a **90-minute tonight card**, and a printable exam-structure report. **מצב מרתון** is a timed walk through every exam-structure block. The union instructor pastes many `PP1` codes into a **classroom briefing**. A coordinator edits the topic×points map in a form, or authors a new course from a paste. Course 10016 also has a four-block code exam in real exam order. A `PPU1` redeem code from the union unlocks the full diagnosis; without it the quiz is capped at 5 questions. It is not a calibrated pass predictor and has no paying users yet.
 
 **For whom:** Afeka students who already buy union marathons or lecturer video (GOOL / Alon Bauman / Danny Bauman) and want a short diagnosis of *which exam blocks they are losing*, not another video course. Instructors who need a room heatmap or a fifth course without touching the repo.
 
@@ -39,8 +39,10 @@
 - **מגמות בין מפגשים.** דיוק מוקדם מול מאוחר לפי נושא, בלוקים שעוד לא נבחנו, ופיצול בוחן/מבחן/מרתון. היסטוריה מקומית עד 40 מפגשים — לא מודל מכויל.
 - **בלי מספר «סיכוי מעבר».** הנוסחה הישנה הוסרה.
 - **תאריכי תוכנית לפי שעון מקומי.** היסטוריה לפי קורס, כולל מצב מבחן. מעבר קורס לא מחזיר «מילונים» לבוחן הפייתון. תוכנית הימים אחרי בוחן משוקללת לפי אובדן נקודות במבנה, לא לפי סולם שעות שטוח.
+- **גבול חינם / תוספת אגודה.** בלי קוד `PPU1`: בוחן עד 5 שאלות, ציון ונושאים חלשים. עם קוד: דוח, כרטיס מרתון, מסלול 55, מצב מרתון, שיתוף, תדריך כיתה. בלי שרת הקוד אינו הוכחת תשלום.
+- **דף מחיר כנה + הצעה לאגודה להדפסה.** 20–40 ₪ כניסוי מעל מרתון 270 ₪, תרחישי חלוקה מסומנים כתרחישים, בלי מספרי משתמשים. פירוט: [`MONETIZATION.md`](MONETIZATION.md).
 
-ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`, קוד שיתוף ב-`src/lib/shareCode.js`, תור חזרה ב-`src/lib/srsQueue.js`, תוכנית לילה ב-`src/lib/tonight.js`, תדריך כיתה ב-`src/lib/cohort.js`, מפות רכז לפי קורס ב-`src/lib/blueprintStore.js`, הסברי נושא ב-`src/lib/topicExplain.js`, סימולציית מרתון ב-`src/lib/marathon.js`, חבילת מדריך ב-`src/lib/coursePack.js`, מגמות בין מפגשים ב-`src/lib/analytics.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה. מצב מרתון משתמש באותם מסכים עם שעון גלובלי.
+ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`, קוד שיתוף ב-`src/lib/shareCode.js`, תור חזרה ב-`src/lib/srsQueue.js`, תוכנית לילה ב-`src/lib/tonight.js`, תדריך כיתה ב-`src/lib/cohort.js`, מפות רכז לפי קורס ב-`src/lib/blueprintStore.js`, הסברי נושא ב-`src/lib/topicExplain.js`, סימולציית מרתון ב-`src/lib/marathon.js`, חבילת מדריך ב-`src/lib/coursePack.js`, מגמות בין מפגשים ב-`src/lib/analytics.js`, מימוש אגודה ב-`src/lib/access.js`, כלכלת חבילה ב-`src/lib/offer.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה. מצב מרתון משתמש באותם מסכים עם שעון גלובלי.
 
 ## מה זה *לא*
 
@@ -59,7 +61,7 @@
 
 2. **מסלול MCQ עצמאי מפסיד כי עלות התוכן כבר שולמה אצל היריב.** [GOOL — שאלות נפוצות](https://www.gool.co.il/Home/Questions) נבנית על התאמה למוסד/מרצה. בלי בנק בסגנון המבחן המתכנן הוא יומן משימות.
 
-3. **הגרעין שכן שווה משהו הוא האבחון — כתוספת.** שליפה מגובה ([Roediger & Karpicke 2006](https://doi.org/10.1111/j.1467-9280.2006.01693.x); [Dunlosky et al. 2013](https://doi.org/10.1177/1529100612453266)). אופטימיזציית «וותר עד 55» לא מגובה בניסוי. ניסוי מחיר: **20–40 ₪** מעל מרתון ~270 ₪. הצעד הבא: שיחה עם רמ״ד אקדמיה ב-[דף המרתונים](https://aguda-afeka.org.il/marathon/), לא קורס חמישי בקוד.
+3. **הגרעין שכן שווה משהו הוא האבחון — כתוספת.** שליפה מגובה ([Roediger & Karpicke 2006](https://doi.org/10.1111/j.1467-9280.2006.01693.x); [Dunlosky et al. 2013](https://doi.org/10.1177/1529100612453266)). אופטימיזציית «וותר עד 55» לא מגובה בניסוי. ניסוי מחיר: **20–40 ₪** מעל מרתון ~270 ₪. פירוט כספי וחלוקת הכנסות (בלי אחוז פומבי): [`MONETIZATION.md`](MONETIZATION.md). הצעד הבא: שיחה עם רמ״ד אקדמיה ב-[דף המרתונים](https://aguda-afeka.org.il/marathon/), לא קורס חמישי בקוד.
 
 ## הפעלה
 
