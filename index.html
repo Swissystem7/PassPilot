@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>PassPilot | פייתון 10016</title>
   <style>
-    :root{color-scheme:light dark;--bg:#f3f7f5;--panel:#fff;--ink:#15221d;--muted:#65736d;--brand:#087f5b;--brand2:#0ca678;--line:#dbe6e0;--good:#16794b;--bad:#c92a2a;--soft:#e9f7f1;--shadow:0 18px 48px #183c2c18}
-    @media(prefers-color-scheme:dark){:root{--bg:#101713;--panel:#18221d;--ink:#eef7f2;--muted:#a8b8b0;--line:#34463d;--soft:#203c31;--shadow:0 18px 48px #0006}}
+    :root{color-scheme:light dark;--bg:#f3f7f5;--panel:#fff;--ink:#15221d;--muted:#3f524a;--brand:#087f5b;--brand2:#0ca678;--line:#dbe6e0;--good:#16794b;--bad:#a31b1b;--soft:#e9f7f1;--shadow:0 18px 48px #183c2c18;--focus:#0b6b4d}
+    @media(prefers-color-scheme:dark){:root{--bg:#101713;--panel:#18221d;--ink:#eef7f2;--muted:#c5d4cc;--line:#34463d;--soft:#203c31;--shadow:0 18px 48px #0006;--focus:#5ee0b5}}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0,#0ca67820,transparent 35%),var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}button,select{font:inherit}button{cursor:pointer}.shell{width:min(880px,calc(100% - 28px));margin:auto;padding:28px 0 60px}.brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.logo{font-weight:900;font-size:1.3rem}.logo span{color:var(--brand2)}.pill{font-size:.82rem;background:var(--soft);color:var(--brand);padding:5px 10px;border-radius:99px}.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,5vw,42px);box-shadow:var(--shadow)}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;margin-bottom:14px}h2{font-size:clamp(1.5rem,4vw,2.2rem)}.lead{color:var(--muted);font-size:1.08rem;max-width:620px}.field{margin:24px 0}.label{font-weight:800;display:block;margin-bottom:10px}.topics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.topic{position:relative}.topic input{position:absolute;opacity:0}.topic span{display:block;text-align:center;border:1px solid var(--line);padding:11px 8px;border-radius:12px;transition:.2s}.topic input:checked+span{background:var(--soft);border-color:var(--brand2);color:var(--brand);font-weight:800}.controls{display:grid;grid-template-columns:1fr 1fr;gap:14px}.controls select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)}.primary,.next{border:0;border-radius:13px;padding:13px 24px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;font-weight:850;box-shadow:0 8px 20px #087f5b35}.primary{width:100%;margin-top:8px}.primary:hover,.next:hover{filter:brightness(1.06);transform:translateY(-1px)}.hidden{display:none!important}.quiz-head{display:flex;align-items:center;gap:14px;margin-bottom:24px}.progress-track{height:8px;background:var(--line);border-radius:9px;overflow:hidden;flex:1}.progress-bar{height:100%;background:var(--brand2);transition:width .3s}.counter,.timer{white-space:nowrap;color:var(--muted);font-size:.9rem}.question-meta{display:flex;gap:8px;margin-bottom:12px}.tag{background:var(--soft);color:var(--brand);border-radius:7px;padding:3px 8px;font-size:.78rem;font-weight:750}.prompt{white-space:pre-wrap;direction:ltr;text-align:left;background:#111b17;color:#e7fff4;border-radius:15px;padding:18px;overflow:auto;font:600 .95rem/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;margin:15px 0 20px}.answers{display:grid;gap:11px}.answer{border:1px solid var(--line);border-radius:13px;padding:13px 16px;background:transparent;color:var(--ink);text-align:right;transition:.15s}.answer:hover:not(:disabled){border-color:var(--brand2);background:var(--soft)}.answer.correct{background:#dff7e9;color:#126b41;border-color:#51cf66}.answer.wrong{background:#ffe3e3;color:#a51111;border-color:#ff8787}.answer:disabled{cursor:default}.feedback{margin-top:18px;padding:15px;border-radius:13px;background:var(--soft)}.feedback strong{display:block;margin-bottom:4px}.next{display:block;margin:17px 0 0 auto}.score-ring{width:136px;height:136px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;background:conic-gradient(var(--brand2) var(--score),var(--line) 0);position:relative}.score-ring:after{content:"";position:absolute;inset:11px;background:var(--panel);border-radius:50%}.score-ring b{z-index:1;font-size:2rem}.center{text-align:center}.insights{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}.insight{border:1px solid var(--line);border-radius:16px;padding:18px}.insight.wide{grid-column:1/-1}.insight h3{font-size:1rem;margin-bottom:10px}.meter{height:9px;background:var(--line);border-radius:10px;overflow:hidden;margin:10px 0}.meter i{display:block;height:100%;background:var(--brand2)}.weak-list,.plan{margin:0;padding:0;list-style:none}.weak-list li,.plan li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:8px 0}.weak-list li:first-child,.plan li:first-child{border-top:0}.muted{color:var(--muted);font-size:.9rem}.restart{margin-top:24px;background:transparent;color:var(--brand2);border:1px solid var(--brand2);border-radius:12px;padding:10px 18px;font-weight:800}@media(max-width:620px){.topics{grid-template-columns:1fr 1fr}.controls,.insights{grid-template-columns:1fr}.insight.wide{grid-column:auto}.card{border-radius:18px}.quiz-head{flex-wrap:wrap}.progress-track{order:3;flex-basis:100%}}
     .exam-button{width:100%;margin-top:12px;border:2px solid var(--brand2);border-radius:13px;padding:13px;background:transparent;color:var(--brand2);font-weight:900}.exam-banner{background:var(--soft);border-radius:14px;padding:14px;margin-bottom:20px}.code-input{width:100%;min-height:180px;resize:vertical;direction:ltr;text-align:left;background:#111b17;color:#e7fff4;border:1px solid var(--line);border-radius:15px;padding:16px;font:600 .95rem/1.6 ui-monospace,Consolas,monospace}.exam-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.solution{direction:ltr;text-align:left;white-space:pre-wrap}.block-order{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.block-order span{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:.82rem}.block-order .active{background:var(--soft);border-color:var(--brand2);font-weight:800}@media(max-width:620px){.block-order{grid-template-columns:1fr 1fr}}
     #examDate{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)}
@@ -18,6 +18,12 @@
     .diag-table th{font-size:.78rem;color:var(--muted);font-weight:700}
     .caveat{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:.84rem;margin:0 0 16px}
     .diag-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .skip-link{position:absolute;inset-inline-start:-999px;top:8px;background:var(--brand);color:#fff;padding:8px 14px;border-radius:8px;z-index:20;font-weight:800}
+    .skip-link:focus{inset-inline-start:12px}
+    :focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+    .topic input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
+    .pp-course[aria-pressed="true"]{background:rgba(8,127,91,.14);border-color:var(--brand2)!important}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     @media print{
       body{background:#fff;color:#111}
       .shell{width:100%;max-width:none;margin:0;padding:0}
@@ -28,40 +34,42 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#start">דלג לתוכן</a>
   <main class="shell">
-    <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill">פייתון 10016</div></header>
+    <header class="brand"><div class="logo">Pass<span>Pilot</span> 🎯</div><div class="pill" id="coursePill">פייתון 10016</div></header>
     <section id="start" class="card">
       <h1>לא רק ללמוד.<br>לדעת שתעבור.</h1>
       <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן.</p>
       <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. המוצר שמוצע לאגודה: תוספת 20–40 ₪ על כרטיס כניסה להדפסה.</div>
-      <div class="field"><span class="label">מקצוע</span><div id="courseButtons"></div><p id="courseNote" class="muted"></p></div>
-      <div class="field"><span class="label">אילו נושאים לתרגל?</span><div id="topics" class="topics"></div></div>
+      <div class="field"><span class="label" id="courseLabel">מקצוע</span><div id="courseButtons" role="group" aria-labelledby="courseLabel"></div><p id="courseNote" class="muted"></p></div>
+      <fieldset class="field" style="border:0;padding:0;margin:24px 0"><legend class="label">אילו נושאים לתרגל?</legend><div id="topics" class="topics"></div></fieldset>
       <div class="controls">
         <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
         <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
       </div>
-      <div class="field"><label><span class="label">תאריך המבחן</span><input type="date" id="examDate"></label><p class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל.</p></div>
-      <button id="startBtn" class="primary">מתחילים בבוחן</button>
-      <button id="examBtn" class="exam-button">מצב מבחן אפקה 10016</button>
+      <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל.</p></div>
+      <button id="startBtn" class="primary" type="button">מתחילים בבוחן</button>
+      <button id="examBtn" class="exam-button" type="button">מצב מבחן אפקה 10016</button>
       <button id="structureBtn" class="ghost" type="button">מפת מבנה המבחן</button>
     </section>
-    <section id="quiz" class="card hidden" aria-live="polite">
-      <div class="quiz-head"><span id="counter" class="counter"></span><div class="progress-track"><div id="progress" class="progress-bar"></div></div><span id="timer" class="timer">00:00</span></div>
+    <section id="quiz" class="card hidden" aria-labelledby="questionTitle">
+      <div class="quiz-head"><span id="counter" class="counter" aria-live="polite"></span><div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress" class="progress-bar"></div></div><span id="timer" class="timer" aria-live="off">00:00</span></div>
       <div class="question-meta"><span id="topicTag" class="tag"></span><span id="levelTag" class="tag"></span></div>
-      <h2 id="questionTitle">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers"></div>
-      <div id="feedback" class="feedback hidden"></div><button id="nextBtn" class="next hidden">לשאלה הבאה</button>
+      <h2 id="questionTitle">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers" role="group" aria-label="אפשרויות תשובה"></div>
+      <div id="feedback" class="feedback hidden" aria-live="assertive" role="status"></div><button id="nextBtn" class="next hidden" type="button">לשאלה הבאה</button>
     </section>
-    <section id="exam" class="card hidden" aria-live="polite">
+    <section id="exam" class="card hidden" aria-labelledby="examTitle">
       <div class="exam-banner"><strong>מבחן אפקה 10016 · מועד ב׳</strong><br><span class="muted">ארבע שאלות כתיבת קוד, לפי הסדר האמיתי. הפתרון נחשף רק אחרי שכתבת תשובה.</span></div>
-      <div id="blockOrder" class="block-order"></div>
-      <div class="question-meta"><span id="examCounter" class="tag"></span><span class="tag">כתיבת קוד</span></div>
+      <div id="blockOrder" class="block-order" role="list" aria-label="סדר בלוקי המבחן"></div>
+      <div class="question-meta"><span id="examCounter" class="tag" aria-live="polite"></span><span class="tag">כתיבת קוד</span></div>
       <h2 id="examTitle"></h2><p id="examEmphasis" class="muted"></p><p id="examPrompt"></p>
-      <textarea id="codeAnswer" class="code-input" spellcheck="false" placeholder="# כתבו כאן את הפתרון שלכם"></textarea>
-      <div id="examSolution" class="feedback hidden"><strong>פתרון ייחוס</strong><pre id="referenceCode" class="solution"></pre><p id="solutionExplanation"></p></div>
-      <div class="exam-actions"><button id="revealBtn" class="next">הצגת פתרון</button><button id="examCorrect" class="next hidden">פתרתי נכון</button><button id="examWrong" class="restart hidden">צריך חיזוק</button></div>
+      <label class="label" for="codeAnswer">הפתרון שלכם</label>
+      <textarea id="codeAnswer" class="code-input" spellcheck="false" placeholder="# כתבו כאן את הפתרון שלכם" aria-describedby="examPrompt"></textarea>
+      <div id="examSolution" class="feedback hidden" aria-live="polite"><strong>פתרון ייחוס</strong><pre id="referenceCode" class="solution"></pre><p id="solutionExplanation"></p></div>
+      <div class="exam-actions"><button id="revealBtn" class="next" type="button">הצגת פתרון</button><button id="examCorrect" class="next hidden" type="button">פתרתי נכון</button><button id="examWrong" class="restart hidden" type="button">צריך חיזוק</button></div>
     </section>
-    <section id="results" class="card hidden">
-      <div class="center"><div id="scoreRing" class="score-ring"><b id="scoreText"></b></div><h2 id="resultTitle"></h2><p id="resultCopy" class="lead" style="margin-inline:auto"></p></div>
+    <section id="results" class="card hidden" aria-labelledby="resultTitle">
+      <div class="center"><div id="scoreRing" class="score-ring" aria-hidden="true"><b id="scoreText"></b></div><h2 id="resultTitle" tabindex="-1"></h2><p id="resultCopy" class="lead" style="margin-inline:auto"></p></div>
       <div class="insights">
         <article class="insight"><h3>מגמה בבוחן</h3><p id="trend" class="muted"></p></article>
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
@@ -105,7 +113,10 @@ function go(screen) {
   state.screen = screen;
   ["start", "quiz", "exam", "results"].forEach(function (id) {
     var el = $(id);
-    if (el) el.classList.toggle("hidden", id !== screen);
+    if (!el) return;
+    var on = id === screen;
+    el.classList.toggle("hidden", !on);
+    el.setAttribute("aria-hidden", on ? "false" : "true");
   });
   if (screen !== "results") {
     var sheet = $("diagnosisSheet");
@@ -116,7 +127,7 @@ function go(screen) {
 function setCourse(id) {
   state.courseId = id;
   var c = course();
-  var pill = document.querySelector(".brand .pill");
+  var pill = $("coursePill") || document.querySelector(".brand .pill");
   if (pill) pill.textContent = c.title;
   document.title = "PassPilot | " + c.title;
   var note = $("courseNote");
@@ -124,7 +135,8 @@ function setCourse(id) {
   var examBtn = $("examBtn");
   if (examBtn) examBtn.style.display = c.hasExam ? "" : "none";
   document.querySelectorAll(".pp-course").forEach(function (btn) {
-    btn.style.background = btn.getAttribute("data-c") === id ? "rgba(8,127,91,.12)" : "transparent";
+    var on = btn.getAttribute("data-c") === id;
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
   });
   renderTopics();
 }
@@ -140,7 +152,7 @@ function renderCourseButtons() {
   var host = $("courseButtons");
   if (!host) return;
   host.innerHTML = Object.keys(COURSES).map(function (id) {
-    return '<button type="button" data-c="' + id + '" class="pp-course" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);background:transparent;color:inherit;font:700 .82rem system-ui;cursor:pointer">' +
+    return '<button type="button" data-c="' + id + '" class="pp-course" aria-pressed="false" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);color:inherit;font:700 .82rem system-ui;cursor:pointer">' +
       COURSES[id].title + "</button>";
   }).join("");
   host.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
@@ -172,14 +184,20 @@ function renderQuizItem() {
   var q = state.items[state.index];
   state.startedAt = Date.now();
   $("counter").textContent = "שאלה " + (state.index + 1) + " מתוך " + state.items.length;
-  $("progress").style.width = (state.index / state.items.length * 100) + "%";
+  var pctNow = Math.round(state.index / state.items.length * 100);
+  $("progress").style.width = pctNow + "%";
+  var track = $("progressTrack");
+  if (track) {
+    track.setAttribute("aria-valuenow", String(pctNow));
+    track.setAttribute("aria-label", "התקדמות הבוחן " + (state.index + 1) + " מתוך " + state.items.length);
+  }
   $("topicTag").textContent = labels()[q.topic] || q.topic;
   $("levelTag").textContent = "רמה " + q.difficulty;
   var parts = q.question.split("\n");
   $("questionTitle").textContent = parts.shift();
   $("prompt").textContent = parts.join("\n");
   $("answers").innerHTML = q.options.map(function (o, i) {
-    return '<button class="answer" data-index="' + i + '">' + o + "</button>";
+    return '<button type="button" class="answer" data-index="' + i + '"><span class="sr-only">' + (i + 1) + ". </span>" + o + "</button>";
   }).join("");
   $("feedback").classList.add("hidden");
   $("nextBtn").classList.add("hidden");
@@ -189,6 +207,8 @@ function renderQuizItem() {
   clearInterval(state.timerId);
   tick();
   state.timerId = setInterval(tick, 1000);
+  var first = document.querySelector("#answers .answer");
+  if (first) first.focus();
 }
 
 function tick() {
@@ -210,6 +230,7 @@ function answerQuiz(selected) {
   $("feedback").classList.remove("hidden");
   $("nextBtn").textContent = state.index === state.items.length - 1 ? "לתוצאות" : "לשאלה הבאה";
   $("nextBtn").classList.remove("hidden");
+  $("nextBtn").focus();
 }
 
 function nextQuiz() {
@@ -235,7 +256,7 @@ function renderExamItem() {
   var q = b.item;
   state.startedAt = Date.now();
   $("blockOrder").innerHTML = state.items.map(function (x, i) {
-    return '<span class="' + (i === state.index ? "active" : "") + '">' + x.title + "</span>";
+    return '<span role="listitem" class="' + (i === state.index ? "active" : "") + '">' + x.title + "</span>";
   }).join("");
   $("examCounter").textContent = (state.index + 1) + " מתוך " + state.items.length;
   $("examTitle").textContent = b.title;
@@ -246,6 +267,7 @@ function renderExamItem() {
   $("revealBtn").classList.remove("hidden");
   $("examCorrect").classList.add("hidden");
   $("examWrong").classList.add("hidden");
+  $("codeAnswer").focus();
 }
 
 function revealExam() {
@@ -257,6 +279,7 @@ function revealExam() {
   $("revealBtn").classList.add("hidden");
   $("examCorrect").classList.remove("hidden");
   $("examWrong").classList.remove("hidden");
+  $("examCorrect").focus();
 }
 
 function gradeExam(correct) {
@@ -310,6 +333,7 @@ function finishSession() {
   var focus = focusFromRanked(ranked, map);
   renderStudyPlan(planFromExamDate(readExamDate(), focus));
   renderHistory(saveHistory(state.answers, state.kind));
+  if ($("resultTitle")) $("resultTitle").focus();
 }
 
 function readExamDate() {
@@ -497,11 +521,19 @@ function bind() {
   $("revealBtn").onclick = revealExam;
   $("examCorrect").onclick = function () { gradeExam(true); };
   $("examWrong").onclick = function () { gradeExam(false); };
-  $("restartBtn").onclick = function () { go("start"); };
+  $("restartBtn").onclick = function () { go("start"); $("startBtn").focus(); };
   $("structureBtn").onclick = function () { openReport(false); };
   $("reportBtn").onclick = function () { openReport(true); };
   $("path55Btn").onclick = function () { openReport(true); };
   $("marathonCardBtn").onclick = function () { openReport(true, true); };
+  document.addEventListener("keydown", function (ev) {
+    if (state.screen !== "quiz") return;
+    if ($("nextBtn") && !$("nextBtn").classList.contains("hidden")) return;
+    var n = ev.key === "1" || ev.key === "2" || ev.key === "3" || ev.key === "4" ? +ev.key : 0;
+    if (!n) return;
+    var btn = document.querySelector('#answers .answer[data-index="' + (n - 1) + '"]');
+    if (btn && !btn.disabled) { ev.preventDefault(); btn.click(); }
+  });
 }
 
 renderCourseButtons();

@@ -55,8 +55,8 @@
 # דפדפן
 start index.html   # Windows; או לחיצה כפולה על הקובץ
 
-# חוזה המתכנן
-node selftest.mjs
+# כל הבדיקות: node --test + selftest.mjs
+npm test
 ```
 
 ## רישיון
