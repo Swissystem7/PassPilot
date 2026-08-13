@@ -6,20 +6,20 @@
 
 ## What / For whom / How
 
-**What:** A Hebrew RTL browser demo (`index.html` + `selftest.mjs`) for four Afeka courses. After a short quiz it ranks weak topics, builds a **date-aware** practice plan, a **90-minute tonight card**, and a printable exam-structure report. The union instructor pastes many `PP1` codes into a **classroom briefing**. A coordinator edits the topic×points map in a form. Course 10016 also has a four-block code exam in real exam order. It is not a paid product and not a calibrated pass predictor.
+**What:** A Hebrew RTL browser demo (`index.html` + `selftest.mjs`) for four Afeka courses, plus any course an instructor pastes as JSON. After a short quiz it ranks weak topics, explains *why that topic fell*, builds a **date-aware** practice plan, a **90-minute tonight card**, and a printable exam-structure report. **מצב מרתון** is a timed walk through every exam-structure block. The union instructor pastes many `PP1` codes into a **classroom briefing**. A coordinator edits the topic×points map in a form, or authors a new course from a paste. Course 10016 also has a four-block code exam in real exam order. It is not a paid product and not a calibrated pass predictor.
 
-**For whom:** Afeka students who already buy union marathons or lecturer video (GOOL / Alon Bauman / Danny Bauman) and want a short diagnosis of *which exam blocks they are losing*, not another video course.
+**For whom:** Afeka students who already buy union marathons or lecturer video (GOOL / Alon Bauman / Danny Bauman) and want a short diagnosis of *which exam blocks they are losing*, not another video course. Instructors who need a room heatmap or a fifth course without touching the repo.
 
-**How:** Open `index.html` or the [live demo](https://swissystem7.github.io/PassPilot/). Pick a course, optional exam date, run a quiz or the 10016 exam mode, then open **דוח מרחק ממבנה המבחן**, **מסלול 55**, **כרטיס למרתון**, or the **הלילה** card. Copy the **PP1** diagnosis code (or its `#PP1…` link) for the union instructor. The instructor pastes many codes into **תדריך כיתה**. A coordinator edits topic×points in the form — not only as JSON. History stays in `localStorage` on this browser only. Run `npm test` (or `node --test` and `node selftest.mjs`) to check the planner contract.
+**How:** Open `index.html` or the [live demo](https://swissystem7.github.io/PassPilot/). Pick a course, optional exam date, run a quiz, the 10016 exam mode, or **מצב מרתון**. Then open **דוח מרחק ממבנה המבחן**, **מסלול 55**, **כרטיס למרתון**, or the **הלילה** card. Misses get a per-topic note. Copy the **PP1** diagnosis code (or its `#PP1…` link) for the union instructor. The instructor pastes many codes into **תדריך כיתה**, or a whole course JSON into **מדריך: קורס חדש**. History and cross-session trends stay in `localStorage` on this browser only. Run `npm test` (or `node --test` and `node selftest.mjs`) to check the planner contract.
 
 ## מה עובד היום
 
 | קורס באפקה | מספר | מה יש |
 |---|---|---|
-| מבוא לפייתון | 10016 | בוחן רב-ברירה + מצב מבחן: 4 שאלות כתיבת קוד בסדר המועד |
-| ארגון המחשב ושפת סף | 10145 | בוחן רב-ברירה בלבד |
-| חדו״א 1 | 90901 | בוחן רב-ברירה בלבד |
-| חדו״א 2 | 90902 | בוחן רב-ברירה בלבד |
+| מבוא לפייתון | 10016 | בוחן רב-ברירה + מצב מבחן + מצב מרתון (4 בלוקי כתיבת קוד מתוזמנים) |
+| ארגון המחשב ושפת סף | 10145 | בוחן רב-ברירה + מצב מרתון לפי מפת הנקודות |
+| חדו״א 1 | 90901 | בוחן רב-ברירה + מצב מרתון לפי מפת הנקודות |
+| חדו״א 2 | 90902 | בוחן רב-ברירה + מצב מרתון לפי מפת הנקודות |
 
 - **מתכנן תלוי-תאריך.** שדה «תאריך המבחן», אופק מ-`parseExamDate`, אזהרת חוסר זמן, חיתוך ל-14 יום. `node selftest.mjs` עובר.
 - **דוח מרחק ממבנה המבחן.** עמוד אחד להדפסה: מפת נושא×נקודות, איפה מאבדים, 2–3 הבלוקים היקרים, תוכנית ימים. רק שאלה 11 ב-10145 מתועדת כ-44 נק׳; שאר החלוקות מסומנות כהנחה.
@@ -32,10 +32,15 @@
 - **תדריך כיתה למרתון.** המדריך מדביק כמה קודי `PP1` מהוואטסאפ ורואה מפת חום לחדר — באיזה בלוק הכיתה מאבדת נקודות — בלי שמות ובלי שרת. יש הודעה מוכנה לקבוצה, וקישור `#PP1…` שפותח אבחון בודד.
 - **טופס מפה לרכז, לפי קורס.** נקודות לכל בלוק בטופס, סכום חי, ייצוא JSON. מפה של פייתון לא זולגת לחדו״א. עדיין מתויגת «הודבק על ידי רכז».
 - **מדגם דק.** ניסיון אחד בבלוק מסומן כמדגם דק — האובדן המשוער רופף, לא מפתח מועד.
+- **מאגר רחב יותר עם פתרון עבודה.** יותר פריטים לכל נושא, וכל פריט חייב הסבר שעובד את הדרך — לא רק את האות הנכונה.
+- **מצב מרתון.** שעון אחד על כל בלוקי מפת המבחן. בפייתון 10016 אלה ארבעה בלוקי כתיבת קוד; בשאר הקורסים רב-ברירה לפי משקל הבלוק. זה לא שעון המועד הרשמי. מה שלא הספקתם נשאר לא-נבחן, לא «טעות».
+- **הסבר לפי נושא אחרי טעות.** מתחת לפריט, ואז בסיכום: למה הנושא הזה עולה נקודות ומה הצעד הבא. נושא בלי הערה מובנית מקבל הערה כללית — בלי להמציא שיעור.
+- **קורס חדש מהדבקה.** מדריך מדביק JSON (נושאים, שאלות עם פתרון עבודה, מפה אופציונלית) ומקבל קורס שרץ בבוחן, במרתון ובאבחון. אי אפשר לדרוס את ארבעת קורסי אפקה.
+- **מגמות בין מפגשים.** דיוק מוקדם מול מאוחר לפי נושא, בלוקים שעוד לא נבחנו, ופיצול בוחן/מבחן/מרתון. היסטוריה מקומית עד 40 מפגשים — לא מודל מכויל.
 - **בלי מספר «סיכוי מעבר».** הנוסחה הישנה הוסרה.
 - **תאריכי תוכנית לפי שעון מקומי.** היסטוריה לפי קורס, כולל מצב מבחן. מעבר קורס לא מחזיר «מילונים» לבוחן הפייתון. תוכנית הימים אחרי בוחן משוקללת לפי אובדן נקודות במבנה, לא לפי סולם שעות שטוח.
 
-ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`, קוד שיתוף ב-`src/lib/shareCode.js`, תור חזרה ב-`src/lib/srsQueue.js`, תוכנית לילה ב-`src/lib/tonight.js`, תדריך כיתה ב-`src/lib/cohort.js`, מפות רכז לפי קורס ב-`src/lib/blueprintStore.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה.
+ארכיטקטורה: מאגרים ב-`src/lib/banks.js`, מתכנן+בחירת שאלות ב-`src/lib/engine.js` (גם `selftest.mjs` טוען אותו), מפת מבנה ב-`src/lib/examBlueprint.js`, דירוג חולשות ב-`src/lib/planner.js`, קוד שיתוף ב-`src/lib/shareCode.js`, תור חזרה ב-`src/lib/srsQueue.js`, תוכנית לילה ב-`src/lib/tonight.js`, תדריך כיתה ב-`src/lib/cohort.js`, מפות רכז לפי קורס ב-`src/lib/blueprintStore.js`, הסברי נושא ב-`src/lib/topicExplain.js`, סימולציית מרתון ב-`src/lib/marathon.js`, חבילת מדריך ב-`src/lib/coursePack.js`, מגמות בין מפגשים ב-`src/lib/analytics.js`. `index.html` הוא מכונת מצבים אחת (`start`/`quiz`/`exam`/`results`) בלי IIFE שמתקנים זה את זה. מצב מרתון משתמש באותם מסכים עם שעון גלובלי.
 
 ## מה זה *לא*
 
