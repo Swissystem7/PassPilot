@@ -71,10 +71,31 @@ const banned = [
   "probabilityBar",
   'id="probability"',
 ];
+const honestyFiles = [
+  ["index.html", html],
+  ["src/lib/tonight.js", readFileSync(new URL("./src/lib/tonight.js", import.meta.url), "utf8")],
+  ["src/lib/cohort.js", readFileSync(new URL("./src/lib/cohort.js", import.meta.url), "utf8")],
+  ["src/lib/blueprintStore.js", readFileSync(new URL("./src/lib/blueprintStore.js", import.meta.url), "utf8")],
+];
 const offences = [];
-html.split("\n").forEach((line, i) => {
-  for (const phrase of banned) if (line.includes(phrase)) offences.push(`index.html:${i + 1} — "${phrase}"`);
+honestyFiles.forEach(([name, text]) => {
+  text.split("\n").forEach((line, i) => {
+    for (const phrase of banned) if (line.includes(phrase)) offences.push(`${name}:${i + 1} — "${phrase}"`);
+  });
 });
 assert.deepEqual(offences, [], `נמצאה טענת הסתברות מעבר לא מכוילת:\n${offences.join("\n")}`);
+
+// החוזה מול שלושת המשתמשים חייב להישאר בדף — לא מודול יתום
+for (const token of [
+  'id="tonightBox"',
+  'id="cohortIn"',
+  'id="mapBuilder"',
+  'id="inviteCopyBtn"',
+  "src/lib/tonight.js",
+  "src/lib/cohort.js",
+  "src/lib/blueprintStore.js",
+]) {
+  assert.ok(html.includes(token), "חסר בדף: " + token);
+}
 
 console.log("selftest: כל הבדיקות עברו");
