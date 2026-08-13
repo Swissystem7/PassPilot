@@ -1,0 +1,8 @@
+{
+  "name": "passpilot",
+  "private": true,
+  "description": "Afeka exam-structure diagnosis demo",
+  "scripts": {
+    "test": "node --test && node selftest.mjs"
+  }
+}

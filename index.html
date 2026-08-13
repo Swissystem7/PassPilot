@@ -77,6 +77,7 @@
   <script src="src/lib/engine.js"></script>
   <script src="src/lib/examBlueprint.js"></script>
   <script src="src/lib/banks.js"></script>
+  <script src="src/lib/history.js"></script>
   <script>
 const $ = function (id) { return document.getElementById(id); };
 
@@ -90,8 +91,7 @@ const state = {
   startedAt: 0
 };
 
-const HIST_KEY = "passpilot.history.v1";
-const HIST_MAX = 20;
+
 
 function course() {
   return getCourse(state.courseId);
@@ -332,10 +332,8 @@ function renderStudyPlan(result) {
 }
 
 function readHistory() {
-  try {
-    var v = JSON.parse(localStorage.getItem(HIST_KEY));
-    return Array.isArray(v) ? v : [];
-  } catch (e) { return []; }
+  try { return parseStored(localStorage.getItem(HIST_KEY)); }
+  catch (e) { return []; }
 }
 
 function writeHistory(list) {
@@ -343,30 +341,11 @@ function writeHistory(list) {
   catch (e) { return false; }
 }
 
-function byTopic(rows) {
-  var acc = {};
-  rows.forEach(function (a) {
-    var t = acc[a.topic] || (acc[a.topic] = { n: 0, ok: 0 });
-    t.n++;
-    if (a.correct) t.ok++;
-  });
-  return acc;
-}
-
 function saveHistory(rows, kind) {
-  if (!rows || !rows.length) return { list: readHistory() };
-  var scored = scoreRows(rows);
-  var rec = {
-    ts: Date.now(),
-    courseId: state.courseId,
-    kind: kind || "quiz",
-    total: scored.total,
-    correct: scored.correct,
-    pct: scored.pct,
-    topics: byTopic(rows)
-  };
   var list = readHistory();
-  list.push(rec);
+  if (!rows || !rows.length) return { list: list };
+  var rec = makeRecord(rows, state.courseId, kind, Date.now());
+  list = appendRecord(list, rec, HIST_MAX);
   writeHistory(list);
   return { rec: rec, list: list };
 }
@@ -380,20 +359,12 @@ function fmtTs(ts) {
 function renderHistory(saved) {
   var box = $("historyBox");
   if (!box) return;
-  var list = (saved ? saved.list : readHistory()).filter(function (r) {
-    return (r.courseId || "python") === state.courseId;
-  });
+  var list = forCourse(saved ? saved.list : readHistory(), state.courseId);
   if (!list.length) { box.innerHTML = ""; return; }
-  var best = list.reduce(function (m, r) { return r.pct > m ? r.pct : m; }, 0);
-  var delta = list.length > 1 ? list[list.length - 1].pct - list[0].pct : null;
-  var agg = {};
-  list.forEach(function (r) {
-    Object.keys(r.topics || {}).forEach(function (k) {
-      var a = agg[k] || (agg[k] = { n: 0, ok: 0 });
-      a.n += r.topics[k].n;
-      a.ok += r.topics[k].ok;
-    });
-  });
+  var sum = summarize(list);
+  var best = sum.best;
+  var delta = sum.delta;
+  var agg = sum.topics;
   var map = labels();
   var bars = Object.keys(agg).map(function (k) {
     return { name: map[k] || k, rate: Math.round(agg[k].ok / agg[k].n * 100), n: agg[k].n };
@@ -418,7 +389,7 @@ function renderHistory(saved) {
     '<div class="muted" style="font-size:.68rem;margin-top:8px">נשמר בדפדפן הזה בלבד — בלי חשבון, בלי שרת, בלי העלאה.</div>';
   var btn = $("clearHistoryBtn");
   if (btn) btn.onclick = function () {
-    writeHistory(readHistory().filter(function (r) { return (r.courseId || "python") !== state.courseId; }));
+    writeHistory(clearCourse(readHistory(), state.courseId));
     box.innerHTML = "";
   };
 }
