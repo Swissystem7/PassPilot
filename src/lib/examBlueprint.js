@@ -210,7 +210,7 @@
       };
     });
     const sum = rows.reduce(function (s, r) { return s + r.weight; }, 0) || 1;
-    return rows.map(function (r) {
+    const out = rows.map(function (r) {
       return {
         id: r.id,
         topic: r.topic,
@@ -220,6 +220,11 @@
         hours: Math.round((r.weight / sum) * hours * 10) / 10,
       };
     }).sort(function (a, b) { return b.hours - a.hours; });
+    const drift = Math.round((hours - out.reduce(function (s, r) { return s + r.hours; }, 0)) * 10) / 10;
+    if (out.length && drift !== 0) {
+      out[0].hours = Math.round((out[0].hours + drift) * 10) / 10;
+    }
+    return out;
   }
 
   function marathonPrompts(costliest, blocks) {
