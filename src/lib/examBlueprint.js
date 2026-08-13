@@ -83,8 +83,135 @@
     return acc;
   }
 
-  function diagnoseCourse(courseId, rows) {
-    const bp = BLUEPRINTS[courseId] || BLUEPRINTS.python;
+  function cloneBlueprint(bp) {
+    if (!bp || typeof bp !== "object") return null;
+    return {
+      courseId: bp.courseId || "python",
+      title: bp.title || "",
+      examLabel: bp.examLabel || "",
+      totalPoints: Number(bp.totalPoints) || 0,
+      passOfficial: bp.passOfficial || AFEKA_PASS,
+      pointMapNote: bp.pointMapNote || "",
+      blocks: (Array.isArray(bp.blocks) ? bp.blocks : []).map(function (b) {
+        return {
+          id: b.id,
+          topic: b.topic,
+          label: b.label,
+          points: b.points,
+          source: b.source,
+        };
+      }),
+    };
+  }
+
+  function parseCoordinatorBlueprint(raw, fallbackCourseId) {
+    const errors = [];
+    const warnings = [];
+    if (raw == null || String(raw).trim() === "") {
+      return { ok: false, errors: ["חסר JSON"], warnings: warnings, blueprint: null };
+    }
+    let data;
+    try {
+      data = typeof raw === "string" ? JSON.parse(raw) : raw;
+    } catch (e) {
+      return { ok: false, errors: ["JSON לא תקין"], warnings: warnings, blueprint: null };
+    }
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      return { ok: false, errors: ["השורש חייב להיות אובייקט"], warnings: warnings, blueprint: null };
+    }
+    const courseId = data.courseId || fallbackCourseId || "python";
+    const incoming = Array.isArray(data.blocks) ? data.blocks : [];
+    if (!incoming.length) errors.push("חסרה רשימת blocks");
+    const blocks = [];
+    incoming.forEach(function (b, i) {
+      if (!b || typeof b !== "object") {
+        errors.push("בלוק " + (i + 1) + " אינו אובייקט");
+        return;
+      }
+      const topic = typeof b.topic === "string" ? b.topic.trim() : "";
+      const points = Number(b.points);
+      if (!topic) errors.push("בלוק " + (i + 1) + " חסר topic");
+      if (!Number.isFinite(points) || points <= 0) errors.push("בלוק " + (i + 1) + " חייב points חיובי");
+      blocks.push({
+        id: (b.id != null && String(b.id).trim() !== "") ? String(b.id) : ("b" + (i + 1)),
+        topic: topic,
+        label: (typeof b.label === "string" && b.label.trim()) ? b.label.trim() : topic,
+        points: points,
+        source: b.source || "coordinator",
+      });
+    });
+    const totalPoints = blocks.reduce(function (s, b) { return s + (Number.isFinite(b.points) ? b.points : 0); }, 0);
+    if (data.totalPoints != null && Number(data.totalPoints) !== totalPoints) {
+      warnings.push("totalPoints המוצהר (" + data.totalPoints + ") שונה מסכום הבלוקים (" + totalPoints + ")");
+    }
+    if (totalPoints && Math.abs(totalPoints - 100) > 0.05) {
+      warnings.push("סכום הנקודות הוא " + totalPoints + " ולא 100 — המפה תישמר כמו שהודבקה");
+    }
+    if (errors.length) return { ok: false, errors: errors, warnings: warnings, blueprint: null };
+    const blueprint = {
+      courseId: courseId,
+      title: (typeof data.title === "string" && data.title.trim()) ? data.title.trim() : courseId,
+      examLabel: (typeof data.examLabel === "string" && data.examLabel.trim()) ? data.examLabel.trim() : "מפה שהודבקה",
+      totalPoints: totalPoints,
+      passOfficial: AFEKA_PASS,
+      pointMapNote: (typeof data.pointMapNote === "string" && data.pointMapNote.trim())
+        ? data.pointMapNote.trim()
+        : "מפה שהודבקה על ידי רכז הקורס בדפדפן הזה. זו לא חתימה רשמית של אפקה ולא מפתח מועד.",
+      blocks: blocks,
+    };
+    return { ok: true, errors: [], warnings: warnings, blueprint: blueprint };
+  }
+
+  function compactBlueprint(bp) {
+    if (!bp) return null;
+    return {
+      c: bp.courseId,
+      t: bp.title,
+      e: bp.examLabel,
+      n: bp.pointMapNote,
+      k: (bp.blocks || []).map(function (b) {
+        return [b.id, b.topic, b.label, b.points, b.source || "coordinator"];
+      }),
+    };
+  }
+
+  function expandBlueprint(compact, fallbackCourseId) {
+    if (!compact || typeof compact !== "object") return null;
+    const rows = Array.isArray(compact.k) ? compact.k : [];
+    if (!rows.length) return null;
+    const blocks = rows.map(function (r, i) {
+      if (Array.isArray(r)) {
+        return {
+          id: r[0] || ("b" + (i + 1)),
+          topic: r[1] || "",
+          label: r[2] || r[1] || "",
+          points: Number(r[3]) || 0,
+          source: r[4] || "coordinator",
+        };
+      }
+      return {
+        id: r.id || ("b" + (i + 1)),
+        topic: r.topic || "",
+        label: r.label || r.topic || "",
+        points: Number(r.points) || 0,
+        source: r.source || "coordinator",
+      };
+    }).filter(function (b) { return b.topic && b.points > 0; });
+    if (!blocks.length) return null;
+    const totalPoints = blocks.reduce(function (s, b) { return s + b.points; }, 0);
+    return {
+      courseId: compact.c || fallbackCourseId || "python",
+      title: compact.t || compact.c || fallbackCourseId || "python",
+      examLabel: compact.e || "מפה שהודבקה",
+      totalPoints: totalPoints,
+      passOfficial: AFEKA_PASS,
+      pointMapNote: compact.n || "מפה שהגיעה עם קוד האבחון. זו לא חתימה רשמית של אפקה.",
+      blocks: blocks,
+    };
+  }
+
+  function diagnoseCourse(courseId, rows, overlay) {
+    const bp = overlay || BLUEPRINTS[courseId] || BLUEPRINTS.python;
     const stats = topicStats(rows);
     const blocks = bp.blocks.map(function (b) {
       const s = stats[b.topic];
@@ -247,6 +374,10 @@
     MARATHON_HOURS: MARATHON_HOURS,
     BLUEPRINTS: BLUEPRINTS,
     topicStats: topicStats,
+    cloneBlueprint: cloneBlueprint,
+    parseCoordinatorBlueprint: parseCoordinatorBlueprint,
+    compactBlueprint: compactBlueprint,
+    expandBlueprint: expandBlueprint,
     diagnoseCourse: diagnoseCourse,
     pickSecurePath: pickSecurePath,
     allocateMarathonHours: allocateMarathonHours,
