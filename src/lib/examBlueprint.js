@@ -194,12 +194,57 @@
     };
   }
 
+  const MARATHON_HOURS = 16;
+
+  function allocateMarathonHours(blocks, totalHours) {
+    const hours = Number(totalHours) > 0 ? Number(totalHours) : MARATHON_HOURS;
+    const rows = (Array.isArray(blocks) ? blocks : []).map(function (b) {
+      var weight = b.lost != null ? b.lost : b.points * 0.5;
+      return {
+        id: b.id,
+        topic: b.topic,
+        label: b.label,
+        points: b.points,
+        lost: b.lost,
+        weight: weight,
+      };
+    });
+    const sum = rows.reduce(function (s, r) { return s + r.weight; }, 0) || 1;
+    return rows.map(function (r) {
+      return {
+        id: r.id,
+        topic: r.topic,
+        label: r.label,
+        points: r.points,
+        lost: r.lost,
+        hours: Math.round((r.weight / sum) * hours * 10) / 10,
+      };
+    }).sort(function (a, b) { return b.hours - a.hours; });
+  }
+
+  function marathonPrompts(costliest, blocks) {
+    var src = (costliest || []).slice();
+    if (src.length < 3 && Array.isArray(blocks)) {
+      blocks.slice().sort(function (a, b) { return b.points - a.points; }).forEach(function (b) {
+        if (src.length >= 3) return;
+        if (!src.some(function (x) { return x.topic === b.topic; })) src.push(b);
+      });
+    }
+    return src.slice(0, 3).map(function (b) {
+      var pts = b.points != null ? b.points + " נק׳" : "בלוק במבנה";
+      return "בבלוק «" + b.label + "» (" + pts + ") — תפתרו איתי פריט אחד בסגנון המועד ותסגרו את הטעות שחזרה בבוחן.";
+    });
+  }
+
   return {
     AFEKA_PASS: AFEKA_PASS,
     FLOOR_55: 55,
+    MARATHON_HOURS: MARATHON_HOURS,
     BLUEPRINTS: BLUEPRINTS,
     topicStats: topicStats,
     diagnoseCourse: diagnoseCourse,
     pickSecurePath: pickSecurePath,
+    allocateMarathonHours: allocateMarathonHours,
+    marathonPrompts: marathonPrompts,
   };
 });

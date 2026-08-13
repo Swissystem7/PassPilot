@@ -32,6 +32,7 @@
     <section id="start" class="card">
       <h1>לא רק ללמוד.<br>לדעת שתעבור.</h1>
       <p class="lead">בוחן קצר שמזהה איפה אתה מאבד נקודות ובונה לך תוכנית תרגול ממוקדת לפי תאריך המבחן.</p>
+      <div class="caveat" id="marathonAddonNote">נספח אבחון למרתון אגודת אפקה — לא תחליף למרתון ב־270 ₪. המוצר שמוצע לאגודה: תוספת 20–40 ₪ על כרטיס כניסה להדפסה.</div>
       <div class="field"><span class="label">אילו נושאים לתרגל?</span><div id="topics" class="topics"></div></div>
       <div class="controls">
         <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
@@ -64,7 +65,7 @@
         <article class="insight"><h3>נושאים לחיזוק</h3><ul id="weakTopics" class="weak-list"></ul></article>
         <article class="insight wide"><h3>תוכנית התרגול שלך</h3><div id="planWarnings"></div><ul id="studyPlan" class="plan"></ul></article>
       </div>
-      <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="restartBtn" class="restart">בוחן חדש</button></div>
+      <div class="center no-print"><button id="reportBtn" class="ghost" type="button">דוח מרחק ממבנה המבחן</button><button id="path55Btn" class="ghost" type="button">מסלול 55</button><button id="marathonCardBtn" class="ghost" type="button">כרטיס למרתון</button><button id="restartBtn" class="restart">בוחן חדש</button></div>
     </section>
     <section id="diagnosisSheet" class="card hidden" aria-label="דוח מרחק ממבנה המבחן"></section>
   </main>
@@ -637,7 +638,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     });
     return buildFocusPlan(focus);
   }
-  function renderSheet(diag){
+  function renderSheet(diag, focusCard){
     var host = document.getElementById('diagnosisSheet');
     if (!host || typeof diagnoseCourse !== 'function') return;
     var bp = diag.blueprint;
@@ -692,6 +693,28 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
         '<p><strong>' + esc(end55) + '</strong></p>' +
         '<p class="muted">' + esc(end60) + '</p>';
     }
+    var cardHtml = '';
+    if (typeof allocateMarathonHours === 'function' && typeof marathonPrompts === 'function') {
+      var hoursTotal = typeof MARATHON_HOURS === 'number' ? MARATHON_HOURS : 16;
+      var split = allocateMarathonHours(diag.blocks, hoursTotal);
+      var splitRows = split.map(function(s){
+        return '<li><span>' + esc(s.label) + ' · ' + s.points + ' נק׳ במבנה</span><b>' + s.hours + ' שעות מתוך ' + hoursTotal + '</b></li>';
+      }).join('');
+      var qs = marathonPrompts(diag.costliest, diag.blocks).map(function(q, i){
+        return '<li><span>' + (i+1) + '. ' + esc(q) + '</span></li>';
+      }).join('') || '<li>אין בלוק יקר מספיק — פתחו את בלוק הנקודות הגבוה במבנה.</li>';
+      cardHtml =
+        '<div id="marathonCard" style="border:2px solid var(--brand2);border-radius:16px;padding:16px;margin:22px 0">' +
+          '<h3 style="margin:0 0 8px">כרטיס כניסה למרתון</h3>' +
+          '<p class="muted" style="margin:0 0 10px">דף למדריך ולסטודנט. מרתון אגודה טיפוסי = 16 שעות / 270 ₪. זו הצעת חלוקה לפי אובדן נקודות במפה — לא סילבוס המרתון.</p>' +
+          '<p><strong>' + esc(bp.title) + '</strong> · תאריך מבחן: ' + esc(examStr) + '</p>' +
+          '<h4 style="margin:12px 0 6px">איך לפצל 16 שעות מרתון</h4>' +
+          '<ul class="plan">' + splitRows + '</ul>' +
+          '<h4 style="margin:12px 0 6px">שלוש שאלות לפתוח עם המרצה</h4>' +
+          '<ul class="weak-list">' + qs + '</ul>' +
+          '<p class="muted" style="margin:10px 0 0;font-size:.8rem">הסטודנט מביא את הדף. האגודה מוכרת את המרתון. PassPilot הוא התוספת, לא המתחרה.</p>' +
+        '</div>';
+    }
 
     host.innerHTML =
       '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
@@ -700,6 +723,7 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
         ' · הופק ' + whenStr + ' · תאריך מבחן: ' + esc(examStr) + '</p>' +
       '<div class="caveat">ציון עובר רשמי באפקה הוא <strong>60</strong>, לא 55. ' +
         'המפה למטה אינה תחזית ציון. ' + esc(bp.pointMapNote) + '</div>' +
+      cardHtml +
       '<h3>מפת מבנה: נושא × נקודות</h3>' +
       '<table class="diag-table"><thead><tr>' +
         '<th>בלוק</th><th>נק׳</th><th>מקור המשקל</th><th>ניסיונות</th><th>דיוק</th><th>צפוי</th><th>אובדן</th>' +
@@ -722,11 +746,15 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
     var closeBtn = document.getElementById('closeReportBtn');
     if (closeBtn) closeBtn.onclick = function(){ host.classList.add('hidden'); };
     host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (focusCard) {
+      var card = document.getElementById('marathonCard');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
-  function openReport(useAnswers){
+  function openReport(useAnswers, focusCard){
     if (typeof diagnoseCourse !== 'function') return;
     var rows = useAnswers ? lastRows : [];
-    renderSheet(diagnoseCourse(courseId(), rows));
+    renderSheet(diagnoseCourse(courseId(), rows), focusCard);
   }
 
   var struct = document.getElementById('structureBtn');
@@ -735,6 +763,8 @@ $("examBtn").onclick=startExam;$("revealBtn").onclick=revealExamSolution;$("exam
   if (report) report.onclick = function(){ openReport(true); };
   var pathBtn = document.getElementById('path55Btn');
   if (pathBtn) pathBtn.onclick = function(){ openReport(true); };
+  var marathonBtn = document.getElementById('marathonCardBtn');
+  if (marathonBtn) marathonBtn.onclick = function(){ openReport(true, true); };
   var restart = document.getElementById('restartBtn');
   if (restart){
     var prev = restart.onclick;
