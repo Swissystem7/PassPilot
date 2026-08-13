@@ -47,6 +47,16 @@ test("a map that does not sum to 100 is kept, with an honest warning", () => {
   assert.ok(parsed.warnings.some((w) => w.includes("44")));
 });
 
+test("a single attempt is a thin sample, not a solid point map", () => {
+  const diag = diagnoseCourse("python", [{ topic: "lists", correct: true }]);
+  const lists = diag.blocks.find((b) => b.topic === "lists");
+  assert.equal(lists.sample, "thin");
+  assert.equal(diag.thinCount, 1);
+  const empty = diagnoseCourse("python", []);
+  assert.equal(empty.thinCount, 0);
+  assert.ok(empty.blocks.every((b) => b.sample === "none"));
+});
+
 test("diagnoseCourse uses the overlay weights instead of the built-in 25/25/25/25", () => {
   const parsed = parseCoordinatorBlueprint(sample);
   const diag = diagnoseCourse("python", [{ topic: "recursion", correct: false }], parsed.blueprint);

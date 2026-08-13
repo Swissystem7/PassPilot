@@ -228,6 +228,7 @@
         accuracy: accuracy,
         expected: expected,
         lost: lost,
+        sample: sampleQuality(s ? s.n : 0),
       };
     });
     const withLoss = blocks.filter(function (b) {
@@ -250,6 +251,9 @@
     const untested = blocks.filter(function (b) {
       return b.attempts === 0;
     });
+    const thinCount = blocks.filter(function (b) {
+      return b.sample === "thin";
+    }).length;
     return {
       blueprint: bp,
       blocks: blocks,
@@ -257,32 +261,51 @@
       expectedTotal: Math.round(expectedTotal * 10) / 10,
       lostTotal: Math.round(lostTotal * 10) / 10,
       untestedCount: untested.length,
+      thinCount: thinCount,
       hasAnswers: (rows || []).length > 0,
     };
   }
 
-  // Greedy by points recovered per hour. Not an optimal knapsack; the steps
-  // are meant to be readable on the page. Untested blocks count as 0 secured.
-  function pickSecurePath(blocks, target) {
-    const goal = Number(target);
-    const items = (Array.isArray(blocks) ? blocks : []).map(function (b) {
-      const acc = b.accuracy == null ? 0 : b.accuracy;
-      const have = Math.round(acc * b.points * 10) / 10;
-      const gain = Math.round((b.points - have) * 10) / 10;
-      const effort = Math.round(Math.max(0.5, (1 - acc) * Math.max(1, b.points / 20)) * 10) / 10;
+  function sampleQuality(n) {
+    const k = Number(n) || 0;
+    if (k <= 0) return "none";
+    if (k < 2) return "thin";
+    if (k < 4) return "ok";
+    return "solid";
+  }
+
+  // Same gain/effort the 55-path and the 90-minute plan both read.
+  // Untested accuracy is treated as 0 — no invented credit.
+  function scoreBlocks(blocks) {
+    return (Array.isArray(blocks) ? blocks : []).map(function (b) {
+      const raw = b && b.accuracy;
+      const acc = raw == null || !Number.isFinite(Number(raw)) ? 0 : Math.min(1, Math.max(0, Number(raw)));
+      const pts = b && Number.isFinite(Number(b.points)) ? Number(b.points) : 0;
+      const have = Math.round(acc * pts * 10) / 10;
+      const gain = Math.round((pts - have) * 10) / 10;
+      const effort = Math.round(Math.max(0.5, (1 - acc) * Math.max(1, pts / 20)) * 10) / 10;
       const value = effort > 0 ? Math.round((gain / effort) * 100) / 100 : 0;
       return {
-        id: b.id,
-        topic: b.topic,
-        label: b.label,
-        points: b.points,
-        accuracy: b.accuracy,
+        id: b && b.id,
+        topic: b && b.topic,
+        label: b && b.label,
+        points: pts,
+        accuracy: b && b.accuracy,
+        attempts: b && b.attempts ? b.attempts : 0,
+        sample: b && b.sample ? b.sample : sampleQuality(b && b.attempts),
         have: have,
         gain: gain,
         effort: effort,
         value: value,
       };
     });
+  }
+
+  // Greedy by points recovered per hour. Not an optimal knapsack; the steps
+  // are meant to be readable on the page. Untested blocks count as 0 secured.
+  function pickSecurePath(blocks, target) {
+    const goal = Number(target);
+    const items = scoreBlocks(blocks);
     const secured = Math.round(items.reduce(function (sum, it) { return sum + it.have; }, 0) * 10) / 10;
     const remaining = items.filter(function (it) { return it.gain > 0.05; })
       .sort(function (a, b) { return b.value - a.value || b.gain - a.gain; });
@@ -379,6 +402,8 @@
     compactBlueprint: compactBlueprint,
     expandBlueprint: expandBlueprint,
     diagnoseCourse: diagnoseCourse,
+    sampleQuality: sampleQuality,
+    scoreBlocks: scoreBlocks,
     pickSecurePath: pickSecurePath,
     allocateMarathonHours: allocateMarathonHours,
     marathonPrompts: marathonPrompts,
