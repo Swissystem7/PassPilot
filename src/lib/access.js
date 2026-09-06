@@ -244,6 +244,32 @@
     return map[feature] || "הפיצ׳ר הזה דורש קוד מימוש מהאגודה.";
   }
 
+  // Uniform denial — never echo rejected payload / array contents.
+  function forbidden(code) {
+    return { ok: false, error: "forbidden", code: code || "forbidden" };
+  }
+
+  // Allowlist check for sensitive arrays (roles, features, course ids).
+  // On failure returns forbidden without naming the bad value.
+  function assertAuthorizedArray(items, allowlist) {
+    if (!Array.isArray(items)) return forbidden("not_array");
+    if (!Array.isArray(allowlist)) return forbidden("bad_allowlist");
+    const allowed = new Set(allowlist.map(String));
+    for (let i = 0; i < items.length; i++) {
+      if (!allowed.has(String(items[i]))) {
+        return forbidden("unauthorized_array");
+      }
+    }
+    return { ok: true, error: null, code: null };
+  }
+
+  function assertPaidFeatureName(feature) {
+    if (typeof feature !== "string" || !Object.prototype.hasOwnProperty.call(PAID_FEATURES, feature)) {
+      return forbidden("unknown_feature");
+    }
+    return { ok: true, error: null, code: null };
+  }
+
   return {
     PREFIX: PREFIX,
     STORE_KEY: STORE_KEY,
@@ -263,5 +289,8 @@
     canUse: canUse,
     clampQuizCount: clampQuizCount,
     lockReason: lockReason,
+    forbidden: forbidden,
+    assertAuthorizedArray: assertAuthorizedArray,
+    assertPaidFeatureName: assertPaidFeatureName,
   };
 });

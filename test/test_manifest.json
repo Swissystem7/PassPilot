@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "note": "Update this list when adding/removing test/*.test.js files",
+  "testFiles": [
+    "access.test.js",
+    "analytics.test.js",
+    "banks.test.js",
+    "blueprintStore.test.js",
+    "cohort.test.js",
+    "coordinatorBlueprint.test.js",
+    "coursePack.test.js",
+    "engine-plan.test.js",
+    "history.test.js",
+    "honesty.test.js",
+    "manifest.test.js",
+    "marathon.test.js",
+    "offer.test.js",
+    "path55.test.js",
+    "planner.test.js",
+    "ranking.test.js",
+    "shareCode.test.js",
+    "srsQueue.test.js",
+    "tonight.test.js",
+    "topicExplain.test.js"
+  ]
+}
