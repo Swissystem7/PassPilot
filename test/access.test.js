@@ -14,6 +14,9 @@ const {
   canUse,
   clampQuizCount,
   lockReason,
+  forbidden,
+  assertAuthorizedArray,
+  assertPaidFeatureName,
 } = require("../src/lib/access");
 
 function memoryStore() {
@@ -98,4 +101,37 @@ test("garbage paste does not throw and lockReason is Hebrew", () => {
   assert.equal(decodeUnlock("").ok, false);
   assert.equal(decodeUnlock("PP1.abc.ffff").ok, false);
   assert.match(lockReason("report"), /קוד מימוש/);
+});
+
+test("forbidden never leaks payload text", () => {
+  const out = forbidden("unauthorized_array");
+  assert.equal(out.ok, false);
+  assert.equal(out.error, "forbidden");
+  assert.equal(out.code, "unauthorized_array");
+  assert.equal(JSON.stringify(out).includes("secret"), false);
+});
+
+test("assertAuthorizedArray allows only allowlisted values", () => {
+  const ok = assertAuthorizedArray(["report", "marathon"], ["report", "marathon", "exam"]);
+  assert.equal(ok.ok, true);
+  const bad = assertAuthorizedArray(["report", "admin-backdoor"], ["report", "marathon"]);
+  assert.equal(bad.ok, false);
+  assert.equal(bad.error, "forbidden");
+  assert.equal(bad.code, "unauthorized_array");
+  assert.equal(JSON.stringify(bad).includes("admin-backdoor"), false);
+});
+
+test("assertAuthorizedArray rejects non-arrays without echoing input", () => {
+  const bad = assertAuthorizedArray({ role: "admin" }, ["student"]);
+  assert.equal(bad.ok, false);
+  assert.equal(bad.error, "forbidden");
+  assert.equal(JSON.stringify(bad).includes("admin"), false);
+});
+
+test("assertPaidFeatureName rejects unknown feature names", () => {
+  assert.equal(assertPaidFeatureName("report").ok, true);
+  const bad = assertPaidFeatureName("superuser");
+  assert.equal(bad.ok, false);
+  assert.equal(bad.error, "forbidden");
+  assert.equal(JSON.stringify(bad).includes("superuser"), false);
 });
