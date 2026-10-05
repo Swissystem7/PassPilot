@@ -24,22 +24,22 @@ test("running product files do not ship an uncalibrated pass-probability", () =>
     "validatePassProbability",
     'id="probability"',
     "probabilityBar",
+    "סיכוי מעבר",
+    "סיכויי המעבר",
   ];
-  const files = [
-    "index.html",
-    "src/lib/planner.js",
-    "src/lib/engine.js",
-    "src/lib/examBlueprint.js",
-    "src/lib/access.js",
-    "src/lib/offer.js",
-    "src/lib/tonight.js",
-    "src/lib/marathon.js",
-  ];
+  // Every module under src/lib is scanned; a hand-kept list silently skipped
+  // new modules (history, srsQueue, shareCode, banks, ...).
+  const libDir = path.join(root, "src", "lib");
+  const files = ["index.html"].concat(
+    fs.readdirSync(libDir).filter((f) => f.endsWith(".js")).sort().map((f) => "src/lib/" + f)
+  );
+  assert.ok(files.length > 2, "src/lib is empty — nothing scanned");
   const hits = [];
   files.forEach((rel) => {
-    const text = read(rel);
-    banned.forEach((phrase) => {
-      if (text.includes(phrase)) hits.push(rel + " → " + phrase);
+    read(rel).split(/\r?\n/).forEach((line, i) => {
+      banned.forEach((phrase) => {
+        if (line.includes(phrase)) hits.push(rel + ":" + (i + 1) + " → " + phrase);
+      });
     });
   });
   assert.deepEqual(hits, []);
