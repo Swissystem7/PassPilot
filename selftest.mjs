@@ -1,7 +1,7 @@
 // בדיקת אמת לתוכנית הלימוד: node selftest.mjs
 // המנוע אחד — אותו src/lib/engine.js שהדף טוען.
 import { createRequire } from "node:module";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import assert from "node:assert/strict";
@@ -76,20 +76,15 @@ const banned = [
   "probabilityBar",
   'id="probability"',
 ];
-const honestyFiles = [
-  ["index.html", html],
-  ["src/lib/planner.js", readFileSync(new URL("./src/lib/planner.js", import.meta.url), "utf8")],
-  ["src/lib/engine.js", readFileSync(new URL("./src/lib/engine.js", import.meta.url), "utf8")],
-  ["src/lib/tonight.js", readFileSync(new URL("./src/lib/tonight.js", import.meta.url), "utf8")],
-  ["src/lib/cohort.js", readFileSync(new URL("./src/lib/cohort.js", import.meta.url), "utf8")],
-  ["src/lib/blueprintStore.js", readFileSync(new URL("./src/lib/blueprintStore.js", import.meta.url), "utf8")],
-  ["src/lib/topicExplain.js", readFileSync(new URL("./src/lib/topicExplain.js", import.meta.url), "utf8")],
-  ["src/lib/marathon.js", readFileSync(new URL("./src/lib/marathon.js", import.meta.url), "utf8")],
-  ["src/lib/coursePack.js", readFileSync(new URL("./src/lib/coursePack.js", import.meta.url), "utf8")],
-  ["src/lib/analytics.js", readFileSync(new URL("./src/lib/analytics.js", import.meta.url), "utf8")],
-  ["src/lib/access.js", readFileSync(new URL("./src/lib/access.js", import.meta.url), "utf8")],
-  ["src/lib/offer.js", readFileSync(new URL("./src/lib/offer.js", import.meta.url), "utf8")],
-];
+// כל מודול ב-src/lib נסרק אוטומטית — רשימה ידנית פספסה מודולים חדשים
+const libDir = join(here, "src", "lib");
+const honestyFiles = [["index.html", html]].concat(
+  readdirSync(libDir)
+    .filter((f) => f.endsWith(".js"))
+    .sort()
+    .map((f) => ["src/lib/" + f, readFileSync(join(libDir, f), "utf8")])
+);
+assert.ok(honestyFiles.length > 2, "src/lib ריק — הסריקה לא בודקת כלום");
 const offences = [];
 honestyFiles.forEach(([name, text]) => {
   text.split("\n").forEach((line, i) => {
