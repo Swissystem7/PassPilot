@@ -932,6 +932,15 @@ function loadShareCode() {
     return;
   }
   var p = decoded.payload;
+  // The decoder only checks the shape of the code. A pack course that is not
+  // installed in this browser would otherwise fall back to Python silently
+  // and the diagnosis would be drawn against the wrong point map.
+  if (!allCourses()[p.courseId]) {
+    var missing = "הקוד שייך לקורס «" + p.courseId + "» שאינו מותקן בדפדפן הזה. הדביקו קודם את חבילת הקורס מהמדריך, ואז טענו את הקוד שוב.";
+    if (msg) msg.textContent = missing;
+    setStatus("startStatus", missing);
+    return;
+  }
   if (p.blueprint) {
     var expanded = expandBlueprint(p.blueprint, p.courseId);
     if (expanded) {
