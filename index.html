@@ -432,7 +432,7 @@ function renderTopics() {
   var hasExamAligned = Object.keys(names).some(function (k) { return examTopics[k]; });
   $("topics").innerHTML = Object.keys(names).map(function (key) {
     var onExam = !hasExamAligned || !!examTopics[key];
-    return '<label class="topic"><input type="checkbox" value="' + key + '"' + (onExam ? " checked" : "") + "><span>" + names[key] + "</span></label>";
+    return '<label class="topic"><input type="checkbox" value="' + esc(key) + '"' + (onExam ? " checked" : "") + "><span>" + esc(names[key]) + "</span></label>";
   }).join("");
 }
 
@@ -442,8 +442,8 @@ function renderCourseButtons() {
   var catalog = allCourses();
   host.innerHTML = Object.keys(catalog).map(function (id) {
     var custom = catalog[id] && catalog[id].custom ? " · הודבק" : "";
-    return '<button type="button" data-c="' + id + '" class="pp-course" aria-pressed="false" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);color:inherit;font:700 .82rem system-ui;cursor:pointer">' +
-      catalog[id].title + custom + "</button>";
+    return '<button type="button" data-c="' + esc(id) + '" class="pp-course" aria-pressed="false" style="flex:1;min-width:130px;padding:9px;border-radius:10px;border:1px solid var(--line);color:inherit;font:700 .82rem system-ui;cursor:pointer">' +
+      esc(catalog[id].title) + custom + "</button>";
   }).join("");
   host.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
   host.querySelectorAll(".pp-course").forEach(function (btn) {
@@ -492,7 +492,7 @@ function renderQuizItem() {
   $("questionTitle").textContent = parts.shift();
   $("prompt").textContent = parts.join("\n");
   $("answers").innerHTML = q.options.map(function (o, i) {
-    return '<button type="button" class="answer" data-index="' + i + '"><span class="sr-only">' + (i + 1) + ". </span>" + o + "</button>";
+    return '<button type="button" class="answer" data-index="' + i + '"><span class="sr-only">' + (i + 1) + ". </span>" + esc(o) + "</button>";
   }).join("");
   $("feedback").classList.add("hidden");
   $("nextBtn").classList.add("hidden");
@@ -573,7 +573,7 @@ function renderExamItem() {
   state.startedAt = Date.now();
   $("blockOrder").innerHTML = state.items.map(function (x, i) {
     return '<span role="listitem" class="' + (i === state.index ? "active" : "") + '"' +
-      (i === state.index ? ' aria-current="step"' : "") + ">" + x.title + "</span>";
+      (i === state.index ? ' aria-current="step"' : "") + ">" + esc(x.title) + "</span>";
   }).join("");
   $("examCounter").textContent = (state.index + 1) + " מתוך " + state.items.length;
   $("examTitle").textContent = b.title;
@@ -671,7 +671,7 @@ function renderResults(rows, opts) {
   $("trend").textContent = options.imported ? "יובא מקוד אבחון — אין מגמת זמן בדפדפן הזה." : trendText(rows);
   $("weakTopics").innerHTML = weak.length
     ? weak.map(function (r) {
-      return "<li><span>" + (map[r.topic] || r.topic) + "</span><span><b>" + Math.round(r.errorRate * 100) +
+      return "<li><span>" + esc(map[r.topic] || r.topic) + "</span><span><b>" + Math.round(r.errorRate * 100) +
         '% טעויות</b> <button type="button" class="ghost drill-btn" data-topic="' + esc(r.topic) +
         '" style="width:auto;margin:0;padding:4px 8px">תרגול</button></span></li>';
     }).join("")
@@ -722,7 +722,7 @@ function renderStudyPlan(result) {
   $("studyPlan").innerHTML = plan.length
     ? plan.map(function (p) {
       var ds = new Date(p.date + "T00:00:00").toLocaleDateString("he-IL", { weekday: "short", day: "numeric", month: "numeric" });
-      return "<li><span>" + ds + " · " + p.topic + "</span><b>" + p.hours + " שעות · " + (p.type === "review" ? "חזרה" : "תרגול") + "</b></li>";
+      return "<li><span>" + ds + " · " + esc(p.topic) + "</span><b>" + p.hours + " שעות · " + (p.type === "review" ? "חזרה" : "תרגול") + "</b></li>";
     }).join("")
     : "<li>אין צורך בתוכנית חיזוק כרגע.</li>";
 }
