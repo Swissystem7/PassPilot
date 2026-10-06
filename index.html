@@ -833,20 +833,45 @@ function setStatus(id, text) {
   el.textContent = text || "";
 }
 
-function copyText(value, msgEl, okText) {
+// Copies value to the clipboard and tells the user what actually happened.
+// The async clipboard API is missing on http:// pages and rejects inside
+// sandboxed iframes; execCommand("copy") then returns false in Firefox and
+// several WebViews. Before this the page said "הועתק" in every one of those
+// cases, so a student pasted an empty clipboard into WhatsApp and the code
+// never reached the instructor. On failure the text is left selected (srcEl)
+// or shown inline so a manual Ctrl+C still works.
+var COPY_BLOCKED_MSG = "ההעתקה נחסמה בדפדפן הזה. הטקסט מסומן — העתיקו ידנית (Ctrl+C).";
+
+function copyText(value, msgEl, okText, srcEl) {
   var done = function () { if (msgEl) msgEl.textContent = okText; };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(value).then(done).catch(function () {
-      fallbackCopy(value);
-      done();
-    });
-  } else {
-    fallbackCopy(value);
-    done();
+  var failed = function () {
+    if (srcEl && srcEl.select) {
+      try { srcEl.focus(); srcEl.select(); } catch (e) {}
+      if (msgEl) msgEl.textContent = COPY_BLOCKED_MSG;
+      return;
+    }
+    if (msgEl) {
+      msgEl.style.whiteSpace = "pre-wrap";
+      msgEl.textContent = COPY_BLOCKED_MSG + String.fromCharCode(10) + value;
+    }
+  };
+  var viaFallback = function () { if (fallbackCopy(value)) done(); else failed(); };
+  var clip = null;
+  try { clip = navigator.clipboard; } catch (e) { clip = null; }
+  if (clip && clip.writeText) {
+    var pending = null;
+    try { pending = clip.writeText(value); } catch (e) { pending = null; }
+    if (pending && typeof pending.then === "function") {
+      pending.then(done, viaFallback);
+      return;
+    }
   }
+  viaFallback();
 }
 
+// Returns true only when the browser reported the copy as done.
 function fallbackCopy(value) {
+  if (!document.body || typeof document.execCommand !== "function") return false;
   var ta = document.createElement("textarea");
   ta.value = value;
   ta.setAttribute("readonly", "");
@@ -854,8 +879,10 @@ function fallbackCopy(value) {
   ta.style.insetInlineStart = "-9999px";
   document.body.appendChild(ta);
   ta.select();
-  try { document.execCommand("copy"); } catch (e) {}
+  var ok = false;
+  try { ok = document.execCommand("copy") === true; } catch (e) { ok = false; }
   document.body.removeChild(ta);
+  return ok;
 }
 
 function activeBlueprint() {
@@ -920,7 +947,7 @@ function copyShareCode() {
   var out = $("shareOut");
   var msg = $("shareOutMsg");
   if (!out || !out.value) return;
-  copyText(out.value, msg, "הועתק. אפשר לשלוח בוואטסאפ למדריך.");
+  copyText(out.value, msg, "הועתק. אפשר לשלוח בוואטסאפ למדריך.", out);
 }
 
 function loadShareCode() {
@@ -1352,7 +1379,7 @@ function copyShareLink() {
   var out = $("shareOut");
   var msg = $("shareOutMsg");
   if (!out || !out.value) return;
-  copyText(shareLink(out.value), msg, "הועתק קישור. מי שפותח אותו רואה את אותו אבחון.");
+  copyText(shareLink(out.value), msg, "הועתק קישור. מי שפותח אותו רואה את אותו אבחון.", out);
 }
 
 // Routes a #PP1.… share link or a #PPU1.… redeem link. A code must start at
