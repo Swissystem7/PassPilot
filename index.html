@@ -1355,17 +1355,28 @@ function copyShareLink() {
   copyText(shareLink(out.value), msg, "הועתק קישור. מי שפותח אותו רואה את אותו אבחון.");
 }
 
-function bootFromHash() {
+// Routes a #PP1.… share link or a #PPU1.… redeem link. A code must start at
+// a boundary: the base64url body of a PP1 code may contain the letters PPU1
+// by chance, and a substring match would send a shared diagnosis to redeem.
+function hashRoute(hash) {
   var raw = "";
-  try { raw = decodeURIComponent(String(location.hash || "").replace(/^#/, "")); }
-  catch (e) { raw = String(location.hash || "").replace(/^#/, ""); }
-  if (raw.indexOf("PPU1") !== -1) {
-    if ($("redeemIn")) $("redeemIn").value = raw;
+  try { raw = decodeURIComponent(String(hash || "").replace(/^#/, "")); }
+  catch (e) { raw = String(hash || "").replace(/^#/, ""); }
+  var compact = raw.replace(/\s+/g, "");
+  if (/(^|[^A-Za-z0-9_-])PPU1\./.test(compact)) return { kind: "redeem", code: compact };
+  if (/(^|[^A-Za-z0-9_-])PP1\./.test(compact)) return { kind: "share", code: compact };
+  return { kind: "none", code: "" };
+}
+
+function bootFromHash() {
+  var route = hashRoute(location.hash);
+  if (route.kind === "redeem") {
+    if ($("redeemIn")) $("redeemIn").value = route.code;
     applyRedeem();
     return;
   }
-  if (raw.indexOf("PP1") === -1) return;
-  if ($("shareIn")) $("shareIn").value = raw;
+  if (route.kind !== "share") return;
+  if ($("shareIn")) $("shareIn").value = route.code;
   loadShareCode();
 }
 
@@ -1823,6 +1834,8 @@ setCourse("python");
 bind();
 go("start");
 bootFromHash();
+// A second link opened in the same tab only changes the hash; without this the shared diagnosis never loads.
+window.addEventListener("hashchange", bootFromHash);
 
   </script>
 </body>
