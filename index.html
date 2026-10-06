@@ -252,6 +252,7 @@
   <script src="src/lib/examBlueprint.js"></script>
   <script src="src/lib/banks.js"></script>
   <script src="src/lib/history.js"></script>
+  <script src="src/lib/examDateStore.js"></script>
   <script src="src/lib/shareCode.js"></script>
   <script src="src/lib/srsQueue.js"></script>
   <script src="src/lib/tonight.js"></script>
@@ -288,6 +289,7 @@ const state = {
   overlays: {},
   mapDrafts: {},
   packs: {},
+  examDates: {},
   imported: false,
   marathon: null,
   marathonEndsAt: 0,
@@ -411,6 +413,8 @@ function setCourse(id) {
   if (note) note.textContent = c.note || "";
   var examBtn = $("examBtn");
   if (examBtn) examBtn.style.display = c.hasExam ? "" : "none";
+  // Each course has its own exam date; a Python date must not show up under Hedva.
+  if ($("examDate")) $("examDate").value = getExamDate(state.examDates, id);
   document.querySelectorAll(".pp-course").forEach(function (btn) {
     var on = btn.getAttribute("data-c") === id;
     btn.setAttribute("aria-pressed", on ? "true" : "false");
@@ -711,6 +715,16 @@ function renderResults(rows, opts) {
 function readExamDate() {
   var el = $("examDate");
   return el ? el.value : null;
+}
+
+function persistExamDate() {
+  state.examDates = putExamDate(state.examDates, state.courseId, readExamDate());
+  try { saveExamDates(localStorage, state.examDates); } catch (e) {}
+}
+
+function loadStoredExamDates() {
+  try { state.examDates = loadExamDates(localStorage); }
+  catch (e) { state.examDates = {}; }
 }
 
 function renderStudyPlan(result) {
@@ -1806,7 +1820,10 @@ function bind() {
   if ($("srsStartBtn")) $("srsStartBtn").onclick = startSrsQuiz;
   if ($("inviteCopyBtn")) $("inviteCopyBtn").onclick = copyInvite;
   if ($("cohortBtn")) $("cohortBtn").onclick = openCohortSheet;
-  if ($("examDate")) $("examDate").addEventListener("change", renderExamHint);
+  if ($("examDate")) $("examDate").addEventListener("change", function () {
+    persistExamDate();
+    renderExamHint();
+  });
   document.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") {
       var sheet = ["diagnosisSheet", "offerSheet", "unionSheet"].map($).filter(function (el) {
@@ -1829,6 +1846,7 @@ function bind() {
 
 loadStoredOverlay();
 loadStoredPacks();
+loadStoredExamDates();
 renderCourseButtons();
 setCourse("python");
 bind();
