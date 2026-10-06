@@ -500,31 +500,42 @@ function renderQuizItem() {
     b.onclick = function () { answerQuiz(+b.getAttribute("data-index")); };
   });
   clearInterval(state.timerId);
-  tick();
+  // An expired marathon clock ends the session inside tick(); starting a
+  // second interval after that would finish (and save) the session twice.
+  if (tick()) return;
   state.timerId = setInterval(tick, 1000);
   var first = document.querySelector("#answers .answer");
   if (first) first.focus();
 }
 
+// Marathon clock only. Returns true when the clock ran out and the session
+// was closed, so callers must not start another interval afterwards.
+function marathonTick() {
+  if (state.kind !== "marathon" || !state.marathonEndsAt) return false;
+  var clk = clockState(state.marathonEndsAt, Date.now());
+  updateMarathonClock(clk);
+  if (!clk.expired) return false;
+  clearInterval(state.timerId);
+  state.timerId = 0;
+  state.marathonExpired = true;
+  finishSession();
+  return true;
+}
+
 function tick() {
-  if (state.kind === "marathon" && state.marathonEndsAt) {
-    var clk = clockState(state.marathonEndsAt, Date.now());
-    updateMarathonClock(clk);
-    if (clk.expired) {
-      clearInterval(state.timerId);
-      state.marathonExpired = true;
-      finishSession();
-      return;
-    }
-  }
+  if (marathonTick()) return true;
   var el = $("timer");
-  if (!el || !state.startedAt) return;
+  if (!el || !state.startedAt) return false;
   var sec = Math.floor((Date.now() - state.startedAt) / 1000);
   el.textContent = String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
+  return false;
 }
 
 function answerQuiz(selected) {
   clearInterval(state.timerId);
+  // The per-question stopwatch stops here, but a marathon clock keeps
+  // running while the feedback is on screen - time spent reading counts.
+  if (state.kind === "marathon") state.timerId = setInterval(marathonTick, 1000);
   var q = state.items[state.index];
   var correct = selected === q.answerIdx;
   state.answers.push({ topic: q.topic, correct: correct, secondsSpent: (Date.now() - state.startedAt) / 1000 });
@@ -587,7 +598,7 @@ function renderExamItem() {
   $("codeAnswer").focus();
   if (state.kind === "marathon") {
     clearInterval(state.timerId);
-    tick();
+    if (tick()) return;
     state.timerId = setInterval(tick, 1000);
   }
 }
