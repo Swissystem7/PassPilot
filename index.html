@@ -263,6 +263,7 @@
   <script src="src/lib/analytics.js"></script>
   <script src="src/lib/access.js"></script>
   <script src="src/lib/offer.js"></script>
+  <script src="src/lib/confirmTap.js"></script>
   <script>
 const $ = function (id) { return document.getElementById(id); };
 
@@ -767,7 +768,7 @@ function renderHistory(saved) {
   }).sort(function (a, b) { return a.rate - b.rate; }).map(function (t) {
     var col = t.rate >= 70 ? "#10b981" : t.rate >= 50 ? "#f59e0b" : "#ef4444";
     return '<div style="margin-bottom:7px"><div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px"><span>' +
-      t.name + '</span><span style="opacity:.7">' + t.rate + "% · " + t.n + ' שאלות</span></div><div style="height:6px;border-radius:3px;background:var(--line)"><div style="height:6px;border-radius:3px;width:' +
+      esc(t.name) + '</span><span style="opacity:.7">' + t.rate + "% · " + t.n + ' שאלות</span></div><div style="height:6px;border-radius:3px;background:var(--line)"><div style="height:6px;border-radius:3px;width:' +
       t.rate + "%;background:" + col + '"></div></div></div>';
   }).join("");
   var recent = list.slice(-5).reverse().map(function (r) {
@@ -806,9 +807,11 @@ function renderHistory(saved) {
     '<ul class="plan">' + recent + "</ul>" +
     '<p class="muted" style="margin:10px 0 0;font-size:.8rem">' + esc(report.caveat) + "</p>" +
     '<button type="button" id="clearHistoryBtn" class="restart" style="margin-top:12px">מחיקת ההיסטוריה</button>' +
+    '<p id="clearHistoryMsg" class="muted" role="status" style="margin:6px 0 0;font-size:.8rem"></p>' +
     '<div class="muted" style="font-size:.68rem;margin-top:8px">נשמר בדפדפן הזה בלבד — בלי חשבון, בלי שרת, בלי העלאה.</div>';
   var btn = $("clearHistoryBtn");
   if (btn) btn.onclick = function () {
+    if (!confirmTap(btn, $("clearHistoryMsg"))) return;
     writeHistory(clearCourse(readHistory(), state.courseId));
     box.innerHTML = "";
   };
@@ -831,6 +834,32 @@ function setStatus(id, text) {
   var el = $(id);
   if (!el) return;
   el.textContent = text || "";
+}
+
+// Destructive buttons take two taps: the first arms the button and relabels
+// it, a second tap within a few seconds confirms, otherwise it disarms itself.
+// The arm state lives on the element, so a re-rendered button starts disarmed.
+function confirmTap(btn, msgEl) {
+  if (!btn) return true;
+  var c = btn.ppConfirm || (btn.ppConfirm = createConfirm({ ttlMs: ARM_MS }));
+  var base = btn.getAttribute("data-label") || btn.textContent;
+  var restore = function () {
+    btn.textContent = base;
+    btn.removeAttribute("data-label");
+    if (msgEl && msgEl.textContent === armedHint(c.ttlMs)) msgEl.textContent = "";
+  };
+  clearTimeout(btn.ppConfirmTimer);
+  if (c.press(Date.now()) === "confirmed") {
+    restore();
+    return true;
+  }
+  btn.setAttribute("data-label", base);
+  btn.textContent = armedLabel(base);
+  if (msgEl) msgEl.textContent = armedHint(c.ttlMs);
+  btn.ppConfirmTimer = setTimeout(function () {
+    if (!c.armed(Date.now())) restore();
+  }, c.ttlMs + 50);
+  return false;
 }
 
 function copyText(value, msgEl, okText) {
@@ -993,6 +1022,7 @@ function applyBlueprintJson() {
 }
 
 function resetBlueprint() {
+  if (!confirmTap($("bpResetBtn"), $("bpMsg"))) return;
   state.overlays = dropOverlay(state.overlays, state.courseId);
   persistOverlays();
   delete state.mapDrafts[state.courseId];
@@ -1290,6 +1320,7 @@ function removeCurrentPack() {
     if (msg) msg.textContent = "אפשר למחוק רק קורס שהודבק, לא אחד מארבעת קורסי אפקה.";
     return;
   }
+  if (!confirmTap($("coursePackDeleteBtn"), msg)) return;
   var id = state.courseId;
   state.packs = dropPack(state.packs, id);
   persistPacks();
@@ -1629,6 +1660,7 @@ function applyRedeem() {
 }
 
 function clearRedeem() {
+  if (!confirmTap($("redeemClearBtn"), $("redeemMsg"))) return;
   clearUnlock(unlockStore());
   if ($("redeemMsg")) $("redeemMsg").textContent = "המימוש הוסר מהדפדפן הזה.";
   renderAccess();
