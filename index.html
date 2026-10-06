@@ -457,6 +457,17 @@ function seedNow() {
   return t | 0;
 }
 
+// Digits 1-4 answer the open question, but only as plain keystrokes. With Ctrl, Alt or
+// Meta held the digit is a browser shortcut (switch to tab N) and must not pick an answer;
+// a digit typed into a field or mid-IME composition is text, not an answer.
+function answerHotkey(ev) {
+  if (!ev || ev.ctrlKey || ev.altKey || ev.metaKey || ev.isComposing) return 0;
+  var t = ev.target;
+  var tag = t && t.tagName ? String(t.tagName).toUpperCase() : "";
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (t && t.isContentEditable)) return 0;
+  return ev.key === "1" || ev.key === "2" || ev.key === "3" || ev.key === "4" ? +ev.key : 0;
+}
+
 function startQuiz() {
   clearMarathonRun();
   var picked = [].slice.call(document.querySelectorAll("#topics input:checked")).map(function (x) { return x.value; });
@@ -1820,7 +1831,7 @@ function bind() {
     }
     if (state.screen !== "quiz") return;
     if ($("nextBtn") && !$("nextBtn").classList.contains("hidden")) return;
-    var n = ev.key === "1" || ev.key === "2" || ev.key === "3" || ev.key === "4" ? +ev.key : 0;
+    var n = answerHotkey(ev);
     if (!n) return;
     var btn = document.querySelector('#answers .answer[data-index="' + (n - 1) + '"]');
     if (btn && !btn.disabled) { ev.preventDefault(); btn.click(); }
