@@ -82,6 +82,40 @@ test("a pack without a map gets an equal split and an honest warning", () => {
   assert.ok(parsed.warnings.some((w) => w.includes("חלוקה שווה")));
 });
 
+test("an exam block without a writing item of its topic is rejected, not left to dead-end the exam", () => {
+  const base = {
+    id: "exam-pack",
+    title: "עם מבחן",
+    quizTopics: { a: "א", b: "ב" },
+    questions: [
+      { topic: "a", question: "A?", options: ["1", "2"], answerIdx: 0, explanation: "פתרון עבודה לא־א" },
+    ],
+    hasExam: true,
+    examItems: [
+      { topic: "a", prompt: "כתבו a", referenceSolution: "a = 1", explanation: "פתרון עבודה לפריט" },
+    ],
+  };
+  const orphan = parseCoursePack(Object.assign({}, base, {
+    examBlocks: [{ number: 1, topic: "a" }, { number: 2, topic: "b" }],
+  }));
+  assert.equal(orphan.ok, false);
+  assert.ok(orphan.errors.some((e) => e.includes("בלוק מבחן 2") && e.includes("b")), orphan.errors.join(" · "));
+
+  const matched = parseCoursePack(Object.assign({}, base, {
+    examBlocks: [{ number: 1, topic: "a" }],
+  }));
+  assert.equal(matched.ok, true, matched.errors.join(" · "));
+  assert.equal(packToCourse(matched.pack).hasExam, true);
+
+  // Without hasExam the blocks are never played, so an orphan is not an error.
+  const unplayed = parseCoursePack(Object.assign({}, base, {
+    hasExam: false,
+    examBlocks: [{ number: 1, topic: "b" }],
+  }));
+  assert.equal(unplayed.ok, true, unplayed.errors.join(" · "));
+  assert.equal(unplayed.pack.hasExam, false);
+});
+
 test("store put/drop ignores builtin ids and survives garbage", () => {
   const parsed = parseCoursePack(EXAMPLE_PACK);
   let store = putPack({}, parsed.pack);

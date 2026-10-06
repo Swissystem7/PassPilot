@@ -167,6 +167,17 @@
     if (data.hasExam && !hasExam) {
       warnings.push("hasExam סומן אבל חסרים examBlocks/examItems — הסימולציה תהיה רב-ברירה");
     }
+    // Every exam block must have at least one writing item of its topic.
+    // pickExamBlocks fills an unmatched block with item: null, and the exam
+    // and marathon screens then show an empty prompt with no way forward.
+    if (hasExam) {
+      const itemTopics = {};
+      examItems.forEach(function (item) { itemTopics[item.topic] = true; });
+      examBlocks.forEach(function (b, i) {
+        if (Object.prototype.hasOwnProperty.call(itemTopics, String(b.topic).trim())) return;
+        errors.push("בלוק מבחן " + (i + 1) + " («" + b.topic + "») ללא פריט כתיבה באותו topic — המבחן היה נתקע בבלוק ריק");
+      });
+    }
 
     let blueprint = null;
     if (data.blueprint) {
