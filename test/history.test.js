@@ -7,6 +7,7 @@ const {
   forCourse,
   clearCourse,
   parseStored,
+  sanitizeRecord,
   summarize,
   HIST_MAX,
 } = require("../src/lib/history");
@@ -75,4 +76,33 @@ test("byTopic ignores malformed rows", () => {
   ]);
   assert.equal(acc.loops.n, 2);
   assert.equal(acc.loops.ok, 1);
+});
+
+test("parseStored drops garbage rows so one bad entry cannot crash the start screen", () => {
+  const good = makeRecord(rows("loops", true), "python", "quiz", 5);
+  const raw = JSON.stringify([null, 1, "x", [], { topics: { a: null, b: { n: "2", ok: 1 } } }, good]);
+  const list = parseStored(raw);
+  assert.equal(list.length, 2);
+  assert.deepEqual(list[0].topics, { b: { n: 2, ok: 1 } });
+  assert.equal(list[0].pct, 0);
+  assert.equal(list[0].courseId, undefined);
+  assert.deepEqual(list[1], good);
+  const py = forCourse(list, "python");
+  assert.equal(py.length, 2);
+  const sum = summarize(py);
+  assert.equal(sum.count, 2);
+  assert.equal(sum.best, 100);
+  assert.equal(sum.topics.b.n, 2);
+  assert.equal(sum.topics.loops.ok, 1);
+});
+
+test("sanitizeRecord coerces string numbers and derives a missing pct", () => {
+  const r = sanitizeRecord({ ts: "7", courseId: "arch", total: "4", correct: "3", topics: [] });
+  assert.equal(r.ts, 7);
+  assert.equal(r.courseId, "arch");
+  assert.equal(r.pct, 75);
+  assert.deepEqual(r.topics, {});
+  assert.equal(sanitizeRecord({ pct: "80" }).pct, 80);
+  assert.equal(sanitizeRecord({ pct: "NaN" }).pct, 0);
+  assert.equal(sanitizeRecord({ courseId: "" }).courseId, undefined);
 });

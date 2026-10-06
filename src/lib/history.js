@@ -53,11 +53,43 @@
     });
   }
 
+  function num(v) {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  // One garbage row in localStorage must not take the start screen down:
+  // keep only object rows and coerce every number the renderers touch.
+  function sanitizeRecord(r) {
+    if (!r || typeof r !== "object" || Array.isArray(r)) return null;
+    const topics = {};
+    const src = r.topics && typeof r.topics === "object" && !Array.isArray(r.topics) ? r.topics : {};
+    Object.keys(src).forEach(function (k) {
+      const t = src[k];
+      if (!t || typeof t !== "object") return;
+      topics[k] = { n: num(t.n), ok: num(t.ok) };
+    });
+    const total = num(r.total);
+    const correct = num(r.correct);
+    const pct = r.pct == null && total ? Math.round(correct / total * 100) : num(r.pct);
+    const out = {
+      ts: num(r.ts),
+      kind: typeof r.kind === "string" ? r.kind : "quiz",
+      total: total,
+      correct: correct,
+      pct: pct,
+      topics: topics
+    };
+    if (typeof r.courseId === "string" && r.courseId) out.courseId = r.courseId;
+    return out;
+  }
+
   function parseStored(raw) {
     if (raw == null || raw === "") return [];
     try {
       const v = typeof raw === "string" ? JSON.parse(raw) : raw;
-      return Array.isArray(v) ? v : [];
+      if (!Array.isArray(v)) return [];
+      return v.map(sanitizeRecord).filter(Boolean);
     } catch (e) {
       return [];
     }
@@ -98,6 +130,7 @@
     forCourse: forCourse,
     clearCourse: clearCourse,
     parseStored: parseStored,
+    sanitizeRecord: sanitizeRecord,
     summarize: summarize
   };
 });
