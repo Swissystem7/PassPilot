@@ -932,6 +932,7 @@ function loadShareCode() {
     return;
   }
   var p = decoded.payload;
+  abandonSession();
   if (p.blueprint) {
     var expanded = expandBlueprint(p.blueprint, p.courseId);
     if (expanded) {
@@ -947,6 +948,18 @@ function loadShareCode() {
   state.imported = true;
   if (msg) msg.textContent = "נטען אבחון לקורס " + p.courseId + ".";
   renderResults(state.answers, { save: false, imported: true });
+}
+
+// A share link can arrive mid-session (hashchange in an open tab, or a
+// pasted code). Drop the running session first: otherwise its stopwatch
+// keeps ticking behind the results, and an expiring marathon clock later
+// finishes the abandoned run, saves it to history and replaces the
+// imported diagnosis on screen.
+function abandonSession() {
+  clearInterval(state.timerId);
+  state.timerId = 0;
+  state.startedAt = 0;
+  clearMarathonRun();
 }
 
 function persistOverlays() {
