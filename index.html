@@ -886,14 +886,31 @@ function renderSrsBox() {
     return;
   }
   box.classList.remove("hidden");
+  var split = splitByQuiz(due, course().quizTopics);
   $("srsList").innerHTML = due.map(function (item) {
-    return "<li><span>" + esc(map[item.topic] || item.topic) + "</span><b>מרווח " + item.intervalDays + " ימים</b></li>";
+    var examOnly = split.quiz.indexOf(item) === -1;
+    return "<li><span>" + esc(map[item.topic] || item.topic) +
+      (examOnly ? ' <small class="muted">(אין שאלות בוחן — חוזרים עליו רק במבנה המבחן)</small>' : "") +
+      "</span><b>מרווח " + item.intervalDays + " ימים</b></li>";
   }).join("");
+  var btn = $("srsStartBtn");
+  if (btn) {
+    btn.disabled = !split.quiz.length;
+    btn.textContent = split.quiz.length
+      ? "תרגול הנושאים שבתוקף"
+      : "אין שאלות בוחן לנושאים שבתוקף — תרגלו במבנה המבחן";
+  }
 }
 
 function startSrsQuiz() {
-  var due = dueTopics(readSrs(), Date.now(), state.courseId);
-  if (!due.length) { setStatus("startStatus", "אין נושאים בתוקף היום"); return; }
+  var split = splitByQuiz(dueItems(readSrs(), Date.now(), state.courseId), course().quizTopics);
+  if (!split.quiz.length) {
+    setStatus("startStatus", split.examOnly.length
+      ? "לנושאים שבתוקף אין שאלות בוחן — תרגלו אותם דרך סימולציית מבנה המבחן"
+      : "אין נושאים בתוקף היום");
+    return;
+  }
+  var due = split.quiz.map(function (item) { return item.topic; });
   document.querySelectorAll("#topics input").forEach(function (box) {
     box.checked = due.indexOf(box.value) > -1;
   });

@@ -74,6 +74,23 @@
     return dueItems(list, now, courseId).map(function (item) { return item.topic; });
   }
 
+  // A missed exam block can have a topic with no quiz questions at all
+  // (python "dictionaries" is exam-only). The quiz button cannot drill such a
+  // topic, so split the due list into what the quiz can run and what can only
+  // be practised again in the exam structure. quizTopics is the course's
+  // quizTopics map or an array of topic keys.
+  function splitByQuiz(items, quizTopics) {
+    const known = {};
+    const keys = Array.isArray(quizTopics) ? quizTopics : Object.keys(quizTopics || {});
+    keys.forEach(function (t) { if (typeof t === "string") known[t] = true; });
+    const out = { quiz: [], examOnly: [] };
+    (Array.isArray(items) ? items : []).forEach(function (item) {
+      if (!item || typeof item.topic !== "string") return;
+      (known[item.topic] ? out.quiz : out.examOnly).push(item);
+    });
+    return out;
+  }
+
   function applySession(list, courseId, rows, now) {
     const ts = Number(now) || 0;
     const id = courseId || "python";
@@ -123,6 +140,7 @@
     parseSrs: parseSrs,
     dueItems: dueItems,
     dueTopics: dueTopics,
+    splitByQuiz: splitByQuiz,
     applySession: applySession,
   };
 });

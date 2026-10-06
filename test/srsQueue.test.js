@@ -58,3 +58,32 @@ test("parseSrs drops garbage instead of throwing", () => {
   assert.deepEqual(parseSrs(null), []);
   assert.equal(parseSrs(JSON.stringify([{ courseId: "python", topic: "x", due: t0 }])).length, 1);
 });
+
+test("splitByQuiz separates topics the quiz can drill from exam-only topics", () => {
+  const { splitByQuiz } = require("../src/lib/srsQueue");
+  const due = [
+    { courseId: "python", topic: "dictionaries", due: t0 },
+    { courseId: "python", topic: "recursion", due: t0 },
+    null,
+  ];
+  const split = splitByQuiz(due, { recursion: "רקורסיה", loops: "לולאות" });
+  assert.deepEqual(split.quiz.map((i) => i.topic), ["recursion"]);
+  assert.deepEqual(split.examOnly.map((i) => i.topic), ["dictionaries"]);
+  // an array of keys works too, and garbage input gives two empty lists
+  assert.deepEqual(splitByQuiz(due, ["dictionaries"]).quiz.map((i) => i.topic), ["dictionaries"]);
+  assert.deepEqual(splitByQuiz(null, null), { quiz: [], examOnly: [] });
+});
+
+test("a missed python exam block with no quiz questions is flagged exam-only", () => {
+  const { splitByQuiz } = require("../src/lib/srsQueue");
+  const { COURSES } = require("../src/lib/banks");
+  const python = COURSES.python;
+  const examOnlyTopic = python.examItems.map((q) => q.topic).find((t) => !python.quizTopics[t]);
+  assert.equal(examOnlyTopic, "dictionaries", "python exam has a block with no quiz questions");
+  const list = applySession([], "python", [{ topic: examOnlyTopic, correct: false }], t0);
+  const due = dueItems(list, t0 + DAY_MS, "python");
+  assert.equal(due.length, 1);
+  const split = splitByQuiz(due, python.quizTopics);
+  assert.equal(split.quiz.length, 0);
+  assert.equal(split.examOnly[0].topic, examOnlyTopic);
+});
