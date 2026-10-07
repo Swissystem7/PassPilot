@@ -1508,7 +1508,7 @@ function openReport(useAnswers, focusCard, extras) {
   if (slim) {
     host.innerHTML =
       '<p class="muted no-print" style="margin:0 0 8px">מפת מבנה · חינם</p>' +
-      "<h2 style=\"margin-bottom:6px\">מפת מבנה המבחן</h2>" +
+      "<h2 id=\"reportTitle\" tabindex=\"-1\" style=\"margin-bottom:6px\">מפת מבנה המבחן</h2>" +
       '<p class="muted" style="margin:0 0 14px">' + esc(bp.title) + " · " + esc(bp.examLabel) +
         " · הופק " + whenStr + "</p>" +
       '<div class="caveat">ציון עובר רשמי באפקה הוא <strong>60</strong>. זו מפת משקל, לא אבחון אישי ולא תחזית ציון. ' + esc(bp.pointMapNote) + "</div>" +
@@ -1521,15 +1521,17 @@ function openReport(useAnswers, focusCard, extras) {
         '<button type="button" class="restart" id="closeReportBtn" style="margin:0">סגירה</button>' +
       "</div>";
     hidePrintSheets();
-    setSheet(host, true);
+    setSheet(host, true, "reportTitle");
     $("printReportBtn").onclick = function () { window.print(); };
     $("closeReportBtn").onclick = function () { setSheet(host, false); };
+    var title = $("reportTitle");
+    if (title) title.focus();
     scrollToEl(host);
     return;
   }
   host.innerHTML =
     '<p class="muted no-print" style="margin:0 0 8px">נספח אבחון להדפסה · עמוד אחד</p>' +
-    "<h2 style=\"margin-bottom:6px\">דוח מרחק ממבנה המבחן</h2>" +
+    "<h2 id=\"reportTitle\" tabindex=\"-1\" style=\"margin-bottom:6px\">דוח מרחק ממבנה המבחן</h2>" +
     '<p class="muted" style="margin:0 0 14px">' + esc(bp.title) + " · " + esc(bp.examLabel) +
       " · הופק " + whenStr + " · תאריך מבחן: " + esc(examStr) + "</p>" +
     '<div class="caveat">ציון עובר רשמי באפקה הוא <strong>60</strong>, לא 55. המפה למטה אינה תחזית ציון. ' + esc(bp.pointMapNote) + "</div>" +
@@ -1565,9 +1567,11 @@ function openReport(useAnswers, focusCard, extras) {
     "</div>" +
     '<p class="muted" style="margin-top:16px;font-size:.78rem">PassPilot · נספח למרתון, לא תחליף לו. נשמר בדפדפן בלבד.</p>';
   hidePrintSheets();
-  setSheet(host, true);
+  setSheet(host, true, "reportTitle");
   $("printReportBtn").onclick = function () { window.print(); };
   $("closeReportBtn").onclick = function () { setSheet(host, false); };
+  var title = $("reportTitle");
+  if (title) title.focus();
   scrollToEl(focusCard && $("marathonCard") ? $("marathonCard") : host);
 }
 
