@@ -131,4 +131,16 @@ const startAt = html.indexOf('id="startBtn"');
 const staffAt = html.indexOf('id="staffTools"');
 assert.ok(startAt > 0 && staffAt > startAt, "כפתור הבוחן חייב להופיע לפני כלי המדריך");
 
-console.log("selftest: כל הבדיקות עברו");
+
+// UI Test: Accessibility & RTL/Hebrew layout robustness
+const buttonMatches = html.match(/<button[^>]*>/g) || [];
+for (const btn of buttonMatches) {
+  assert.ok(btn.includes('type="button"'), "UI Test Failed: Button missing type='button': " + btn);
+}
+const textareas = html.match(/<textarea[^>]*>/g) || [];
+for (const ta of textareas) {
+  assert.ok(ta.includes('spellcheck="false"'), "UI Test Failed: textarea missing spellcheck='false': " + ta);
+  assert.ok(ta.includes('dir="ltr"'), "UI Test Failed: textarea missing dir='ltr' (RTL layout bug): " + ta);
+}
+console.log("selftest: �� ������� ����");
+
