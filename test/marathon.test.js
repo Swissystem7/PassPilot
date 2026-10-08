@@ -87,3 +87,23 @@ test("the clock warns under five minutes and expires at zero", () => {
   assert.equal(done.label, "00:00");
   assert.equal(formatCountdown(3661000), "01:01:01");
 });
+
+test("counts and minutes add up exactly on the even ten-topic map a pack gets by default", () => {
+  const blocks = Array.from({ length: 10 }, (_, i) => ({
+    id: "t" + i, topic: "t" + i, label: "t" + i, points: 10,
+  }));
+  const counts = countsForBlocks(blocks, 16);
+  assert.equal(counts.reduce((s, r) => s + r.count, 0), 16);
+  assert.ok(counts.every((r) => r.count >= 1));
+  const spread = counts.map((r) => r.count);
+  assert.ok(Math.max(...spread) - Math.min(...spread) <= 1, "equal blocks get equal shares: " + spread);
+  const minutes = allocateMinutes(blocks, 121);
+  assert.equal(minutes.reduce((s, r) => s + r.minutes, 0), 121);
+  const mins = minutes.map((r) => r.minutes);
+  assert.ok(Math.max(...mins) - Math.min(...mins) <= 1, "equal blocks get equal minutes: " + mins);
+});
+
+test("a budget smaller than the block count still gives every block one slot", () => {
+  const blocks = [1, 2, 3].map((p) => ({ id: "b" + p, topic: "b" + p, label: "b" + p, points: p }));
+  assert.deepEqual(countsForBlocks(blocks, 2).map((r) => r.count), [1, 1, 1]);
+});

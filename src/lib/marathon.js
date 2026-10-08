@@ -1,7 +1,7 @@
 // PassPilot — timed exam-structure simulation ("מצב מרתון").
 // Walks every blueprint block under one clock. Not the official seating,
-// not a pass forecast. Minutes follow the point map; leftover seconds
-// are parked on the heaviest block so the sum matches the budget.
+// not a pass forecast. Minutes and question counts follow the point map
+// by largest remainder, so the parts add up to the budget.
 (function (root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
@@ -33,6 +33,30 @@
     return "mcq";
   }
 
+  function apportion(weights, total) {
+    // Largest remainder with a floor of 1 per block. When the budget is
+    // smaller than the block count every block still gets 1.
+    const n = weights.length;
+    if (!n) return [];
+    if (total <= n) return weights.map(function () { return 1; });
+    const sum = weights.reduce(function (s, w) { return s + w; }, 0) || 1;
+    const ideal = weights.map(function (w) { return (w / sum) * total; });
+    const out = ideal.map(function (x) { return Math.max(1, Math.floor(x)); });
+    let left = total - out.reduce(function (s, x) { return s + x; }, 0);
+    const order = ideal.map(function (x, i) { return i; });
+    if (left > 0) {
+      order.sort(function (a, b) { return (ideal[b] - out[b]) - (ideal[a] - out[a]) || weights[b] - weights[a]; });
+      for (let k = 0; left > 0; k = (k + 1) % n) { out[order[k]] += 1; left -= 1; }
+    }
+    while (left < 0) {
+      const give = order.filter(function (i) { return out[i] > 1; })
+        .sort(function (a, b) { return (ideal[a] - out[a]) - (ideal[b] - out[b]) || weights[a] - weights[b]; })[0];
+      out[give] -= 1;
+      left += 1;
+    }
+    return out;
+  }
+
   function allocateMinutes(blocks, totalMinutes) {
     const hours = Number(totalMinutes) > 0 ? Number(totalMinutes) : DEFAULT_MCQ_MINUTES;
     const rows = (Array.isArray(blocks) ? blocks : []).map(function (b) {
@@ -43,43 +67,31 @@
         points: b && Number(b.points) > 0 ? Number(b.points) : 0,
       };
     }).filter(function (b) { return b.topic && b.points > 0; });
-    const sum = rows.reduce(function (s, r) { return s + r.points; }, 0) || 1;
-    const out = rows.map(function (r) {
+    const minutes = apportion(rows.map(function (r) { return r.points; }), hours);
+    return rows.map(function (r, i) {
       return {
         id: r.id,
         topic: r.topic,
         label: r.label,
         points: r.points,
-        minutes: Math.max(1, Math.round((r.points / sum) * hours)),
+        minutes: minutes[i],
       };
     });
-    const drift = hours - out.reduce(function (s, r) { return s + r.minutes; }, 0);
-    if (out.length && drift !== 0) {
-      const heaviest = out.slice().sort(function (a, b) { return b.points - a.points; })[0];
-      heaviest.minutes = Math.max(1, heaviest.minutes + drift);
-    }
-    return out;
   }
 
   function countsForBlocks(blocks, totalQuestions) {
     const rows = Array.isArray(blocks) ? blocks : [];
     const total = Number(totalQuestions) > 0 ? Number(totalQuestions) : DEFAULT_MCQ_COUNT;
-    const sum = rows.reduce(function (s, b) { return s + (Number(b.points) || 0); }, 0) || 1;
-    const out = rows.map(function (b) {
+    const counts = apportion(rows.map(function (b) { return Number(b.points) || 0; }), total);
+    return rows.map(function (b, i) {
       return {
         id: b.id,
         topic: b.topic,
         label: b.label,
         points: b.points,
-        count: Math.max(1, Math.round(((Number(b.points) || 0) / sum) * total)),
+        count: counts[i],
       };
     });
-    const drift = total - out.reduce(function (s, r) { return s + r.count; }, 0);
-    if (out.length && drift !== 0) {
-      const heaviest = out.slice().sort(function (a, b) { return b.points - a.points; })[0];
-      heaviest.count = Math.max(1, heaviest.count + drift);
-    }
-    return out;
   }
 
   function remainingMs(endsAt, now) {
