@@ -93,3 +93,14 @@ test("custom blueprint travels with the code so the union sees the same map", ()
   assert.equal(decoded.payload.blueprint.t, "מועד מותאם");
   assert.equal(decoded.payload.blueprint.k[0][3], 40);
 });
+
+test("an oversized code is refused before it expands into millions of rows", () => {
+  const { MAX_ROWS } = require("../src/lib/shareCode");
+  const huge = encodeDiagnosis({ courseId: "python", t: [["strings", 30000000, 1]] });
+  const out = decodeDiagnosis(huge);
+  assert.equal(out.ok, false);
+  assert.equal(triplesToRows([["strings", 30000000, 1]]).length, MAX_ROWS);
+  const normal = decodeDiagnosis(encodeDiagnosis({ courseId: "python", t: [["strings", 12, 7]] }));
+  assert.equal(normal.ok, true);
+  assert.equal(normal.payload.rows.length, 12);
+});
