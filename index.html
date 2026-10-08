@@ -716,7 +716,7 @@ function readExamDate() {
 function renderStudyPlan(result) {
   var warn = $("planWarnings");
   if (warn) warn.innerHTML = (result.warnings || []).map(function (w) {
-    return '<p class="muted" style="margin:0 0 6px">' + w + "</p>";
+    return '<p class="muted" style="margin:0 0 6px">' + esc(w) + "</p>";
   }).join("");
   var plan = result.plan || [];
   $("studyPlan").innerHTML = plan.length
@@ -767,7 +767,7 @@ function renderHistory(saved) {
   }).sort(function (a, b) { return a.rate - b.rate; }).map(function (t) {
     var col = t.rate >= 70 ? "#10b981" : t.rate >= 50 ? "#f59e0b" : "#ef4444";
     return '<div style="margin-bottom:7px"><div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:3px"><span>' +
-      t.name + '</span><span style="opacity:.7">' + t.rate + "% · " + t.n + ' שאלות</span></div><div style="height:6px;border-radius:3px;background:var(--line)"><div style="height:6px;border-radius:3px;width:' +
+      esc(t.name) + '</span><span style="opacity:.7">' + t.rate + "% · " + t.n + ' שאלות</span></div><div style="height:6px;border-radius:3px;background:var(--line)"><div style="height:6px;border-radius:3px;width:' +
       t.rate + "%;background:" + col + '"></div></div></div>';
   }).join("");
   var recent = list.slice(-5).reverse().map(function (r) {

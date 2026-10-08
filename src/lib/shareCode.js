@@ -7,6 +7,9 @@
   else Object.assign(root, api);
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   const PREFIX = "PP1";
+  // One session never answers this many; a bigger code is hostile or broken
+  // and would freeze the tab while it expands into rows.
+  const MAX_ROWS = 2000;
 
   function rowsToTriples(rows) {
     const acc = {};
@@ -27,7 +30,7 @@
       if (!Array.isArray(tr) || typeof tr[0] !== "string" || !tr[0]) return;
       const n = Math.max(0, Math.floor(Number(tr[1]) || 0));
       const ok = Math.max(0, Math.min(n, Math.floor(Number(tr[2]) || 0)));
-      for (let i = 0; i < n; i++) {
+      for (let i = 0; i < n && rows.length < MAX_ROWS; i++) {
         rows.push({ topic: tr[0], correct: i < ok, secondsSpent: 0 });
       }
     });
@@ -119,6 +122,12 @@
     if (data.t != null && !Array.isArray(data.t)) {
       return { ok: false, error: "טבלת הנושאים בקוד אינה תקינה.", payload: null };
     }
+    const attempts = (data.t || []).reduce(function (s, tr) {
+      return s + (Array.isArray(tr) ? Math.max(0, Number(tr[1]) || 0) : 0);
+    }, 0);
+    if (attempts > MAX_ROWS) {
+      return { ok: false, error: "הקוד מכיל יותר מ־" + MAX_ROWS + " תשובות — זה לא אבחון של מפגש אחד.", payload: null };
+    }
     const payload = {
       v: 1,
       courseId: data.c.trim(),
@@ -133,6 +142,7 @@
 
   return {
     PREFIX: PREFIX,
+    MAX_ROWS: MAX_ROWS,
     normalizeKind: normalizeKind,
     rowsToTriples: rowsToTriples,
     triplesToRows: triplesToRows,
