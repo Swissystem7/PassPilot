@@ -1548,7 +1548,7 @@ function openReport(useAnswers, focusCard, extras) {
     '<p class="muted" style="margin:10px 0 0">' + sampleNote +
       (diag.thinCount ? " · " + diag.thinCount + " בלוקים עם מדגם דק (ניסיון אחד)." : "") + "</p>" +
     "<h3 style=\"margin-top:22px\">איפה הכי יקר לטעות</h3><ul class=\"weak-list\">" + costly + "</ul>" +
-    "<h3 style=\"margin-top:22px\">מסלול 55 — אילו בלוקים לסגור במאמץ הנמוך</h3>" +
+    "<h3 id=\"path55Card\" style=\"margin-top:22px\">מסלול 55 — אילו בלוקים לסגור במאמץ הנמוך</h3>" +
     '<p class="muted">אלגוריתם חמדן: בכל צעד לוקחים את הבלוק עם הכי הרבה נקודות לשעת מאמץ (gain/effort). זה לא תיק אופטימלי וזה לא תחזית ציון. ציון עובר באפקה הוא 60; 55 הוא רצפת ביניים שמבקשים בפיצ׳ר.</p>' +
     '<ul class="plan">' + steps55 + "</ul>" +
     "<p><strong>" + esc(end55) + "</strong></p>" +
@@ -1568,7 +1568,7 @@ function openReport(useAnswers, focusCard, extras) {
   setSheet(host, true);
   $("printReportBtn").onclick = function () { window.print(); };
   $("closeReportBtn").onclick = function () { setSheet(host, false); };
-  scrollToEl(focusCard && $("marathonCard") ? $("marathonCard") : host);
+  scrollToEl(focusCard && $("marathonCard") ? $("marathonCard") : (extras === true && $("path55Card") ? $("path55Card") : host));
 }
 
 function renderAccess() {
@@ -1782,7 +1782,7 @@ function bind() {
   $("restartBtn").onclick = function () { go("start"); $("startBtn").focus(); };
   $("structureBtn").onclick = function () { openReport(false, false, false); };
   $("reportBtn").onclick = function () { openReport(true); };
-  $("path55Btn").onclick = function () { openReport(true); };
+  $("path55Btn").onclick = function () { openReport(true, false, true); };
   $("marathonCardBtn").onclick = function () { openReport(true, true); };
   if ($("offerNavBtn")) $("offerNavBtn").onclick = function () { openOfferSheet(); };
   if ($("unionNavBtn")) $("unionNavBtn").onclick = function () { openUnionSheet(); };
