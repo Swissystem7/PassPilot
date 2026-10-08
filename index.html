@@ -90,8 +90,8 @@
         <div class="field"><span class="label" id="courseLabel">מקצוע</span><div id="courseButtons" role="group" aria-labelledby="courseLabel"></div><p id="courseNote" class="muted"></p></div>
         <fieldset class="field" style="border:0;padding:0;margin:24px 0"><legend class="label">אילו נושאים לתרגל?</legend><p class="muted" id="topicHint" style="margin:0 0 8px">מסומנים בלוקי המבחן. אפשר להוסיף נושאי בוחן אחרים.</p><div id="topics" class="topics"></div></fieldset>
         <div class="controls">
-          <label><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
-          <label><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
+          <label for="count"><span class="label">מספר שאלות</span><select id="count"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></label>
+          <label for="difficulty"><span class="label">רמת קושי</span><select id="difficulty"><option value="">כל הרמות</option><option value="1">בסיסית</option><option value="2">בינונית</option><option value="3">מתקדמת</option></select></label>
         </div>
         <div class="field"><label for="examDate"><span class="label">תאריך המבחן</span></label><input type="date" id="examDate" aria-describedby="examDateHint"><p id="examDateHint" class="muted">התוכנית נבנית עד יום לפני המבחן, לכל היותר 14 ימים. בלי תאריך — אופק ברירת מחדל. אם המבחן היום או מחר — אחרי הבוחן תופיע תוכנית ל־90 דקות.</p></div>
         <div id="srsBox" class="addon-box hidden" aria-live="polite">
@@ -346,9 +346,11 @@ function setSheet(el, open, labelledBy) {
   if (open) {
     rememberFocus();
     el.setAttribute("role", "dialog");
+    el.setAttribute("aria-modal", "true");
     if (labelledBy) el.setAttribute("aria-labelledby", labelledBy);
   } else {
     el.removeAttribute("role");
+    el.removeAttribute("aria-modal");
     restoreFocus();
   }
 }
