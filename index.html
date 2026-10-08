@@ -187,14 +187,14 @@
       <div class="quiz-head"><span id="counter" class="counter" aria-live="polite"></span><div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress" class="progress-bar"></div></div><span id="marathonClock" class="marathon-clock hidden" aria-live="off"></span><span id="timer" class="timer" aria-live="off">00:00</span></div>
       <p id="quizKeys" class="muted kbd-hint">מקשים 1–4 בוחרים תשובה. Escape סוגר דוח פתוח.</p>
       <div class="question-meta"><span id="topicTag" class="tag"></span><span id="levelTag" class="tag"></span></div>
-      <h2 id="questionTitle">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers" role="group" aria-label="אפשרויות תשובה"></div>
+      <h2 id="questionTitle" tabindex="-1">מה התוצאה?</h2><div id="prompt" class="prompt"></div><div id="answers" class="answers" role="group" aria-label="אפשרויות תשובה"></div>
       <div id="feedback" class="feedback hidden" aria-live="assertive" role="status"></div><button id="nextBtn" class="next hidden" type="button">לשאלה הבאה</button>
     </section>
     <section id="exam" class="card hidden" aria-hidden="true" aria-labelledby="examTitle">
       <div class="exam-banner" id="examBanner"><strong>מבחן אפקה 10016 · מועד ב׳</strong><br><span class="muted">ארבע שאלות כתיבת קוד, לפי הסדר האמיתי. הפתרון נחשף רק אחרי שכתבת תשובה.</span><div id="marathonClockExam" class="marathon-clock hidden" aria-live="off"></div></div>
       <div id="blockOrder" class="block-order" role="list" aria-label="סדר בלוקי המבחן"></div>
       <div class="question-meta"><span id="examCounter" class="tag" aria-live="polite"></span><span class="tag">כתיבת קוד</span></div>
-      <h2 id="examTitle"></h2><p id="examEmphasis" class="muted"></p><p id="examPrompt"></p>
+      <h2 id="examTitle" tabindex="-1"></h2><p id="examEmphasis" class="muted"></p><p id="examPrompt"></p>
       <label class="label" for="codeAnswer">הפתרון שלכם</label>
       <textarea id="codeAnswer" class="code-input" spellcheck="false" placeholder="# כתבו כאן את הפתרון שלכם" aria-describedby="examPrompt"></textarea>
       <div id="examSolution" class="feedback hidden" aria-live="polite"><strong>פתרון ייחוס</strong><pre id="referenceCode" class="solution"></pre><p id="solutionExplanation"></p></div>
@@ -503,7 +503,7 @@ function renderQuizItem() {
   tick();
   state.timerId = setInterval(tick, 1000);
   var first = document.querySelector("#answers .answer");
-  if (first) first.focus();
+  if ($("questionTitle")) $("questionTitle").focus();
 }
 
 function tick() {
@@ -580,11 +580,12 @@ function renderExamItem() {
   $("examEmphasis").textContent = b.emphasis;
   $("examPrompt").textContent = q ? q.prompt : "";
   $("codeAnswer").value = "";
+  $("codeAnswer").readOnly = false;
   $("examSolution").classList.add("hidden");
   $("revealBtn").classList.remove("hidden");
   $("examCorrect").classList.add("hidden");
   $("examWrong").classList.add("hidden");
-  $("codeAnswer").focus();
+  if ($("examTitle")) $("examTitle").focus();
   if (state.kind === "marathon") {
     clearInterval(state.timerId);
     tick();
@@ -597,6 +598,7 @@ function revealExam() {
   if (!q) return;
   $("referenceCode").textContent = q.referenceSolution;
   $("solutionExplanation").textContent = q.explanation;
+  $("codeAnswer").readOnly = true;
   $("examSolution").classList.remove("hidden");
   $("revealBtn").classList.add("hidden");
   $("examCorrect").classList.remove("hidden");
