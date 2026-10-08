@@ -346,7 +346,9 @@ function setSheet(el, open, labelledBy) {
   if (open) {
     rememberFocus();
     el.setAttribute("role", "dialog");
+    el.setAttribute("tabindex", "-1");
     if (labelledBy) el.setAttribute("aria-labelledby", labelledBy);
+    el.focus();
   } else {
     el.removeAttribute("role");
     restoreFocus();
